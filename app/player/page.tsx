@@ -1,7 +1,5 @@
+import Link from "next/link"
+
 export default function Player() {
-  return (
-    <div>
-      <h1>Player</h1>
-    </div>
-  );
+  return <div></div>
 }
