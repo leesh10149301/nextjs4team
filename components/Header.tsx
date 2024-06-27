@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function Header() {
   return (
-    <nav className="fixed w-full z-[100] bg-black">
+    <nav className="fixed w-full z-[100] bg-black group">
       <div className="h-[84px] flex gap-2 justify-center items-center max-w-[1200px] mx-auto ">
         <div className="flex">
           <div className="w-[89px] -mt-2">
@@ -78,11 +78,10 @@ export default function Header() {
             </ul>
           </div>
         </div>
-        {/* 지움ㅁ이나러;ㅁㅇ니ㅏ럼;ㅣㄴ얼;ㅣㅁㅇ나ㅓ리먼이러민얼;ㅣㅁㄴ어;리머;ㅇ니럼;ㅣㄴ얼;ㅣㅁㄴ어ㅣㅏㄹ멍ㄴ  */}
-        <div className=" absolute top-0 w-full bg-white overflow-hidden">
+        <div className="absolute top-0 w-full bg-white overflow-hidden opacity-0 transform -translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition duration-500 ease-in-out">
           <div className=" max-w-[1200px] mx-auto  w-full">
             <div className="flex gap-2 justify-center items-center  h-[84px] border-b border-[#eceef2]">
-              <div className="w-[89px] ">
+              <div className="w-[89px] -mt-2">
                 <img
                   src="/images/logo-black.svg"
                   alt="kt wiz"
@@ -90,38 +89,38 @@ export default function Header() {
                 />
               </div>
               <div className="flex h-[84px] justify-center items-center">
-                <ul className="flex m-auto max-w-[950px] w-full">
-                  <li className=" w-28  text-center">
+                <ul className="flex  max-w-[950px] w-full h-full">
+                  <li className=" w-28 text-center h-full flex items-center justify-center hover:border-b-[3px] hover:border-[#ea0101]">
                     <Link href="/" className="text-[17px] font-medium ">
                       kt wiz
                     </Link>
                   </li>
-                  <li className=" w-28 text-center">
+                  <li className=" w-28 text-center h-full flex items-center justify-center hover:border-b-[3px] hover:border-[#ea0101]">
                     <Link href="/" className="text-[17px] font-medium ">
                       wiz park
                     </Link>
                   </li>
-                  <li className=" w-28 text-center">
+                  <li className=" w-28 text-center h-full flex items-center justify-center hover:border-b-[3px] hover:border-[#ea0101]">
                     <Link href="/" className="text-[17px] font-medium ">
                       Game
                     </Link>
                   </li>
-                  <li className=" w-28 text-center">
+                  <li className=" w-28 text-center h-full flex items-center justify-center hover:border-b-[3px] hover:border-[#ea0101]">
                     <Link href="/" className="text-[17px] font-medium ">
                       Player
                     </Link>
                   </li>
-                  <li className=" w-28 text-center">
+                  <li className=" w-28 text-center h-full flex items-center justify-center hover:border-b-[3px] hover:border-[#ea0101]">
                     <Link href="/" className="text-[17px] font-medium ">
                       Media
                     </Link>
                   </li>
-                  <li className=" w-28 text-center">
+                  <li className=" w-28 text-center h-full flex items-center justify-center hover:border-b-[3px] hover:border-[#ea0101]">
                     <Link href="/" className="text-[17px] font-medium ">
                       팬페이지
                     </Link>
                   </li>
-                  <li className=" w-28 text-center">
+                  <li className=" w-28 text-center h-full flex items-center justify-center hover:border-b-[3px] hover:border-[#ea0101]">
                     <Link
                       href="/"
                       className="text-[17px] font-bold text-[#d60c0c]"
@@ -163,28 +162,43 @@ export default function Header() {
                 <ul className="flex w-full max-w-[950px] ml-[152px] mr-auto text-center">
                   <li className="w-28 align-top text-sm ">
                     <ul>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold "
+                        >
                           kt wiz는?
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold "
+                        >
                           구단 BI
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold "
+                        >
                           회원 정책
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold "
+                        >
                           스폰서
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold "
+                        >
                           웰페이퍼
                         </Link>
                       </li>
@@ -192,23 +206,35 @@ export default function Header() {
                   </li>
                   <li className="w-28 align-top text-sm mr-1">
                     <ul>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           수원 wiz park
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           주차 예약
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           찾아오기
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           익산야구장
                         </Link>
                       </li>
@@ -216,13 +242,19 @@ export default function Header() {
                   </li>
                   <li className="w-28 align-top text-sm">
                     <ul>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           정규리그
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           퓨처스리그
                         </Link>
                       </li>
@@ -230,38 +262,59 @@ export default function Header() {
                   </li>
                   <li className="w-28 align-top text-sm">
                     <ul>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           코칭스텝
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           투수
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           타자
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           응원단
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           신입선수
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           군입대 선수
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           육성 선수
                         </Link>
                       </li>
@@ -269,33 +322,51 @@ export default function Header() {
                   </li>
                   <li className="w-28 align-top text-sm">
                     <ul>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           wiz 뉴스
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           wiz 스토리
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           시구자 정보
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           wiz 포토
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           하이라이트
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           Live 영상모음
                         </Link>
                       </li>
@@ -303,18 +374,27 @@ export default function Header() {
                   </li>
                   <li className="w-28 align-top text-sm">
                     <ul>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           홈런볼 예측
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           경기 예측
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           응원 게시판
                         </Link>
                       </li>
@@ -322,18 +402,27 @@ export default function Header() {
                   </li>
                   <li className="w-28 align-top text-sm">
                     <ul>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           티켓 예매
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           단체 관람
                         </Link>
                       </li>
-                      <li className="text-left py-[10px]  w-full">
-                        <Link href="" className="leading-normal">
+                      <li className="text-left py-[10px]  w-full ">
+                        <Link
+                          href=""
+                          className="leading-normal hover:font-bold  "
+                        >
                           입장 및 좌석 정보
                         </Link>
                       </li>
