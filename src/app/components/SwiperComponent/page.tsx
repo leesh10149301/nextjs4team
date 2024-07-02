@@ -42,7 +42,8 @@ const SwiperComponent: FC = () => {
           <div className="w-[1099.99px] h-[680.95px] flex flex-col items-center justify-center mx-auto mt-5">
             <div className="w-full h-[302px] flex items-center justify-center border-2 border-red-100">
               <div className="w-[605px] h-[222px] bg-gray-100 flex items-center justify-center mx-2">
-                몇 대 몇<button>경기 정보</button>
+                <img />
+                <button>경기 정보</button>
               </div>
               <div className="relative w-[395px] h-[222px] overflow-hidden bg-[url('/images/ktwiz_cheonplayer.png')] bg-cover">
                 <img
