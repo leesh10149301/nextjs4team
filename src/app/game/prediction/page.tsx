@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import gamedata from "../../data/gamedata.json"; // Assuming the data structure is directly exportable
+import React from "react";
 
 interface GameData {
   [date: string]: {
