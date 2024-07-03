@@ -1,0 +1,11 @@
+/* 화살표 숨기기 */
+.swiper-button-prev,
+.swiper-button-next {
+  display: none !important;
+}
+
+/* 페이지네이션(dot) 위치 조정 */
+/* 활성화된 페이지네이션(dot) 스타일 변경 */
+.swiper-pagination-bullet-active {
+  background-color: #007bff; /* 활성화된 페이지네이션(dot) 색상 변경 */
+}

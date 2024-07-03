@@ -1,3 +1,4 @@
+// tailwind.config.ts
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -7,7 +8,10 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./public/**/*.{svg}",
   ],
-  theme: {},
+  theme: {
+    extend: {},
+  },
   plugins: [],
 };
+
 export default config;
