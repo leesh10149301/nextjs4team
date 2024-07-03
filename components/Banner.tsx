@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
 type TBannerItem = {
@@ -11,9 +12,22 @@ type TBannerProps = {
   items: TBannerItem[]
 }
 export default function Banner({ items }: TBannerProps) {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
-  const [title, setTitle] = useState("")
-  const [desc, setDesc] = useState("")
+
+  const pathname = usePathname()
+  const categoryPath = pathname.split("/").pop() || items[0].url
+  const [activeCategory, setActiveCategory] = useState<string>(
+    items.find((item) => item.url.split("/").pop() === categoryPath)
+      ?.category || items[0].category
+  )
+  const [title, setTitle] = useState(
+    items.find((item) => item.url.split("/").pop() === categoryPath)
+      ?.category || items[0].category
+  )
+  const [desc, setDesc] = useState(
+    items.find((item) => item.url.split("/").pop() === categoryPath)?.desc ||
+      items[0].desc
+  )
+
   const onClick = (category: string) => {
     setActiveCategory(category)
   }
