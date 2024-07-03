@@ -19,6 +19,7 @@
     ],
     "paths": {
       "@/*": ["./*"]
+    "baseUrl": ".",
     }
   },
   "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
