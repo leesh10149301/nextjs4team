@@ -3,6 +3,7 @@
 import { gptChatBot } from "./actions";
 import { ChatLog } from ".";
 import { useState, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
 import { MESSAGES } from "@/lib/constants/chatbot";
 
 const initialLog: ChatLog[] = [
@@ -49,11 +50,11 @@ export default function ChatbotForm() {
   }, [log]);
 
   useEffect(() => {
-    //FAQ 리스트 업
+    // FAQ 리스트 업
   }, []);
 
-  return (
-    <div className="w-[360px] h-96 bg-white border border-black shadow-lg rounded-lg fixed right-4 bottom-28 transition-opacity">
+  return ReactDOM.createPortal(
+    <div className="w-[360px] h-96 bg-white border border-black shadow-lg rounded-lg fixed right-4 bottom-28 z-50 transition-opacity">
       <form onSubmit={handleSubmit} className="p-4 flex flex-col h-full">
         <div className="flex flex-col h-full overflow-y-auto space-y-2">
           {log.map((entry: ChatLog, index: number) => (
@@ -87,7 +88,7 @@ export default function ChatbotForm() {
           </button>
         </div>
         {faqVisible && (
-          <div className="flex flex-col text-end gap-1 absolute z-10 right-5 bottom-20 items-end *:text-sm">
+          <div className="flex flex-col text-end gap-1 absolute z-50 right-5 bottom-20 items-end *:text-sm">
             <span className="bg-red-100 p-1.5 rounded-md inline-block w-auto">
               강백호 선수에 대해 알려줘.
             </span>
@@ -113,6 +114,7 @@ export default function ChatbotForm() {
           </button>
         </div>
       </form>
-    </div>
+    </div>,
+    document.body
   );
 }

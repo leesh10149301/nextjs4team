@@ -15,7 +15,7 @@ export default function Chatbot() {
   return (
     <>
       <button
-        className="w-20 h-20 rounded-full bg-neutral-900 absolute bottom-4 right-4 flex items-center justify-center cursor-pointer transition-transform transform hover:scale-105"
+        className="w-20 h-20 rounded-full bg-neutral-900 fixed bottom-4 right-4 flex items-center justify-center cursor-pointer transition-transform transform hover:scale-105 z-50"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <Image
