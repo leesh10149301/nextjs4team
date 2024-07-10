@@ -1,4 +1,4 @@
-import SwiperComponent from "@/components/SwiperComponent/page";
+import SwiperComponent from "@/components/SwiperComponent";
 
 export default function Home() {
   return (

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "fanpage board",
+  title: "auth",
   description: "",
 };
 
@@ -9,8 +9,8 @@ export default function BoardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <>
       <main>{children}</main>
-    </div>
+    </>
   );
 }

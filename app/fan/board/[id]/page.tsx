@@ -18,6 +18,7 @@ export default function Post() {
             throw new Error("Failed to fetch post");
           }
           const data = await response.json();
+          console.log("Post data:", data); // 게시물 데이터 로그 출력
           setPost(data);
         } catch (error) {
           console.error("Error fetching post:", error);
