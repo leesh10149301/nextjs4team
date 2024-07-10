@@ -125,30 +125,3 @@ model homerun_history {
 
   @@index([player_id])
 }
-
-}
-
-model player {
-  id            BigInt   @id @default(autoincrement())
-  created_at    DateTime @default(now()) @db.Timestamptz(6)
-  p_code         Int?
-  player_name    String?
-  back_number       Int?
-  debut_year     Int?
-  image String?
-  position      String?
-  hit_type       String?
-  team_name      String?
-  homerun_histories homerun_history[]
-}
-
-model homerun_history {
-  id       BigInt        @id @default(autoincrement())
-  player_id BigInt
-  x_coord   Float
-  y_coord   Float
-  player   player       @relation(fields: [player_id], references: [id])
-
-  @@index([player_id])
-}
-
