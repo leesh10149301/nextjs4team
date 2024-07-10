@@ -18,6 +18,7 @@ export default function EditPost() {
           throw new Error("Failed to fetch post");
         }
         const data = await response.json();
+        console.log("Post data:", data); // 게시물 데이터 로그 출력
         setTitle(data.title);
         setContent(data.content);
         setLoading(false);
@@ -41,7 +42,7 @@ export default function EditPost() {
       });
 
       if (response.ok) {
-        router.push(`/fan/board/${id}`); // 수정 후 게시물 상세 페이지로 이동
+        router.push(`/fan/board/${id}`);
       } else {
         const errorData = await response.json();
         console.error("Error updating post:", errorData);
