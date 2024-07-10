@@ -1,7 +1,7 @@
 import "./global.css";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Chatbot from "../components/Chatbot";
+import Chatbot from "../components/WizChat";
 
 export const metadata = {
   title: "Next.js",
@@ -20,6 +20,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <Chatbot />
+        <div id="chatBot"></div>
       </body>
     </html>
   );
