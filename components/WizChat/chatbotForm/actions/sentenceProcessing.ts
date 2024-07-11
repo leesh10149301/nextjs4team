@@ -19,27 +19,33 @@ const processAndStoreSentence = async (
   keywords: string[]
 ) => {
   try {
+    let exist = false;
     for (const keyword of keywords) {
       const data = await fetchSentenceData(keyword);
-
       if (data && data.length > 0) {
-        const { id, sentence: existSentence } = data[0];
+        for (const { id, sentence: existSentence } of data) {
+          const paraphraseResponse: ParaphraseRecognitionResponse =
+            await paraphraseRecognition(sentence, existSentence);
 
-        const paraphraseResponse: ParaphraseRecognitionResponse =
-          await paraphraseRecognition(sentence, existSentence);
-        const {
-          return_object: { result },
-        } = paraphraseResponse;
+          const {
+            return_object: { result },
+          } = paraphraseResponse;
 
-        console.log("result", result);
-
-        if (result === "paraphrase") {
-          await incrementSentenceCount(id);
-          return;
+          if (result === "paraphrase") {
+            await incrementSentenceCount(id);
+            exist = true;
+            break;
+          }
+        }
+        if (exist) {
+          break;
         }
       }
     }
-    await saveNewSentenceToDB(sentence, keywords);
+
+    if (!exist) {
+      await saveNewSentenceToDB(sentence, keywords);
+    }
   } catch (error) {
     console.error("Error in processAndStoreSentence:", error);
     throw error;

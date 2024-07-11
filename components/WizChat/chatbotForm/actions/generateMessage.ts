@@ -48,6 +48,23 @@ export const generatePlayerDataMessage = (data: {
   return template;
 };
 
+export const generateSeasonMessage = (
+  seasonsummary: Record<string, string | number>,
+  position: string
+) => {
+  if (position === "투수") {
+    return `이번 시즌 ${seasonsummary.gamenum}경기에 등판하여, ${seasonsummary.innDisplay}이닝을 소화하며 평균 자책점 ${seasonsummary.era}를 기록했습니다. 총 ${seasonsummary.w}승 ${seasonsummary.l}패 ${seasonsummary.sv}세이브를 기록했으며, 삼진 ${seasonsummary.kk}개, 볼넷 ${seasonsummary.bb}개, 피안타 ${seasonsummary.hit}개, 피홈런 ${seasonsummary.hr}개를 허용했습니다. 이닝당 출루 허용율 (WHIP)은 ${seasonsummary.whip}입니다.`;
+  } else {
+    return `이번 시즌 ${seasonsummary.gamenum}경기에서 ${
+      seasonsummary.ab ?? 0
+    }타수 ${seasonsummary.hit ?? 0}안타, 타율 ${seasonsummary.bra ?? 0}, ${
+      seasonsummary.hr ?? 0
+    }홈런, ${seasonsummary.rbi ?? 0}타점, ${
+      seasonsummary.run ?? 0
+    }득점을 기록했습니다. OPS는 ${seasonsummary.ops ?? 0}입니다.`;
+  }
+};
+
 // 경기 결과 메시지
 export const generateGameResultMessage = (data: {
   gameDate: number;
@@ -75,6 +92,14 @@ export const generateGameResultMessage = (data: {
   lastUsedTemplates = updatedLastUsed;
   return template;
 };
+
+export const generateCreateMessage = `KT Wiz는 2013년에 창단된 구단입니다. 2013년 5월 7일에 구단명을 공모전을 통해 발표했고, 같은 해에 한국프로야구 신인 드래프트를 통해 신인 선수를 선발했습니다. 2014년에는 한국야구퓨처스리그(2군 리그)에 참여했으며, 2015년부터는 KBO 리그(1군 리그)에 정식으로 참가하기 시작했습니다. KT Wiz는 KBO 리그의 10번째 구단으로, 프로야구 10구단 창단에 대한 논의는 2002년부터 있었지만 실제 창단은 2013년에 이루어졌습니다. `;
+
+export const generateFavoritePlayerMessage = `
+KT Wiz의 인기 선수로는 강백호와 황재균을 꼽을 수 있습니다. 강백호는 뛰어난 타격 실력으로 정평이 나 있으며, 황재균은 팀의 베테랑으로서 중요한 역할을 하고 있습니다. 이 외에도 팀을 대표하는 선수들이 많이 있습니다.<br>
+  <a href="/player/team/detail/68050">강백호 선수 소개</a> <br>
+  <a href="/player/team/detail/76313">황재균 선수 소개</a>
+`;
 
 export const generateMascotMessage =
   "KT Wiz의 마스코트는 빅(Vic)과 또리(Ddory)입니다. 빅은 공격형 파워와 강인함을 상징하고, 또리는 수비와 신속한 기동력을 상징합니다. 두 마스코트가 함께 있을 때 ‘빅또리’라고 불리며, 이는 KT Wiz의 승리를 의미합니다.";

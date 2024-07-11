@@ -1,31 +1,38 @@
-import { useEffect } from "react";
-import { useFormState } from "react-dom";
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import ChatLog from "./ChatLog";
 import { generateUser } from "./actions/generateUser";
 import { addUserMessage } from "./actions/addUserMessage";
 
 export default function AnonChatForm() {
-  const [_, dispatch] = useFormState(addUserMessage, null);
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     generateUser();
   }, []);
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await addUserMessage(value);
+    setValue("");
+  };
+
   return (
     <div className="p-4 flex flex-col h-full bg-gray-100 rounded-lg shadow-lg max-w-md mx-auto">
-      {/** 메시지 나오는 영역 */}
       <div className="flex-1 space-y-2 rounded-lg">
         <ChatLog />
       </div>
-      {/** 메시지 입력 영역 */}
       <div className="mt-2 relative">
-        <form action={dispatch}>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
+            value={value}
             name="content"
             className="flex-1 p-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm"
             placeholder="KT Wiz 선수팀을 응원해주세요!"
+            onChange={(e) => setValue(e.target.value)}
           />
           <button
             type="submit"

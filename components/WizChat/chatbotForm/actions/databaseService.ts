@@ -19,6 +19,24 @@ const getPlayerData = async (name: string) => {
   }
 };
 
+const getPlayerSelectedData = async (keyword: string) => {
+  try {
+    const { data, error } = await supabase
+      .from("player")
+      .select("pcode, position")
+      .eq("playerName", keyword)
+      .single();
+    if (error) {
+      throw new Error(`Error fetching existing sentence: ${error.message}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in fetchSentenceData:", error);
+    throw error;
+  }
+};
+
 // DB 서버에서 경기 결과를 가져오는 함수
 const getGameResult = async (date: string) => {
   console.log(date);
@@ -93,7 +111,7 @@ const incrementSentenceCount = async (id: string) => {
 // 새로운 문장을 DB에 저장하는 함수
 const saveNewSentenceToDB = async (sentence: string, keywords: string[]) => {
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("sentence")
       .insert([{ sentence, count: 1 }]);
 
@@ -101,7 +119,7 @@ const saveNewSentenceToDB = async (sentence: string, keywords: string[]) => {
       throw new Error(`Error saving new sentence: ${error.message}`);
     }
 
-    console.log("New sentence saved. Response:", data);
+    console.log("New sentence saved. Response:");
   } catch (error) {
     console.error("Error in saveNewSentenceToDB:", error);
     throw error;
@@ -133,4 +151,5 @@ export {
   incrementSentenceCount,
   saveNewSentenceToDB,
   fetchSentenceData,
+  getPlayerSelectedData,
 };

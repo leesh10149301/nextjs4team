@@ -11,6 +11,8 @@ import { answerGameQuestion, answerPlayerQuestion } from "./questionHandlers";
 import { MESSAGES } from "@/lib/constants/chatbot";
 import {
   generateBookingMessage,
+  generateCreateMessage,
+  generateFavoritePlayerMessage,
   generateMascotMessage,
 } from "./generateMessage";
 
@@ -32,13 +34,13 @@ export async function gptModel(userQuestion: string) {
   // 형태소 분석 수행
   const analysisResult = await performMorphologicalAnalysis(question);
 
-  const keywordAnalysis = analyzeKeywords(
+  const keywordAnalysis = await analyzeKeywords(
     analysisResult.return_object.sentence
   );
 
-  const keywords = analysisResult.return_object.sentence[0].morp
-    .filter((d) => d.type === "NNP" || d.type === "NNG")
-    .map((d) => d.lemma);
+  const keywords = analysisResult.return_object.sentence[0].word.map(
+    (d) => d.text
+  );
 
   await processAndStoreSentence(question, keywords);
 
@@ -57,6 +59,10 @@ export async function gptModel(userQuestion: string) {
       responseMessage = generateMascotMessage;
     } else if (keywordAnalysis.hasBooking) {
       responseMessage = generateBookingMessage;
+    } else if (keywordAnalysis.hasFavlite) {
+      responseMessage = generateFavoritePlayerMessage;
+    } else if (keywordAnalysis.hasCreateTeam) {
+      responseMessage = generateCreateMessage;
     }
   } else {
     try {

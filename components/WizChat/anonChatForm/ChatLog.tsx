@@ -34,7 +34,6 @@ export default function ChatLog(props: IChatLogProps) {
         ...prevMessages,
         { ...message, nickname, created_at: kstDate(message.created_at) },
       ]);
-      scrollToBottom();
     }
   };
 
@@ -89,7 +88,6 @@ export default function ChatLog(props: IChatLogProps) {
           });
 
           setMessages(formattedData);
-          scrollToBottom();
         }
       } catch (err) {
         console.log(err);
@@ -125,7 +123,6 @@ export default function ChatLog(props: IChatLogProps) {
                   : msg
               )
             );
-            scrollToBottom();
           }
         }
       )
@@ -136,6 +133,11 @@ export default function ChatLog(props: IChatLogProps) {
       supabase.removeChannel(subscription);
     };
   }, []);
+
+  // 메시지가 변경될 때마다 스크롤
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const itsMe = (uuid: string) => uuid === getCookieValue("user_uuid");
 

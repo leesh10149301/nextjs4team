@@ -1,8 +1,13 @@
-import { extractPlayerName } from "./morphologicalAnalysis";
-import { getGameResult, getPlayerData } from "./databaseService";
+import { extractPerformance, extractPlayerName } from "./morphologicalAnalysis";
+import {
+  getPlayerSelectedData,
+  getGameResult,
+  getPlayerData,
+} from "./databaseService";
 import {
   generateGameResultMessage,
   generatePlayerDataMessage,
+  generateSeasonMessage,
 } from "./generateMessage";
 import { MESSAGES } from "@/lib/constants/chatbot";
 import { formatDateToYYYYMMDD } from "@/lib/formatDateToYYYMMDD";
@@ -30,17 +35,55 @@ const answerGameQuestion = async (question: string) => {
 
 // 선수 질문 처리 함수
 const answerPlayerQuestion = async (analysisResult: any) => {
-  console.log(analysisResult.return_object.sentence);
   const searchName = extractPlayerName(analysisResult.return_object.sentence);
+  //추가 키워드로 성적을 물어보는 경우
+  const isPlayerPerformance = extractPerformance(
+    analysisResult.return_object.sentence
+  );
   try {
-    const { success, data } = await getPlayerData(searchName);
-    if (success && data) {
-      return generatePlayerDataMessage(data);
+    if (isPlayerPerformance) {
+      const { pcode, position } = await getPlayerSelectedData(searchName);
+
+      const response = await fetch(
+        `http://3.35.50.52:5002/player_data?pcode=${pcode}`
+      ).then((res) => res.json());
+      return generateSeasonMessage(response.data.seasonsummary, position);
     } else {
-      return `${searchName} 선수는 ${MESSAGES.PLAYER_NOT_FOUND}`;
+      const { success, data } = await getPlayerData(searchName);
+      if (success && data) {
+        return generatePlayerDataMessage(data);
+      } else {
+        return `${searchName} 선수는 ${MESSAGES.PLAYER_NOT_FOUND}`;
+      }
     }
   } catch (error) {
     return MESSAGES.SERVER_ERROR;
+  }
+};
+
+const answerDateQuestion = async (question: string) => {
+  if (question.includes("오늘")) {
+    if (question.includes("순위")) {
+      // 오늘 순위를 알려줘
+      const response = await fetch("http://3.35.50.52:5002/today_rank").then(
+        (d) => d.json()
+      );
+    } else if (question.includes("경기")) {
+      // 오늘 경기를 알려줘
+      const response = await fetch("http://3.35.50.52:5002/games").then((d) =>
+        d.json()
+      );
+    }
+  } else if (question.includes("이번주") || question.includes("지난주")) {
+    if (question.includes("경기 일정")) {
+      // 이번주 경기를 알려줘
+      const response = await fetch("http://3.35.50.52:5002/games").then((d) =>
+        d.json()
+      );
+    } else {
+      // 경기 일정이 아닌 질문엔 거절 메시지
+      return "경기 일정에 관한 질문만 답변할 수 있습니다.";
+    }
   }
 };
 

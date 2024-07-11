@@ -3,9 +3,8 @@
 import { cookies } from "next/headers";
 import supabase from "@/lib/utils/supabase/client";
 
-export async function addUserMessage(prev: any, formData: FormData) {
+export async function addUserMessage(content: string) {
   const cookieStore = cookies();
-  const content = formData.get("content");
   const user_id = cookieStore.get("user_uuid").value;
 
   if (!content || !user_id) {
