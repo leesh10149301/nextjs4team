@@ -12,7 +12,9 @@ export interface PlayerHomerunData {
 
 export default function Page() {
   const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
-  const [playersHomerunData, setPlayersHomerunData] = useState<PlayerHomerunData[]>([]);
+  const [playersHomerunData, setPlayersHomerunData] = useState<
+    PlayerHomerunData[]
+  >([]);
   const [error, setError] = useState<string | null>(null);
 
   const handleCardSelect = (playerId: number | null) => {
