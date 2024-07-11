@@ -1,14 +1,15 @@
-import { formatDate, extractPlayerName } from "./morphologicalAnalysis";
+import { extractPlayerName } from "./morphologicalAnalysis";
 import { getGameResult, getPlayerData } from "./databaseService";
 import {
   generateGameResultMessage,
   generatePlayerDataMessage,
 } from "./generateMessage";
 import { MESSAGES } from "@/lib/constants/chatbot";
+import { formatDateToYYYYMMDD } from "@/lib/formatDateToYYYMMDD";
 
 // 경기 결과 질문 처리 함수
 const answerGameQuestion = async (question: string) => {
-  const date = formatDate(question);
+  const date = formatDateToYYYYMMDD(question);
   if (!date) {
     return MESSAGES.DATE_MISSING_ERROR;
   }
@@ -29,6 +30,7 @@ const answerGameQuestion = async (question: string) => {
 
 // 선수 질문 처리 함수
 const answerPlayerQuestion = async (analysisResult: any) => {
+  console.log(analysisResult.return_object.sentence);
   const searchName = extractPlayerName(analysisResult.return_object.sentence);
   try {
     const { success, data } = await getPlayerData(searchName);

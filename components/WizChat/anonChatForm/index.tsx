@@ -15,7 +15,7 @@ export default function AnonChatForm() {
   return (
     <div className="p-4 flex flex-col h-full bg-gray-100 rounded-lg shadow-lg max-w-md mx-auto">
       {/** 메시지 나오는 영역 */}
-      <div className="flex-1 overflow-y-auto space-y-2 p-2 bg-white rounded-lg">
+      <div className="flex-1 space-y-2 rounded-lg">
         <ChatLog />
       </div>
       {/** 메시지 입력 영역 */}

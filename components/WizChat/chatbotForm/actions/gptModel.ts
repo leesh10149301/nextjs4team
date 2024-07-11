@@ -9,6 +9,10 @@ import {
 import { processAndStoreSentence } from "./sentenceProcessing";
 import { answerGameQuestion, answerPlayerQuestion } from "./questionHandlers";
 import { MESSAGES } from "@/lib/constants/chatbot";
+import {
+  generateBookingMessage,
+  generateMascotMessage,
+} from "./generateMessage";
 
 const openai = new OpenAI();
 
@@ -47,6 +51,12 @@ export async function gptModel(userQuestion: string) {
       responseMessage = await answerGameQuestion(question);
     } else if (keywordAnalysis.hasPlayerKeyword) {
       responseMessage = await answerPlayerQuestion(analysisResult);
+    } else if (keywordAnalysis.hasTodayResult) {
+      responseMessage = "오늘?";
+    } else if (keywordAnalysis.hasMascot) {
+      responseMessage = generateMascotMessage;
+    } else if (keywordAnalysis.hasBooking) {
+      responseMessage = generateBookingMessage;
     }
   } else {
     try {

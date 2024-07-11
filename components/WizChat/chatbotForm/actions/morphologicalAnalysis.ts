@@ -1,8 +1,4 @@
-import {
-  baseballResultPatterns,
-  datePatterns,
-  playerNamePatterns,
-} from "./baseballPatterns";
+import { baseballResultPatterns, playerNamePatterns } from "@/lib/patterns";
 
 interface IMorph {
   lemma: string;
@@ -18,6 +14,7 @@ interface Sentence {
   morp: IMorph[];
   NE: INamedEntity[];
 }
+
 // 형태소 분석을 수행하는 함수
 const performMorphologicalAnalysis = async (question: string) => {
   const openApiURL = "http://aiopen.etri.re.kr:8000/WiseNLU";
@@ -56,10 +53,23 @@ const performMorphologicalAnalysis = async (question: string) => {
 const analyzeKeywords = (sentences: Sentence[]) => {
   let hasBaseballKeyword = false;
   let hasPlayerKeyword = false;
+  let hasTodayResult = false;
+  let hasScoreResult = false;
+  let hasBooking = false;
+  let hasMascot = false;
 
   for (const morp of sentences[0].morp) {
     if (containsBaseballResultKeyword(morp.lemma)) {
       hasBaseballKeyword = true;
+    }
+    if (containsScoreResultKeyword(morp.lemma)) {
+      hasScoreResult = true;
+    }
+    if (containsBookingKeyword(morp.lemma)) {
+      hasBooking = true;
+    }
+    if (containsMascotKeyword(morp.lemma)) {
+      hasMascot = true;
     }
   }
 
@@ -67,11 +77,18 @@ const analyzeKeywords = (sentences: Sentence[]) => {
     if (namedEntity.type === "PS_NAME") {
       hasPlayerKeyword = containsPlayerKeyword(namedEntity.text);
     }
+    if (namedEntity.type === "DT_DAY") {
+      hasTodayResult = namedEntity.text === "오늘";
+    }
   }
 
   return {
     hasBaseballKeyword,
     hasPlayerKeyword,
+    hasTodayResult,
+    hasScoreResult,
+    hasBooking,
+    hasMascot,
   };
 };
 
@@ -95,38 +112,19 @@ const containsPlayerKeyword = (keyword: string): boolean => {
   return playerNamePatterns.some((pattern) => pattern.test(keyword));
 };
 
-// 현재 연도를 반환하는 함수
-const getCurrentYear = (): string => new Date().getFullYear().toString();
-
-// 날짜 형식을 변환하는 함수 (쿼리용 YYYYMMDD 형식)
-const formatDate = (dateString: string): string | null => {
-  for (const pattern of datePatterns) {
-    const match = dateString.match(pattern);
-    if (match) {
-      let year: string, month: string, day: string;
-      if (match.length === 4) {
-        year = match[1].padStart(4, "0");
-        month = match[2].padStart(2, "0");
-        day = match[3].padStart(2, "0");
-      } else if (match.length === 3) {
-        year = getCurrentYear();
-        month = match[1].padStart(2, "0");
-        day = match[2].padStart(2, "0");
-      } else {
-        continue;
-      }
-      return `${year}${month}${day}`;
-    }
-  }
-  return null;
+// 단어에 성적이 있는지 확인하는 함수
+const containsScoreResultKeyword = (keyword: string): boolean => {
+  return /성적/.test(keyword);
 };
 
-export {
-  performMorphologicalAnalysis,
-  analyzeKeywords,
-  extractPlayerName,
-  containsBaseballResultKeyword,
-  containsPlayerKeyword,
-  getCurrentYear,
-  formatDate,
+// 단어에 예매가 있는지 확인하는 함수
+const containsBookingKeyword = (keyword: string): boolean => {
+  return /예매/.test(keyword);
 };
+
+// 단어에 마스코트가 있는지 확인하는 함수
+const containsMascotKeyword = (keyword: string): boolean => {
+  return /마스코트/.test(keyword);
+};
+
+export { performMorphologicalAnalysis, analyzeKeywords, extractPlayerName };

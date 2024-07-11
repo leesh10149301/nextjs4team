@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import supabase from "@/lib/utils/supabase/client";
+import { getCookieValue } from "@/lib/getCookie";
 
 interface IChatLogProps {}
 
@@ -38,18 +39,35 @@ export default function ChatLog(props: IChatLogProps) {
   };
 
   const kstDate = (date: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      timeZone: "Asia/Seoul",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
+    const today = new Date();
+    const messageDate = new Date(date);
 
-    const formatter = new Intl.DateTimeFormat("ko-KR", options);
-    const formattedDate = formatter.format(new Date(date));
+    const isSameDay =
+      today.getFullYear() === messageDate.getFullYear() &&
+      today.getMonth() === messageDate.getMonth() &&
+      today.getDate() === messageDate.getDate();
 
-    return formattedDate;
+    if (isSameDay) {
+      const timeOptions: Intl.DateTimeFormatOptions = {
+        timeZone: "Asia/Seoul",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      };
+      const timeFormatter = new Intl.DateTimeFormat("ko-KR", timeOptions);
+      return timeFormatter.format(messageDate);
+    } else {
+      const dateOptions: Intl.DateTimeFormatOptions = {
+        timeZone: "Asia/Seoul",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      };
+      const dateFormatter = new Intl.DateTimeFormat("ko-KR", dateOptions);
+      return dateFormatter.format(messageDate);
+    }
   };
 
   // 유저 및 메시지 불러오기
@@ -119,22 +137,32 @@ export default function ChatLog(props: IChatLogProps) {
     };
   }, []);
 
+  const itsMe = (uuid: string) => uuid === getCookieValue("user_uuid");
+
   return (
-    <div className="flex flex-col p-4 max-w-lg mx-auto rounded-lg shadow-md">
+    <div className="flex flex-col rounded-lg shadow-md h-full p-2 bg-white">
       <div className="overflow-y-auto h-96 mb-4 space-y-2">
-        {messages.map((data, index) => (
-          <div key={index} className="mb-2">
-            <div className="flex items-center mb-1">
-              <span className="text-base font-semibold text-gray-400">
-                {data.nickname}
+        {messages.map((data, index) => {
+          const textColor = itsMe(data.user_id)
+            ? "text-red-400"
+            : "text-gray-400";
+
+          return (
+            <div key={index} className="mb-2">
+              <div className="flex items-center mb-1">
+                <span className={`font-semibold ${textColor}`}>
+                  {data.nickname}
+                </span>
+                <span className="text-xs text-gray-500 ml-2">
+                  {data.created_at}
+                </span>
+              </div>
+              <span className={`p-2 rounded-lg bg-gray-600 text-gray-200`}>
+                {data.content}
               </span>
             </div>
-            <span className="bg-gray-200 p-2 rounded-lg">{data.content}</span>
-            <span className="text-xs text-gray-500 ml-2">
-              {data.created_at}
-            </span>
-          </div>
-        ))}
+          );
+        })}
         <div ref={messagesEndRef} />
       </div>
     </div>

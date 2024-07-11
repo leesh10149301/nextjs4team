@@ -75,3 +75,24 @@ export const generateGameResultMessage = (data: {
   lastUsedTemplates = updatedLastUsed;
   return template;
 };
+
+export const generateMascotMessage =
+  "KT Wiz의 마스코트는 빅(Vic)과 또리(Ddory)입니다. 빅은 공격형 파워와 강인함을 상징하고, 또리는 수비와 신속한 기동력을 상징합니다. 두 마스코트가 함께 있을 때 ‘빅또리’라고 불리며, 이는 KT Wiz의 승리를 의미합니다.";
+
+export const generateBookingMessage = `
+  KT 위즈 경기를 예매하는 방법은 다음과 같습니다:<br>
+<br>
+<b>온라인 예매:</b><br>
+- KT 위즈 공식 홈페이지에서 티켓링크(<a href="http://www.ticketlink.co.kr" target="_blank">http://www.ticketlink.co.kr</a>)로 연결되어 예매할 수 있습니다.<br>
+- 티켓링크 웹사이트에서 직접 KT 위즈 경기를 검색하여 예매할 수 있습니다.<br>
+<br>
+<b>현장 구매:</b><br>
+- KT 위즈 파크 매표소에서 당일 티켓을 구매할 수 있습니다.<br>
+<br>
+<b>모바일 앱:</b><br>
+- '위잽' 앱을 통해 무료로 야구 티켓을 예매할 수 있습니다. 앱 설치 후 회원가입과 로그인이 필요합니다.<br>
+<br>
+<b>예매 시 주의사항:</b><br>
+- KT 위즈 홈경기의 경우, 경기 7일 전 오후 2시부터 예매가 가능합니다.<br>
+- 주차를 원하는 경우, 반드시 사전에 주차 예약을 해야 합니다. 주차 예약은 경기 7일 전 오후 2시부터 가능하며, 예약 없이는 경기장 내 주차가 불가능합니다.<br>
+- 티켓 가격과 할인 혜택에 대한 정보는 KT 위즈 공식 홈페이지의 '티켓 예매' 섹션에서 확인할 수 있습니다.`;
