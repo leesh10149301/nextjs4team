@@ -1,7 +1,9 @@
+// src/app/components/LogIn.tsx
 "use client";
 
-import supabase from "@/app/utils/supabase/client";
 import { useEffect, useState } from "react";
+import useUserInfo from "@/app/stores/useUserInfo";
+import { LoginApi } from "@/app/api/auth/route";
 
 export default function LogIn() {
   // input
@@ -13,6 +15,9 @@ export default function LogIn() {
   const [passwordError, setPasswordError] = useState<string>("");
 
   const [isValid, setIsValid] = useState<boolean>(false);
+
+  //zustand 전역관리
+  const { setUserInfo } = useUserInfo();
 
   const handleEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
@@ -41,19 +46,23 @@ export default function LogIn() {
   };
 
   // 이메일 로그인
-  const handleLoginBtnClick = async () => {
+  const handleLoginBtnClick = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     validateEmail();
     validatePassword();
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
 
-    if (data.user !== null) {
-      console.log("성공");
-    } else {
-      setPasswordError("이메일 혹은 비밀번호를 확인해주세요.");
-      console.log("실패");
+    if (emailError || passwordError) return;
+
+    try {
+      const user = await LoginApi(email, password);
+      setUserInfo({
+        email: user.email,
+        nickname: user.user_metadata.username,
+      });
+      console.log("로그인 성공:", user.user_metadata.username);
+    } catch (err: any) {
+      setPasswordError(err.message);
     }
   };
 
@@ -68,9 +77,8 @@ export default function LogIn() {
 
   return (
     <>
-      <form onSubmit={(e) => e.preventDefault} className="pt-24 flex flex-col">
+      <form onSubmit={handleLoginBtnClick} className="pt-24 flex flex-col">
         <input
-          type="text"
           placeholder="이메일 주소를 입력해주세요"
           value={email}
           onChange={handleEmailInput}
@@ -88,12 +96,10 @@ export default function LogIn() {
         />
         <div>{passwordError}</div>
         <button
-          type="submit"
-          disabled={isValid ? false : true}
+          disabled={!isValid}
           className={`p-2 rounded ${
             isValid ? "bg-green-500 text-white" : "bg-red-500 text-white"
           }`}
-          onClick={handleLoginBtnClick}
         >
           로그인
         </button>
