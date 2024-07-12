@@ -1,5 +1,4 @@
 import { baseballResultPatterns, playerNamePatterns } from "@/lib/patterns";
-import { paraphraseRecognition } from "./paraphraseRecognition";
 
 interface IMorph {
   lemma: string;
@@ -69,7 +68,7 @@ const analyzeKeywords = async (sentences: Sentence[]) => {
   const result = {
     hasBaseballKeyword: false,
     hasPlayerKeyword: false,
-    hasTodayResult: false,
+    hasDateResult: false,
     hasScoreResult: false,
     hasFavlite: false,
     hasBooking: false,
@@ -91,8 +90,8 @@ const analyzeKeywords = async (sentences: Sentence[]) => {
         namedEntity.text
       );
     }
-    if (namedEntity.type === "DT_DAY" && namedEntity.text === "오늘") {
-      result.hasTodayResult = true;
+    if (namedEntity.type.includes("DT")) {
+      result.hasDateResult = true;
     }
   }
 

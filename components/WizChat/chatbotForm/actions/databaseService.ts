@@ -39,7 +39,6 @@ const getPlayerSelectedData = async (keyword: string) => {
 
 // DB 서버에서 경기 결과를 가져오는 함수
 const getGameResult = async (date: string) => {
-  console.log(date);
   try {
     const { data } = await supabase
       .from("gameResult")

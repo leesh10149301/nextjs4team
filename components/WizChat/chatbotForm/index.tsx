@@ -27,6 +27,7 @@ export default function ChatbotForm() {
   const [faqClick, setFaqClick] = useState(false);
   const [faqData, setFaqData] =
     useState<{ sentence: string }[]>(INIT_FAQ_SENTENCE);
+
   const logEndRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const faqRefs = useRef<(HTMLButtonElement | null)[]>([]);

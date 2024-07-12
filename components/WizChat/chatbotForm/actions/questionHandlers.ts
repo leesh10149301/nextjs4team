@@ -7,10 +7,16 @@ import {
 import {
   generateGameResultMessage,
   generatePlayerDataMessage,
+  generateRankResultMessage,
   generateSeasonMessage,
 } from "./generateMessage";
 import { MESSAGES } from "@/lib/constants/chatbot";
 import { formatDateToYYYYMMDD } from "@/lib/formatDateToYYYMMDD";
+import {
+  getNextWeekSchedule,
+  getThisWeekSchedule,
+  getTodaySchedule,
+} from "./getSchduledata";
 
 // 경기 결과 질문 처리 함수
 const answerGameQuestion = async (question: string) => {
@@ -21,7 +27,6 @@ const answerGameQuestion = async (question: string) => {
 
   try {
     const { success, data, message } = await getGameResult(date);
-    console.log(data);
     if (success) {
       return generateGameResultMessage(data);
     } else {
@@ -61,30 +66,43 @@ const answerPlayerQuestion = async (analysisResult: any) => {
   }
 };
 
-const answerDateQuestion = async (question: string) => {
-  if (question.includes("오늘")) {
-    if (question.includes("순위")) {
-      // 오늘 순위를 알려줘
-      const response = await fetch("http://3.35.50.52:5002/today_rank").then(
-        (d) => d.json()
-      );
-    } else if (question.includes("경기")) {
-      // 오늘 경기를 알려줘
-      const response = await fetch("http://3.35.50.52:5002/games").then((d) =>
-        d.json()
-      );
-    }
-  } else if (question.includes("이번주") || question.includes("지난주")) {
-    if (question.includes("경기 일정")) {
-      // 이번주 경기를 알려줘
-      const response = await fetch("http://3.35.50.52:5002/games").then((d) =>
-        d.json()
-      );
-    } else {
-      // 경기 일정이 아닌 질문엔 거절 메시지
-      return "경기 일정에 관한 질문만 답변할 수 있습니다.";
-    }
-  }
+const fetchTodayRank = async () => {
+  const response = await fetch("http://3.35.50.52:5002/today_rank");
+  const data = await response.json();
+  return data.filter((rank: Record<string, string>) => rank.팀 === "KT");
 };
 
-export { answerGameQuestion, answerPlayerQuestion };
+const isGameScheduleQuestion = (question: string) =>
+  question.includes("경기") || question.includes("일정");
+
+const answerDateQuestion = async ({ text, type }, question) => {
+  //오늘
+  if (type === "DT_DAY") {
+    //오늘 순위
+    if (question.includes("순위")) {
+      const ktRankResult = await fetchTodayRank();
+      return generateRankResultMessage(ktRankResult);
+      //오늘 경기
+    } else if (isGameScheduleQuestion(question)) {
+      return getTodaySchedule();
+    }
+  }
+  if (type === "DT_OTHERS") {
+    if (question.includes("이번주") || question.includes("이번 주")) {
+      if (isGameScheduleQuestion(question)) {
+        return getThisWeekSchedule();
+      } else {
+        return "경기 일정에 관한 질문만 답변할 수 있습니다.";
+      }
+    } else if (question.includes("다음주") || question.includes("다음 주")) {
+      if (isGameScheduleQuestion(question)) {
+        return getNextWeekSchedule();
+      } else {
+        return "경기 일정에 관한 질문만 답변할 수 있습니다.";
+      }
+    }
+  }
+  return "오늘 뭐요?";
+};
+
+export { answerGameQuestion, answerPlayerQuestion, answerDateQuestion };

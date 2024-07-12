@@ -7,7 +7,11 @@ import {
   analyzeKeywords,
 } from "./morphologicalAnalysis";
 import { processAndStoreSentence } from "./sentenceProcessing";
-import { answerGameQuestion, answerPlayerQuestion } from "./questionHandlers";
+import {
+  answerDateQuestion,
+  answerGameQuestion,
+  answerPlayerQuestion,
+} from "./questionHandlers";
 import { MESSAGES } from "@/lib/constants/chatbot";
 import {
   generateBookingMessage,
@@ -42,6 +46,13 @@ export async function gptModel(userQuestion: string) {
     (d) => d.text
   );
 
+  const namedEntity = analysisResult.return_object.sentence[0].NE.map(
+    ({ type, text }) => ({
+      type,
+      text,
+    })
+  );
+
   await processAndStoreSentence(question, keywords);
 
   const hasRelevantKeyword = Object.values(keywordAnalysis).some(
@@ -53,8 +64,8 @@ export async function gptModel(userQuestion: string) {
       responseMessage = await answerGameQuestion(question);
     } else if (keywordAnalysis.hasPlayerKeyword) {
       responseMessage = await answerPlayerQuestion(analysisResult);
-    } else if (keywordAnalysis.hasTodayResult) {
-      responseMessage = "오늘?";
+    } else if (keywordAnalysis.hasDateResult) {
+      responseMessage = await answerDateQuestion(namedEntity[0], question);
     } else if (keywordAnalysis.hasMascot) {
       responseMessage = generateMascotMessage;
     } else if (keywordAnalysis.hasBooking) {
