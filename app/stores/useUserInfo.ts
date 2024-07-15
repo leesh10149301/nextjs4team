@@ -1,3 +1,4 @@
+// src/app/stores/useUserInfo.ts
 import { create } from "zustand";
 
 interface userInfoType {
@@ -7,6 +8,7 @@ interface userInfoType {
 
 interface UserInfoState {
   userInfo: userInfoType;
+  isLoggedIn: boolean;
 }
 
 interface UserInfoActions {
@@ -18,11 +20,12 @@ const defaultState = { email: "", nickname: "" };
 
 const useUserInfo = create<UserInfoState & UserInfoActions>((set) => ({
   userInfo: defaultState,
+  isLoggedIn: false,
   setUserInfo: (userInfo: userInfoType) => {
-    set({ userInfo });
+    set({ userInfo, isLoggedIn: true });
   },
   deleteUserInfo: () => {
-    set({ userInfo: defaultState });
+    set({ userInfo: defaultState, isLoggedIn: false });
   },
 }));
 

@@ -1,6 +1,12 @@
-import Link from "next/link"
+"use client";
+
+import Logout from "@/app/auth/logout/page";
+import useUserInfo from "@/app/stores/useUserInfo";
+import Link from "next/link";
 
 export default function Header() {
+  const { isLoggedIn, userInfo } = useUserInfo();
+
   return (
     <nav className="fixed w-full z-[100] bg-black group">
       <div className="h-[84px] flex gap-2 justify-center items-center max-w-[1200px] mx-auto ">
@@ -52,21 +58,32 @@ export default function Header() {
             </ul>
           </div>
           <div className="ml-9">
-            <ul className="flex h-full  items-center">
-              <li className=" text-white  text-opacity-70 text-sm after:content-['|'] after:pl-2 after:mr-2 after:align-top">
-                <Link href="/" className="align-middle">
-                  로그인
-                </Link>
-              </li>
-              <li className="text-white text-opacity-70 text-sm ">
-                <Link href="/" className="align-middle">
-                  회원가입
-                </Link>
-              </li>
-              <li className="pl-4 w">
+            <ul className="flex h-full items-center">
+              {isLoggedIn ? (
+                <>
+                  <span className="text-white">
+                    welcome, {userInfo.nickname}
+                  </span>
+                  <Logout />
+                </>
+              ) : (
+                <>
+                  <li className="text-white text-opacity-70 text-sm after:content-['|'] after:pl-2 after:mr-2 after:align-top">
+                    <Link href={`/auth/login`} className="align-middle">
+                      로그인
+                    </Link>
+                  </li>
+                  <li className="text-white text-opacity-70 text-sm">
+                    <Link href={`/auth/join`} className="align-middle">
+                      회원가입
+                    </Link>
+                  </li>
+                </>
+              )}
+              <li className="pl-4">
                 <Link
                   href="/"
-                  className="align-middle inline-block border border-white rounded-md border-opacity-20 py-3 px-4 "
+                  className="align-middle inline-block border border-white rounded-md border-opacity-20 py-3 px-4"
                 >
                   <img
                     src="/images/kt-sports.png"
@@ -132,16 +149,25 @@ export default function Header() {
               </div>
               <div className="ml-9">
                 <ul className="flex h-full  items-center">
-                  <li className=" text-[#35383e]  text-opacity-70 text-sm after:content-['|'] after:pl-2 after:mr-2 after:align-top">
-                    <Link href="/" className="align-middle ">
-                      로그인
-                    </Link>
-                  </li>
-                  <li className="text-[#35383e] text-opacity-70 text-sm ">
-                    <Link href="/" className="align-middle ">
-                      회원가입
-                    </Link>
-                  </li>
+                  {isLoggedIn ? (
+                    <>
+                      <span>welcome, {userInfo.nickname}</span>
+                      <Logout />
+                    </>
+                  ) : (
+                    <>
+                      <li className=" text-[#35383e]  text-opacity-70 text-sm after:content-['|'] after:pl-2 after:mr-2 after:align-top">
+                        <Link href="/" className="align-middle ">
+                          로그인
+                        </Link>
+                      </li>
+                      <li className="text-[#35383e] text-opacity-70 text-sm ">
+                        <Link href="/" className="align-middle ">
+                          회원가입
+                        </Link>
+                      </li>
+                    </>
+                  )}
                   <li className="pl-4 w">
                     <Link
                       href="/"
@@ -435,5 +461,5 @@ export default function Header() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
