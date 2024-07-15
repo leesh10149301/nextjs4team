@@ -30,7 +30,10 @@ export default function NewPost() {
   return (
     <>
       <h1>Create a New Post</h1>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        className="flex items-center justify-center h-[680px]"
+      >
         <div>
           <label htmlFor="title">Title</label>
           <input
