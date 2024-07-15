@@ -6,7 +6,7 @@ const getPlayerData = async (name: string) => {
     const { data } = await supabase
       .from("player")
       .select("*")
-      .eq("playerName", name);
+      .eq("player_name", name);
 
     return { success: true, data: data[0] };
   } catch (error) {
@@ -26,6 +26,7 @@ const getPlayerSelectedData = async (keyword: string) => {
       .select("pcode, position")
       .eq("playerName", keyword)
       .single();
+
     if (error) {
       throw new Error(`Error fetching existing sentence: ${error.message}`);
     }
@@ -108,7 +109,7 @@ const incrementSentenceCount = async (id: string) => {
 };
 
 // 새로운 문장을 DB에 저장하는 함수
-const saveNewSentenceToDB = async (sentence: string, keywords: string[]) => {
+const saveNewSentenceToDB = async (sentence: string) => {
   try {
     const { error } = await supabase
       .from("sentence")

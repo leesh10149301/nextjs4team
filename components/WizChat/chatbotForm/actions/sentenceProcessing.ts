@@ -19,33 +19,26 @@ const processAndStoreSentence = async (
   keywords: string[]
 ) => {
   try {
-    let exist = false;
     for (const keyword of keywords) {
       const data = await fetchSentenceData(keyword);
-      if (data && data.length > 0) {
-        for (const { id, sentence: existSentence } of data) {
-          const paraphraseResponse: ParaphraseRecognitionResponse =
-            await paraphraseRecognition(sentence, existSentence);
+      if (!data.length) continue;
 
-          const {
-            return_object: { result },
-          } = paraphraseResponse;
+      for (const { id, sentence: existSentence } of data) {
+        // 429 error 방지
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        const paraphraseResponse: ParaphraseRecognitionResponse =
+          await paraphraseRecognition(sentence, existSentence);
+        const {
+          return_object: { result },
+        } = paraphraseResponse;
 
-          if (result === "paraphrase") {
-            await incrementSentenceCount(id);
-            exist = true;
-            break;
-          }
-        }
-        if (exist) {
-          break;
+        if (result === "paraphrase") {
+          await incrementSentenceCount(id);
+          return; // 문장이 이미 존재하면 함수를 종료
         }
       }
     }
-
-    if (!exist) {
-      await saveNewSentenceToDB(sentence, keywords);
-    }
+    await saveNewSentenceToDB(sentence); // 문장이 존재하지 않으면 새로 저장
   } catch (error) {
     console.error("Error in processAndStoreSentence:", error);
     throw error;

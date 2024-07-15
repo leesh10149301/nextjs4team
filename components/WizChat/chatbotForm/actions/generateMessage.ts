@@ -24,19 +24,26 @@ const formatDateString = (date: number): string => {
 
 // 선수 정보 메시지
 export const generatePlayerDataMessage = (data: {
-  pcode: number;
-  playerName: string;
-  backnum: number;
-  debutYear: number;
+  p_code: number;
+  player_name: string;
+  back_number: number;
+  debut_year: number;
   position: string;
-  hittype: string;
+  hit_type: string;
 }): string => {
-  const { pcode, playerName, backnum, debutYear, position, hittype } = data;
+  const {
+    p_code,
+    player_name: playerName,
+    back_number: backnum,
+    debut_year: debutYear,
+    position,
+    hit_type: hittype,
+  } = data;
 
   const templates = [
-    `${playerName} 선수는 ${debutYear}년에 데뷔하였으며, 포지션은 ${position}입니다. 등번호는 ${backnum}번이며, ${hittype} 타격 유형을 갖고 있습니다. 더 자세한 정보는 <a href="/player/team/detail/${pcode}">${playerName} 선수 소개</a>에서 확인할 수 있습니다.`,
-    `${debutYear}년 데뷔한 ${playerName}는 ${position} 포지션을 맡고 있습니다. ${backnum}번 등번호를 달고 ${hittype} 타자로 활약 중입니다. 더 자세한 정보는 <a href="/player/team/detail/${pcode}">${playerName} 선수 소개</a>에서 확인할 수 있습니다.`,
-    `${position} 포지션을 맡고 있는 ${playerName} 선수는 ${debutYear}년에 프로 무대에 첫 발을 내디뎠습니다. ${backnum}번 유니폼을 입고 ${hittype} 타격을 선보이고 있습니다. 더 자세한 정보는 <a href="/player/team/detail/${pcode}">${playerName} 선수 소개</a>에서 확인할 수 있습니다.`,
+    `${playerName} 선수는 ${debutYear}년에 데뷔하였으며, 포지션은 ${position}입니다. 등번호는 ${backnum}번이며, ${hittype} 타격 유형을 갖고 있습니다. 더 자세한 정보는 <a href="/player/team/detail/${p_code}">${playerName} 선수 소개</a>에서 확인할 수 있습니다.`,
+    `${debutYear}년 데뷔한 ${playerName}는 ${position} 포지션을 맡고 있습니다. ${backnum}번 등번호를 달고 ${hittype} 타자로 활약 중입니다. 더 자세한 정보는 <a href="/player/team/detail/${p_code}">${playerName} 선수 소개</a>에서 확인할 수 있습니다.`,
+    `${position} 포지션을 맡고 있는 ${playerName} 선수는 ${debutYear}년에 프로 무대에 첫 발을 내디뎠습니다. ${backnum}번 유니폼을 입고 ${hittype} 타격을 선보이고 있습니다. 더 자세한 정보는 <a href="/player/team/detail/${p_code}">${playerName} 선수 소개</a>에서 확인할 수 있습니다.`,
   ];
 
   const { template, updatedLastUsed } = selectNonRepeatingTemplate(
