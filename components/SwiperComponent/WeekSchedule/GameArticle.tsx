@@ -6,12 +6,16 @@ interface IGameArticleProps {
   result: string;
   team2: string;
   team2Pitcher: string;
+  toDaySchedule?: boolean;
 }
 
 export function GameArticle(props: IGameArticleProps) {
+  const isToday = props.toDaySchedule ? "bg-[#ec0a0b]" : "bg-black";
   return (
     <article className="p-5 w-1/3 border rounded-lg shadow-lg">
-      <span className="block rounded-full bg-gray-800 text-white text-center py-1 mb-4 whitespace-nowrap overflow-hidden text-ellipsis">
+      <span
+        className={`block rounded-full text-white text-center py-1 mb-4 whitespace-nowrap overflow-hidden text-ellipsis ${isToday}`}
+      >
         {props.date}
       </span>
       <div className="flex justify-between items-center">

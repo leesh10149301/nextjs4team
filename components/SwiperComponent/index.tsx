@@ -35,7 +35,7 @@ const SwiperComponent: FC = () => {
             className="w-[826px] mx-auto my-auto mt-20"
           />
           <div className="w-[1099.99px] h-[680.95px] flex flex-col items-center justify-center mx-auto mt-5">
-            <div className="w-full h-[302px] flex items-center justify-center border-2 border-red-100">
+            <div className="w-full h-[302px] flex items-center justify-center">
               <WeekSchedule />
             </div>
             <div className="w-full h-[189.98px] bg-gray-300 flex items-center justify-center mt-4">

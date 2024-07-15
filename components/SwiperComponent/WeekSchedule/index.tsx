@@ -3,6 +3,8 @@ import { GameArticle } from "./GameArticle";
 interface IWeekScheduleProps {}
 
 export default function WeekSchedule(props: IWeekScheduleProps) {
+  //오늘 경기 혹은 이전 경기 중 가장 가까운 날?
+  let toDaySchedule = true;
   return (
     <div className="flex justify-between space-x-4">
       <GameArticle
@@ -22,6 +24,7 @@ export default function WeekSchedule(props: IWeekScheduleProps) {
         result="취"
         team2="롯데 자이언츠"
         team2Pitcher="한현희"
+        toDaySchedule
       />
       <GameArticle
         date="2024.7.16"
