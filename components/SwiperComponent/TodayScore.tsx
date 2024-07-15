@@ -46,7 +46,7 @@ export default function TodayScore(props: ITodayScoreProps) {
       <div className=" w-full flex justify-center items-center space-x-4 p-4 *:my-[60px] *:h-24">
         {score ? (
           <>
-            <div className="flex-1 text-center p-4 bg-red-600 text-white rounded-lg">
+            <div className="flex-1 text-center p-4 bg-[#ec0a0b] text-white rounded-lg">
               <div className="text-lg">순위</div>
               <div className="text-2xl font-bold">{score.rank}</div>
             </div>
