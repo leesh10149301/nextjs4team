@@ -10,9 +10,7 @@ export default function BoardLayout({
 }) {
   return (
     <div>
-      <body>
-        <main>{children}</main>
-      </body>
+      <main>{children}</main>
     </div>
   );
 }
