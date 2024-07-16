@@ -1,40 +1,88 @@
+"use client";
+
+import React, { Suspense, useState, useEffect, useTransition } from "react";
 import { GameArticle } from "./GameArticle";
+import { SkeletonGameArticle } from "@/components/skeleton/SkeletonGameArticle";
 
-interface IWeekScheduleProps {}
+interface IGameArticleProps {
+  game: "current" | "next" | "prev";
+  displayDate: string;
+  home: string;
+  homeKey: string;
+  homeStarter: string;
+  homeScore?: number;
+  outcome: string;
+  visit: string;
+  visitKey: string;
+  visitScore?: number;
+  visitStarter: string;
+}
 
-export default function WeekSchedule(props: IWeekScheduleProps) {
-  //오늘 경기 혹은 이전 경기 중 가장 가까운 날?
-  let toDaySchedule = true;
+interface IScheduleData {
+  data: {
+    current: IGameArticleProps;
+    next: IGameArticleProps;
+    prev: IGameArticleProps;
+  };
+}
+
+const fetchScheduleData = async () => {
+  const response = await fetch("http://3.35.50.52:5002/get_current_info");
+  if (response.ok) {
+    const data = await response.json();
+    return data as IScheduleData;
+  } else {
+    throw new Error("Failed to fetch data");
+  }
+};
+
+function ScheduleComponent() {
+  const [schedule, setSchedule] = useState<IScheduleData["data"] | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    startTransition(() => {
+      fetchScheduleData()
+        .then(({ data }) => setSchedule(data))
+        .catch((error) => console.error(error));
+    });
+  }, []);
+
+  if (isPending || !schedule) {
+    return <SkeletonGameArticle />;
+  }
+
   return (
     <div className="flex justify-between space-x-4">
-      <GameArticle
-        date="2024.7.13"
-        team1="KT 위즈"
-        team1Pitcher="엄상백"
-        score="6 : 3"
-        result="승"
-        team2="롯데 자이언츠"
-        team2Pitcher="구승민"
-      />
-      <GameArticle
-        date="2024.7.14"
-        team1="KT 위즈"
-        team1Pitcher="조이현"
-        score="0 : 0"
-        result="취"
-        team2="롯데 자이언츠"
-        team2Pitcher="한현희"
-        toDaySchedule
-      />
-      <GameArticle
-        date="2024.7.16"
-        team1="KT 위즈"
-        team1Pitcher="벤자민"
-        score="VS"
-        result="18:30 고척"
-        team2="키움 히어로즈"
-        team2Pitcher="후라도"
-      />
+      {renderGameArticle({ gameArticle: schedule.prev })}
+      {renderGameArticle({ gameArticle: schedule.current })}
+      {renderGameArticle({ gameArticle: schedule.next })}
     </div>
   );
+}
+
+function renderGameArticle({
+  gameArticle,
+}: {
+  gameArticle: IGameArticleProps;
+}) {
+  return (
+    <GameArticle
+      game={gameArticle.game}
+      displayDate={gameArticle.displayDate}
+      home={gameArticle.home}
+      homeKey={gameArticle.homeKey}
+      homeStarter={gameArticle.homeStarter}
+      homeScore={gameArticle.homeScore}
+      outcome={gameArticle.outcome}
+      visit={gameArticle.visit}
+      visitKey={gameArticle.visitKey}
+      visitScore={gameArticle.visitScore}
+      visitStarter={gameArticle.visitStarter}
+    />
+  );
+}
+
+export default function WeekSchedule() {
+  return <ScheduleComponent />;
 }

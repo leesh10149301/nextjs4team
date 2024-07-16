@@ -24,7 +24,6 @@ const SwiperComponent: FC = () => {
       className="h-screen"
     >
       <SwiperSlide className="h-screen flex items-center justify-center">
-        {/* YouTube 비디오 */}
         <TodayScore />
       </SwiperSlide>
       <SwiperSlide className="h-screen flex flex-col items-center justify-center">

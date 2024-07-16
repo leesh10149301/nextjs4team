@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SkeletonTodayScore } from "../skeleton/SKeletonTodayScore";
 
 interface Score {
   rank: number;
@@ -43,7 +44,7 @@ export default function TodayScore(props: ITodayScoreProps) {
         referrerPolicy="strict-origin-when-cross-origin"
         allowFullScreen
       />
-      <div className=" w-full flex justify-center items-center space-x-4 p-4 *:my-[60px] *:h-24">
+      <div className="w-full flex justify-center items-center space-x-4 p-4 *:my-[60px] *:h-24">
         {score ? (
           <>
             <div className="flex-1 text-center p-4 bg-[#ec0a0b] text-white rounded-lg">
@@ -68,13 +69,7 @@ export default function TodayScore(props: ITodayScoreProps) {
             </div>
           </>
         ) : (
-          <>
-            <div className="flex-1 text-center p-4 bg-gray-800 animate-pulse rounded-lg h-24"></div>
-            <div className="flex-1 text-center p-4 bg-gray-800 animate-pulse rounded-lg h-24"></div>
-            <div className="flex-1 text-center p-4 bg-gray-800 animate-pulse rounded-lg h-24"></div>
-            <div className="flex-1 text-center p-4 bg-gray-800 animate-pulse rounded-lg h-24"></div>
-            <div className="flex-1 text-center p-4 bg-gray-800 animate-pulse rounded-lg h-24"></div>
-          </>
+          <SkeletonTodayScore />
         )}
       </div>
     </div>
