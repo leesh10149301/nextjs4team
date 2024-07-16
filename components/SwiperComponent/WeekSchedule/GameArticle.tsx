@@ -2,9 +2,9 @@ import Image from "next/image";
 import { IGameArticleProps } from ".";
 
 const emblemMap: { [key: string]: string } = {
-  "Dosan": "/icons/emblems/dosan_emblem.png",
+  "OB": "/icons/emblems/dosan_emblem.png",
   "HH": "/icons/emblems/hanhwa_emblem.png",
-  "Kia": "/icons/emblems/kia_emblem.png",
+  "HT": "/icons/emblems/kia_emblem.png",
   "WO": "/icons/emblems/kiwoom_emblem.png",
   "KT": "/icons/emblems/kt_emblem.png",
   "LG": "/icons/emblems/lg_emblem.png",
@@ -12,7 +12,7 @@ const emblemMap: { [key: string]: string } = {
   "NC": "/icons/emblems/nc_emblem.png",
   "SM": "/icons/emblems/sm_emblem.png",
   "SS": "/icons/emblems/ss_emblem.png",
-  "SSG": "/icons/emblems/ssg_emblem.png",
+  "SK": "/icons/emblems/ssg_emblem.png",
 };
 
 const formatDateString = (dateString: string) => {
@@ -27,46 +27,43 @@ export function GameArticle(props: IGameArticleProps) {
   const isToday = props.game === "current" ? "bg-[#ec0a0b]" : "bg-black";
 
   // 'kt'가 home이나 visit에 있는 경우 항상 team1 위치에 오도록 설정
-  const isKtHome = props.home === "kt";
-  const isKtVisit = props.visit === "kt";
+  const isKtVisit = props.visitKey === "KT";
 
-  const team1 =
-    isKtHome || isKtVisit
-      ? {
-          name: props.home,
-          key: props.homeKey,
-          starter: props.homeStarter,
-          decision: props.homeDecision,
-          score: props.homeScore,
-          decisionPitcher: props.homeDecisionPitcher,
-        }
-      : {
-          name: props.visit,
-          key: props.visitKey,
-          starter: props.visitStarter,
-          decision: props.visitDecision,
-          score: props.visitScore,
-          decisionPitcher: props.visitDecisionPitcher,
-        };
+  const team1 = isKtVisit
+    ? {
+        name: props.visit,
+        key: props.visitKey,
+        starter: props.visitStarter,
+        decision: props.visitDecision,
+        score: props.visitScore,
+        decisionPitcher: props.visitDecisionPitcher,
+      }
+    : {
+        name: props.home,
+        key: props.homeKey,
+        starter: props.homeStarter,
+        decision: props.homeDecision,
+        score: props.homeScore,
+        decisionPitcher: props.homeDecisionPitcher,
+      };
 
-  const team2 =
-    isKtHome || isKtVisit
-      ? {
-          name: props.visit,
-          key: props.visitKey,
-          starter: props.visitStarter,
-          decision: props.visitDecision,
-          score: props.visitScore,
-          decisionPitcher: props.visitDecisionPitcher,
-        }
-      : {
-          name: props.home,
-          key: props.homeKey,
-          starter: props.homeStarter,
-          decision: props.homeDecision,
-          score: props.homeScore,
-          decisionPitcher: props.homeDecisionPitcher,
-        };
+  const team2 = isKtVisit
+    ? {
+        name: props.home,
+        key: props.homeKey,
+        starter: props.homeStarter,
+        decision: props.homeDecision,
+        score: props.homeScore,
+        decisionPitcher: props.homeDecisionPitcher,
+      }
+    : {
+        name: props.visit,
+        key: props.visitKey,
+        starter: props.visitStarter,
+        decision: props.visitDecision,
+        score: props.visitScore,
+        decisionPitcher: props.visitDecisionPitcher,
+      };
 
   const getPitcherInfo = (
     starter: string | undefined,
@@ -93,7 +90,7 @@ export function GameArticle(props: IGameArticleProps) {
         <div className="flex flex-col items-center">
           <div className="mb-2">
             <Image
-              src={emblemMap[team1.key] || "/icons/emblems/kt_emblem.png"}
+              src={emblemMap[team1.key] || "/icons/emblems/default_emblem.png"}
               alt={`${team1.name} Emblem`}
               width={64}
               height={64}
@@ -135,7 +132,7 @@ export function GameArticle(props: IGameArticleProps) {
         <div className="flex flex-col items-center">
           <div className="mb-2">
             <Image
-              src={emblemMap[team2.key] || "/icons/emblems/kt_emblem.png"}
+              src={emblemMap[team2.key] || "/icons/emblems/default_emblem.png"}
               alt={`${team2.name} Emblem`}
               width={64}
               height={64}

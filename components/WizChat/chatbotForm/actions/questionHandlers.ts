@@ -75,7 +75,7 @@ const fetchTodayRank = async () => {
 const isGameScheduleQuestion = (question: string) =>
   question.includes("경기") || question.includes("일정");
 
-const answerDateQuestion = async ({ text, type }, question) => {
+const answerDateQuestion = async ({ type }, question: string) => {
   //오늘
   if (type === "DT_DAY") {
     //오늘 순위
@@ -84,19 +84,19 @@ const answerDateQuestion = async ({ text, type }, question) => {
       return generateRankResultMessage(ktRankResult);
       //오늘 경기
     } else if (isGameScheduleQuestion(question)) {
-      return getTodaySchedule();
+      return await getTodaySchedule();
     }
   }
   if (type === "DT_OTHERS") {
     if (question.includes("이번주") || question.includes("이번 주")) {
       if (isGameScheduleQuestion(question)) {
-        return getThisWeekSchedule();
+        return await getThisWeekSchedule();
       } else {
         return "경기 일정에 관한 질문만 답변할 수 있습니다.";
       }
     } else if (question.includes("다음주") || question.includes("다음 주")) {
       if (isGameScheduleQuestion(question)) {
-        return getNextWeekSchedule();
+        return await getNextWeekSchedule();
       } else {
         return "경기 일정에 관한 질문만 답변할 수 있습니다.";
       }
