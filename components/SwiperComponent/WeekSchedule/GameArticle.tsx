@@ -1,18 +1,5 @@
 import Image from "next/image";
-
-interface IGameArticleProps {
-  game: "current" | "next" | "prev";
-  displayDate: string;
-  home: string;
-  homeKey: string;
-  homeStarter: string;
-  homeScore: number;
-  outcome: string;
-  visit: string;
-  visitKey: string;
-  visitScore: number;
-  visitStarter: string;
-}
+import { IGameArticleProps } from ".";
 
 const emblemMap: { [key: string]: string } = {
   "Dosan": "/icons/emblems/dosan_emblem.png",
@@ -28,15 +15,72 @@ const emblemMap: { [key: string]: string } = {
   "SSG": "/icons/emblems/ssg_emblem.png",
 };
 
+const formatDateString = (dateString: string) => {
+  if (!dateString) return "";
+  return `${dateString.substring(0, 4)}.${dateString.substring(
+    4,
+    6
+  )}.${dateString.substring(6, 8)}`;
+};
+
 export function GameArticle(props: IGameArticleProps) {
   const isToday = props.game === "current" ? "bg-[#ec0a0b]" : "bg-black";
-  const formatDateString = (dateString: string) => {
-    if (!dateString) return "";
-    return `${dateString.substring(0, 4)}.${dateString.substring(
-      4,
-      6
-    )}.${dateString.substring(6, 8)}`;
+
+  // 'kt'가 home이나 visit에 있는 경우 항상 team1 위치에 오도록 설정
+  const isKtHome = props.home === "kt";
+  const isKtVisit = props.visit === "kt";
+
+  const team1 =
+    isKtHome || isKtVisit
+      ? {
+          name: props.home,
+          key: props.homeKey,
+          starter: props.homeStarter,
+          decision: props.homeDecision,
+          score: props.homeScore,
+          decisionPitcher: props.homeDecisionPitcher,
+        }
+      : {
+          name: props.visit,
+          key: props.visitKey,
+          starter: props.visitStarter,
+          decision: props.visitDecision,
+          score: props.visitScore,
+          decisionPitcher: props.visitDecisionPitcher,
+        };
+
+  const team2 =
+    isKtHome || isKtVisit
+      ? {
+          name: props.visit,
+          key: props.visitKey,
+          starter: props.visitStarter,
+          decision: props.visitDecision,
+          score: props.visitScore,
+          decisionPitcher: props.visitDecisionPitcher,
+        }
+      : {
+          name: props.home,
+          key: props.homeKey,
+          starter: props.homeStarter,
+          decision: props.homeDecision,
+          score: props.homeScore,
+          decisionPitcher: props.homeDecisionPitcher,
+        };
+
+  const getPitcherInfo = (
+    starter: string | undefined,
+    decision: string | undefined,
+    decisionPitcher: string | undefined,
+    outcome: string | undefined
+  ) => {
+    if (outcome) {
+      return `${decision}: ${decisionPitcher ?? "미정"}`;
+    } else {
+      return `선발: ${starter ?? "미정"}`;
+    }
   };
+
   return (
     <article className="p-5 w-1/3 border rounded-lg shadow-lg">
       <span
@@ -49,33 +93,39 @@ export function GameArticle(props: IGameArticleProps) {
         <div className="flex flex-col items-center">
           <div className="mb-2">
             <Image
-              src={emblemMap[props.homeKey] || "/icons/emblems/kt_emblem.png"}
-              alt={`${props.home} Emblem`}
+              src={emblemMap[team1.key] || "/icons/emblems/kt_emblem.png"}
+              alt={`${team1.name} Emblem`}
               width={64}
               height={64}
-              objectFit="contain"
+              layout="fixed"
             />
           </div>
+          {/**결과가 나왔으면 결정 사항, 안나왔으면 선발투수 */}
           <dl className="text-center">
             <dt className="font-bold w-24 whitespace-nowrap overflow-hidden text-ellipsis">
-              {props.home}
+              {team1.name}
             </dt>
             <dd className="text-gray-500 w-24 whitespace-nowrap overflow-hidden text-ellipsis">
-              선발: {props.homeStarter ?? "미정"}
+              {getPitcherInfo(
+                team1.starter,
+                team1.decision,
+                team1.decisionPitcher,
+                props.outcome
+              )}
             </dd>
           </dl>
         </div>
         {/** info */}
         <div className="flex flex-col items-center mx-4">
           <span className="text-2xl font-bold my-2 whitespace-nowrap overflow-hidden text-ellipsis">
-            {props.homeScore ?? 0} : {props.visitScore ?? 0}
+            {team1.score ?? 0} : {team2.score ?? 0}
           </span>
           <span
             className={`text-${
               props.outcome === "승" ? "red" : "gray"
             }-600 font-bold whitespace-nowrap overflow-hidden text-ellipsis`}
           >
-            {props.outcome}
+            {props.outcome || "-"}
           </span>
           <button className="mt-2 py-1 px-4 bg-gray-200 rounded-full whitespace-nowrap overflow-hidden text-ellipsis">
             경기 정보
@@ -85,19 +135,24 @@ export function GameArticle(props: IGameArticleProps) {
         <div className="flex flex-col items-center">
           <div className="mb-2">
             <Image
-              src={emblemMap[props.visitKey] || "/icons/emblems/kt_emblem.png"}
-              alt={`${props.visit} Emblem`}
+              src={emblemMap[team2.key] || "/icons/emblems/kt_emblem.png"}
+              alt={`${team2.name} Emblem`}
               width={64}
               height={64}
-              objectFit="contain"
+              layout="fixed"
             />
           </div>
           <dl className="text-center">
             <dt className="font-bold w-24 whitespace-nowrap overflow-hidden text-ellipsis">
-              {props.visit}
+              {team2.name}
             </dt>
             <dd className="text-gray-500 w-24 whitespace-nowrap overflow-hidden text-ellipsis">
-              선발: {props.visitStarter ?? "미정"}
+              {getPitcherInfo(
+                team2.starter,
+                team2.decision,
+                team2.decisionPitcher,
+                props.outcome
+              )}
             </dd>
           </dl>
         </div>

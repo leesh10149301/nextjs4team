@@ -1,21 +1,41 @@
 "use client";
 
-import React, { Suspense, useState, useEffect, useTransition } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { GameArticle } from "./GameArticle";
 import { SkeletonGameArticle } from "@/components/skeleton/SkeletonGameArticle";
 
-interface IGameArticleProps {
-  game: "current" | "next" | "prev";
-  displayDate: string;
-  home: string;
-  homeKey: string;
-  homeStarter: string;
+interface GameArticleOptinalProps {
+  homeDecision?: string;
+  homeDecisionPitcher?: string;
   homeScore?: number;
-  outcome: string;
-  visit: string;
-  visitKey: string;
+  homeStarter?: string;
+  visitDecision?: string;
+  visitDecisionPitcher?: string;
   visitScore?: number;
-  visitStarter: string;
+  visitStarter?: string;
+}
+
+export interface IGameArticleProps extends GameArticleOptinalProps {
+  displayDate: string;
+  game: "current" | "next" | "prev";
+  gameDate: number;
+  gday: number;
+  gmkey: string;
+  gmonth: number;
+  gtime: string;
+  gyear: string;
+  home: string;
+  homeFullname: string;
+  homeKey: string;
+  matchTeamCode: string;
+  matchTeamName: string;
+  outcome: string;
+  stadium: string;
+  stadiumKey: string;
+  status: string;
+  visit: string;
+  visitFullname: string;
+  visitKey: string;
 }
 
 interface IScheduleData {
@@ -66,21 +86,7 @@ function renderGameArticle({
 }: {
   gameArticle: IGameArticleProps;
 }) {
-  return (
-    <GameArticle
-      game={gameArticle.game}
-      displayDate={gameArticle.displayDate}
-      home={gameArticle.home}
-      homeKey={gameArticle.homeKey}
-      homeStarter={gameArticle.homeStarter}
-      homeScore={gameArticle.homeScore}
-      outcome={gameArticle.outcome}
-      visit={gameArticle.visit}
-      visitKey={gameArticle.visitKey}
-      visitScore={gameArticle.visitScore}
-      visitStarter={gameArticle.visitStarter}
-    />
-  );
+  return <GameArticle {...gameArticle} />;
 }
 
 export default function WeekSchedule() {
