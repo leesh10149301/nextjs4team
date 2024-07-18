@@ -1,7 +1,7 @@
 import Banner from "@/components/Banner";
 
 export const metadata = {
-  title: "fanpage board",
+  title: "auth",
   description: "",
 };
 
@@ -12,9 +12,14 @@ export default function BoardLayout({
 }) {
   const data = [
     {
-      category: "팬페이지",
-      url: "/fan/board",
-      desc: "팬페이지 입니다.",
+      category: "로그인",
+      url: "/auth/login",
+      desc: "로그인 후 kt wiz 사이트를 더욱 다양하게 이용해 보세요.",
+    },
+    {
+      category: "회원가입",
+      url: "/auth/join",
+      desc: "",
     },
   ];
   return (
