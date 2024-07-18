@@ -199,3 +199,18 @@ export const deleteUserByUsername = async (username) => {
     throw new Error("Unexpected error: " + error.message);
   }
 };
+
+// 유저 정보 가져오기
+const getCurrentUser = async () => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user;
+};
+
+const getTargetUserinfo = async () => {
+  const { data: usernameData } = await supabase
+    .from("userinfo")
+    .select("username");
+  return usernameData;
+};
