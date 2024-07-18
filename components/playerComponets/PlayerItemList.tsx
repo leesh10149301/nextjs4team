@@ -17,6 +17,13 @@ export default function PlayerItemList() {
   const sortByPlayerName = (a: TPlayer | TCoach, b: TPlayer | TCoach) => {
     return a.playerName.localeCompare(b.playerName, "ko");
   };
+  const searchData = [
+    ...pitcherData.data.list,
+    ...catcherData.data.list,
+    ...infielderData.data.list,
+    ...outfielderData.data.list,
+    ...coachData.data.list,
+  ];
   let data: (TPlayer | TCoach)[] = useMemo(() => {
     switch (pathname.split("/").pop()) {
       case "player":
@@ -54,11 +61,14 @@ export default function PlayerItemList() {
         return [];
     }
   }, [pathname]);
+  //지우기
+
   useEffect(() => {
     if (searchTerm === "") {
       setFilterData(data);
     } else {
-      const filtered = data.filter((player) =>
+      //플레이어
+      const filtered = searchData.filter((player) =>
         player.playerName.includes(searchTerm)
       );
       setFilterData(filtered);
@@ -66,7 +76,7 @@ export default function PlayerItemList() {
   }, [searchTerm, data]);
   return (
     <>
-      <PlayerRole setSearchTerm={setSearchTerm} />
+      <PlayerRole searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <div className="w-full flex justify-center p-2 mb-10">
         <div className="flex flex-wrap w-[1100px]">
           {filterData.map((player) => (
