@@ -8,3 +8,9 @@ export const MESSAGES = {
     "KT Wiz 선수가 아니거나 야구 선수가 아닙니다. 다른 질문을 해주세요.",
   GPT_API_ERROR: "GPT API 호출 중 에러가 발생했습니다.",
 };
+
+export const INIT_FAQ_SENTENCE: { sentence: string }[] = [
+  { sentence: "예매는 어디서 하지?" },
+  { sentence: "KT Wiz는 언제 창단되었어?" },
+  { sentence: "KT Wiz의 인기 선수는 누구야?" },
+];
