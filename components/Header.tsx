@@ -110,12 +110,12 @@ export default function Header() {
                   ) : (
                     <>
                       <li className=" text-[#35383e]  text-opacity-70 text-sm after:content-['|'] after:pl-2 after:mr-2 after:align-top">
-                        <Link href="/" className="align-middle ">
+                        <Link href="/auth/logIn" className="align-middle ">
                           로그인
                         </Link>
                       </li>
                       <li className="text-[#35383e] text-opacity-70 text-sm ">
-                        <Link href="/" className="align-middle ">
+                        <Link href="/auth/join" className="align-middle ">
                           회원가입
                         </Link>
                       </li>

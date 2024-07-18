@@ -44,9 +44,9 @@ const MENU_SUB_ITEM = {
     { name: "Live 영상모음", href: "/" },
   ],
   "팬페이지": [
-    { name: "홈런볼 예측", href: "/" },
+    { name: "홈런볼 예측", href: "/fan/homerun" },
     { name: "경기 예측", href: "/" },
-    { name: "응원 게시판", href: "/" },
+    { name: "응원 게시판", href: "/fan/board" },
   ],
   "티켓구매": [
     { name: "티켓 예매", href: "/" },
