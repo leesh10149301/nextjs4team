@@ -19,7 +19,7 @@ export default function Chatbot() {
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <Image
-          src={"icon/img-logo-black.svg"}
+          src={"icons/img-logo-black.svg"}
           alt="logo"
           width={64}
           height={64}
