@@ -3,8 +3,11 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { TSearchBarProps } from "./PlayerRole";
 
-export default function SearchBar({ setSearchTerm }: TSearchBarProps) {
-  const [searchPlayer, setSearchPlayer] = useState("");
+export default function SearchBar({
+  searchTerm,
+  setSearchTerm,
+}: TSearchBarProps) {
+  const [searchPlayer, setSearchPlayer] = useState(searchTerm);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchPlayer(e.target.value);

@@ -91,6 +91,8 @@ export type Gameplayer = {
 };
 
 export type TPRecentgamerecordlist = {
+  slg: number;
+  hra: number;
   ab: number;
   gd: number;
   rbi: number;
@@ -139,6 +141,9 @@ export type Recentgamerecordlistfuture = {
 };
 
 export type Seasonsummary = {
+  cs: number;
+  rbi: number;
+  run: number;
   babip: string;
   bb: number;
   bf: number;
@@ -213,6 +218,18 @@ export type Seasonsummaryfutures = {
 };
 
 export type Yearrecordlist = {
+  oavg: number;
+  rbi: number;
+  cs: number;
+  gd: number;
+  sb: number;
+  slg: number;
+  run: number;
+  h2: number;
+  h3: number;
+  ab: number;
+  bra: number;
+  hra: number;
   bb: number;
   bf: number;
   er: number;

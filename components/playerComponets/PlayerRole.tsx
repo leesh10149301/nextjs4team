@@ -3,15 +3,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SearchBar from "./SearchBar";
 export type TSearchBarProps = {
+  searchTerm: string;
   setSearchTerm: (term: string) => void;
 };
-export default function PlayerRole({ setSearchTerm }: TSearchBarProps) {
+export default function PlayerRole({
+  searchTerm,
+  setSearchTerm,
+}: TSearchBarProps) {
   const pathname = usePathname();
   return (
     <>
       <div className="w-full h-16 flex justify-center items-center my-10 ">
         <div className="w-[1100px] flex justify-between text-xl font-bold items-center ">
-          <SearchBar setSearchTerm={setSearchTerm} />
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           {pathname.split("/").pop() === "coach" ? (
             <div className="mr-10 border-b-2 border-[#d60c0c] p-2">
               코칭스태프
