@@ -1,4 +1,5 @@
-const SCHEDULE_API_URL = "http://3.35.50.52:5002/get_schedule?yearMonth=";
+const SCHEDULE_API_URL =
+  process.env.NEXT_PUBLIC_API_ENDPOINT + "/get_schedule?yearMonth=";
 
 async function fetchScheduleData(yearMonth: string) {
   const response = await fetch(`${SCHEDULE_API_URL}${yearMonth}`);

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { FC } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Mousewheel, Navigation } from "swiper/modules";
@@ -11,6 +11,8 @@ import "swiper/css/pagination";
 import "./custom-swiper.css"; // custom-swiper.css 파일 import
 import TodayScore from "./TodayScore";
 import WeekSchedule from "./WeekSchedule";
+import MonthlyPlayer from "./MonthlyPlayer";
+import WizNews from "./WizNews";
 
 const SwiperComponent: FC = () => {
   return (
@@ -19,6 +21,8 @@ const SwiperComponent: FC = () => {
       slidesPerView={1}
       mousewheel
       pagination={{ clickable: true }}
+      preventClicks={false}
+      preventClicksPropagation={false}
       navigation
       modules={[Pagination, Mousewheel, Navigation]}
       className="h-screen"
@@ -37,13 +41,9 @@ const SwiperComponent: FC = () => {
             <div className="w-full h-[302px] flex items-center justify-center">
               <WeekSchedule />
             </div>
-            <div className="w-full h-[189.98px] bg-gray-300 flex items-center justify-center mt-4">
-              <div className="w-[550px] h-[190px] bg-gray-100 flex items-center justify-center mx-2">
-                현재 순위
-              </div>
-              <div className="w-[550px] h-[190px] bg-gray-400 flex items-center justify-center mx-2">
-                wiz 소식
-              </div>
+            <div className="w-full h-[189.98px] flex">
+              <MonthlyPlayer />
+              <WizNews />
             </div>
           </div>
         </div>

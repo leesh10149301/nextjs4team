@@ -143,7 +143,7 @@ export default function ChatLog(props: IChatLogProps) {
 
   return (
     <div className="flex flex-col rounded-lg shadow-md h-full p-2 bg-white">
-      <div className="overflow-y-auto h-96 mb-4 space-y-2">
+      <div className="overflow-y-auto h-[430px] mb-4 space-y-2">
         {messages.map((data, index) => {
           const textColor = itsMe(data.user_id)
             ? "text-red-400"

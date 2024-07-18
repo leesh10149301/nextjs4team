@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { IGameArticleProps } from ".";
 
 const emblemMap: { [key: string]: string } = {
@@ -89,12 +88,10 @@ export function GameArticle(props: IGameArticleProps) {
         {/** team1 */}
         <div className="flex flex-col items-center">
           <div className="mb-2">
-            <Image
+            <img
               src={emblemMap[team1.key] || "/icons/emblems/default_emblem.png"}
               alt={`${team1.name} Emblem`}
-              width={64}
-              height={64}
-              layout="fixed"
+              className="size-16 object-contain"
             />
           </div>
           {/**결과가 나왔으면 결정 사항, 안나왔으면 선발투수 */}
@@ -131,12 +128,10 @@ export function GameArticle(props: IGameArticleProps) {
         {/** team2 */}
         <div className="flex flex-col items-center">
           <div className="mb-2">
-            <Image
+            <img
               src={emblemMap[team2.key] || "/icons/emblems/default_emblem.png"}
               alt={`${team2.name} Emblem`}
-              width={64}
-              height={64}
-              layout="fixed"
+              className="size-16 object-contain"
             />
           </div>
           <dl className="text-center">

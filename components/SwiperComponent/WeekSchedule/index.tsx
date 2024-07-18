@@ -47,7 +47,9 @@ interface IScheduleData {
 }
 
 const fetchScheduleData = async () => {
-  const response = await fetch("http://3.35.50.52:5002/get_current_info");
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/get_current_info`
+  );
   if (response.ok) {
     const data = await response.json();
     return data as IScheduleData;

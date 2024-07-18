@@ -50,7 +50,7 @@ const answerPlayerQuestion = async (analysisResult: any) => {
       const { pcode, position } = await getPlayerSelectedData(searchName);
 
       const response = await fetch(
-        `http://3.35.50.52:5002/player_data?pcode=${pcode}`
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/player_data?pcode=${pcode}`
       ).then((res) => res.json());
       return generateSeasonMessage(response.data.seasonsummary, position);
     } else {
@@ -67,7 +67,7 @@ const answerPlayerQuestion = async (analysisResult: any) => {
 };
 
 const fetchTodayRank = async () => {
-  const response = await fetch("http://3.35.50.52:5002/today_rank");
+  const response = await fetch(`${process.env.KTWIZ_API_URL}/today_rank`);
   const data = await response.json();
   return data.filter((rank: Record<string, string>) => rank.팀 === "KT");
 };
