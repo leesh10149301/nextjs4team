@@ -65,6 +65,11 @@ export default function EditPost() {
         onChange={(e) => setTitle(e.target.value)}
       />
       <textarea value={content} onChange={(e) => setContent(e.target.value)} />
+      <input
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)} // username 입력 필드 추가
+      />
       <button onClick={saveHandle}>저장</button>
       <button onClick={() => router.push(`/fan/board/${id}`)}>취소</button>
     </>
