@@ -1,20 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import supabase from "@/app/utils/supabase/client";
 
 export default function NewPost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [token, setToken] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (data && data.session) {
+        setToken(data.session.access_token); // 토큰 설정
+      } else {
+        console.error("Failed to fetch session:", error);
+      }
+    };
+    fetchSession();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!token) {
+      console.error("로그인되어 있지 않습니다.");
+      return;
+    }
 
     const response = await fetch("/api/board", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`, // 인증 토큰 포함
       },
       body: JSON.stringify({ title, content }),
     });
