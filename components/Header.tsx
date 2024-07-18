@@ -418,7 +418,7 @@ export default function Header() {
                       </li>
                       <li className="text-left py-[10px]  w-full ">
                         <Link
-                          href=""
+                          href="/fan/board"
                           className="leading-normal hover:font-bold  "
                         >
                           응원 게시판

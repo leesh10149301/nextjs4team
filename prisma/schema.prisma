@@ -16,6 +16,18 @@ model board {
   content   String?   @default("")
   likes     Int?
   updatedAt DateTime? @db.Timestamptz(6)
+  username  String    @default("")
+
+  @@schema("public")
+}
+
+model board_comment {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  post_id   String   @db.Uuid 
+  content   String?   @default("")
+  updatedAt DateTime? @db.Timestamptz(6)
+  username  String    @default("")
 
   @@schema("public")
 }

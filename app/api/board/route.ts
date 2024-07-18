@@ -1,3 +1,4 @@
+import supabase from "@/app/utils/supabase/client";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,14 +11,39 @@ function replacer(key, value) {
   return value;
 }
 
-export async function POST(req) {
+// supabase에서 username 가져오기
+export async function getUsernameFromToken(req: NextRequest) {
+  const token = req.headers.get("Authorization")?.replace("Bearer", "").trim();
+  if (!token) throw new Error("Authentication token is missing");
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser(token);
+  if (error) throw new Error("Failed to get user from supabase");
+
+  const { data: userinfo, error: userinfoError } = await supabase
+    .from("userinfo")
+    .select("username")
+    .eq("id", user.id)
+    .single();
+
+  if (userinfoError) throw new Error("Failed to get user info from supabase");
+
+  return userinfo.username;
+}
+
+// POST 메서드
+export async function POST(req: NextRequest) {
   try {
     const { title, content } = await req.json();
+    const username = await getUsernameFromToken(req);
 
     const post = await prisma.board.create({
       data: {
         title,
         content,
+        username,
       },
     });
 
@@ -34,9 +60,11 @@ export async function POST(req) {
   }
 }
 
+// GET 메서드
 export async function GET() {
   try {
     const posts = await prisma.board.findMany();
+    console.log("Fetched posts:", posts); // 콘솔 로그 추가
     const postsData = JSON.parse(JSON.stringify(posts, replacer));
     return NextResponse.json(postsData, { status: 200 });
   } catch (error) {
@@ -50,7 +78,7 @@ export async function GET() {
   }
 }
 
-// 수정
+// PUT 메서드
 export async function PUT(req: NextRequest, { params }) {
   const { id } = params;
 
@@ -66,7 +94,7 @@ export async function PUT(req: NextRequest, { params }) {
     }
 
     const updatedPost = await prisma.board.update({
-      where: { id: parseInt(id, 10) },
+      where: { id: id }, // 문자열로 제공
       data: { title, content },
     });
 
@@ -83,12 +111,12 @@ export async function PUT(req: NextRequest, { params }) {
   }
 }
 
-// 삭제
+// DELETE 메서드
 export async function DELETE(req: NextRequest) {
   try {
     const { id } = await req.json();
     await prisma.board.delete({
-      where: { id: Number(id) },
+      where: { id: id }, // 문자열로 제공
     });
     return NextResponse.json(
       { message: "Post deleted successfully" },

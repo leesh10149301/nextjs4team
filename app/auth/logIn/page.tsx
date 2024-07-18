@@ -5,7 +5,6 @@ import useUserInfo from "@/app/stores/useUserInfo";
 import { LoginApi } from "@/app/api/auth/route";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import supabase from "@/app/utils/supabase/client";
 
 export default function LogIn() {
   const [email, setEmail] = useState<string>("");
@@ -29,6 +28,7 @@ export default function LogIn() {
     fetchUserInfo();
   }, []);
 
+  // inp;ut
   const handleEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
     setEmail(email);
@@ -39,6 +39,7 @@ export default function LogIn() {
     setPassword(password);
   };
 
+  // validate check
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) setEmailError("이메일 아이디를 입력해주세요.");
@@ -66,9 +67,9 @@ export default function LogIn() {
       const user = await LoginApi(email, password);
       setUserInfo({
         email: user.email,
-        nickname: user.user_metadata.username,
+        nickname: user.username,
       });
-      console.log("로그인 성공:", user.user_metadata.username);
+      console.log("로그인 성공:", user.username);
       router.push("/");
     } catch (err: any) {
       setPasswordError(err.message);
