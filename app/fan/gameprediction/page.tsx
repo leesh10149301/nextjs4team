@@ -7,7 +7,7 @@ interface TeamData {
   recentMatches: Record<string, string>;
 }
 
-export default function Home() {
+export default function gamePrediction() {
   const [ktData, setKtData] = useState<TeamData | null>(null);
   const [ktWinProbability, setKtWinProbability] = useState<number | null>(null);
   const [opponent, setOpponent] = useState<string>("KIA");
@@ -32,6 +32,7 @@ export default function Home() {
               if (key.includes("승-패-무")) {
                 const opponent = key.split("(")[0].trim();
                 const record = ktTeam[key];
+
                 recentMatches[opponent] = record;
               }
             }
@@ -41,9 +42,11 @@ export default function Home() {
             console.error("KT 팀 데이터를 찾을 수 없습니다.");
           }
         } else {
+          // data 형식 유효하지 않은 경우
           console.error("Invalid data format");
         }
       } catch (error) {
+        // data 가져오기 중 오류가 발생한 경우
         console.error("Error fetching data", error);
       }
     };
@@ -85,10 +88,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-700 flex flex-col items-center justify-center p-4">
+    <div className="min-h-[710px] bg-gradient-to-br flex flex-col items-center justify-center p-4">
       <div className="bg-white shadow-2xl rounded-lg p-8 max-w-lg w-full transform transition-all border-t-8 border-red-600 h-80">
         <h1 className="text-4xl font-extrabold text-center text-red-600 mb-6 drop-shadow-lg">
-          KT wiz 승리 예측
+          KT wiz 경기 예측
         </h1>
         <div className="mb-4">
           <label

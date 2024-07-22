@@ -14,13 +14,13 @@ export default function FanLayout({ children }: { children: React.ReactNode }) {
     },
     {
       category: "경기예측",
-      url: "/fan/",
-      desc: "각기 다른 매력을 지닌 kt wiz 팀을 소개합니다.",
+      url: "/fan/gameprediction",
+      desc: "",
     },
     {
       category: "응원게시판",
       url: "/fan/board",
-      desc: "각기 다른 매력을 지닌 kt wiz 팀을 소개합니다.",
+      desc: "KT wiz 팀을 응원해주세요.",
     },
   ];
   return (
