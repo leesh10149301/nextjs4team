@@ -4,26 +4,53 @@ import { useEffect, useState } from "react";
 import * as d3 from "d3";
 import hitterImage from "@/public/images/hitter.png";
 import ballImage from "@/public/images/home-run-ball.png";
+import { PlayerHomerunData } from "@/app/fan/homerun/page";
 
-const StadiumMap = () => {
+interface StadiumMapProps {
+  selectedPlayerId: number | null;
+  playersHomerunData: PlayerHomerunData[];
+  error: string | null;
+}
+
+const StadiumMap = ({
+  selectedPlayerId,
+  playersHomerunData,
+  error,
+}: StadiumMapProps) => {
   const [isBallHit, setIsBallHit] = useState(false);
+
+  useEffect(() => {
+    resetBall();
+    const hitButton = d3.select("#hit-button");
+    hitButton.classed("animate-bounce", true);
+    setTimeout(() => {
+      hitButton.classed("animate-bounce", false);
+    }, 2000);
+  }, [selectedPlayerId]);
 
   useEffect(() => {
     const svg = d3.select("#stadium-svg");
 
     const colors: { [key: string]: string } = {
-      "중앙지정석": "#FF5733",
-      "1루 응원지정석": "#337AFF",
-      "3루 응원지정석": "#FFB533",
-      "지니TV석": "#9333FF",
-      "Y박스석": "#33FF57",
+      "중앙지정석": "#702CA4",
+      "1루 응원지정석": "#C63737",
+      "3루 응원지정석": "#C63737",
+      "지니TV석": "#509336",
+      "Y박스석": "#ED9342",
       "스카이박스": "#33D1FF",
-      "1루 스카이존": "#33FFDA",
-      "3루 스카이존": "#FFF733",
-      "티빙 테이블석(외야)": "#FF33E3",
-      "외야잔디/자유석": "#B6FF33",
-      "1루 휠체어석": "#F2C9E9",
-      "3루 휠체어석": "#F2C9E9",
+      "스카이박스 구역": "#1F2937",
+      "1루 스카이존": "#211C79",
+      "3루 스카이존": "#211C79",
+      "티빙 테이블석(외야)": "#DC7490",
+      "외야잔디/자유석1": "#BDBDBD",
+      "외야잔디/자유석2": "#BDBDBD",
+      "1루 휠체어석": "#C63737",
+      "3루 휠체어석": "#C63737",
+      "키즈랜드 캠핑존": "#1F8DCC",
+      "KT알파쇼핑석": "#CE4F9D",
+      "지니존": "#4864CB",
+      "익사이팅석": "#37A09B",
+      "하이파이브존": "#37A09B",
     };
 
     d3.json("/data/stadium_coordinates.json")
@@ -49,9 +76,9 @@ const StadiumMap = () => {
         const maxY = d3.max(allCoordinates, (d) => d[1]);
 
         const padding = 300;
-        const viewBox = `${minX - padding} ${minY - padding} ${
-          maxX - minX + 2 * padding
-        } ${maxY - minY + 2 * padding}`;
+        const viewBox = `${minX! - padding} ${minY! - padding} ${
+          maxX! - minX! + 2 * padding
+        } ${maxY! - minY! + 2 * padding}`;
         svg.attr("viewBox", viewBox);
 
         const boundaryCoordinates = d3.polygonHull(allCoordinates);
@@ -59,8 +86,8 @@ const StadiumMap = () => {
           const boundaryPadding = 200;
           const expandedBoundary = boundaryCoordinates.map(([x, y]) => {
             const angle = Math.atan2(
-              y - (minY + maxY) / 2,
-              x - (minX + maxX) / 2
+              y - (minY! + maxY!) / 2,
+              x - (minX! + maxX!) / 2
             );
             return [
               x + boundaryPadding * Math.cos(angle),
@@ -85,37 +112,96 @@ const StadiumMap = () => {
           const seatRadius = 40;
           const auraRadius = seatRadius + 10;
 
-          // 각 영역의 좌석(zone) 처리
-          area.zones.forEach((zone: any) => {
-            const { x, y } = zone.coordinates;
+          if (
+            [
+              "익사이팅석",
+              "하이파이브존",
+              "지니존",
+              "KT알파쇼핑석",
+              "키즈랜드 캠핑존",
+              "외야잔디/자유석1",
+              "외야잔디/자유석2",
+            ].includes(area.area_name)
+          ) {
+            const points = area.zones.map((zone: any) => [
+              zone.coordinates.x,
+              zone.coordinates.y,
+            ]);
+
+            const line = d3
+              .line()
+              .x((d) => d[0])
+              .y((d) => d[1])
+              .curve(d3.curveBasisClosed);
 
             areaGroup
-              .append("circle")
-              .attr("cx", x)
-              .attr("cy", y)
-              .attr("r", auraRadius)
+              .append("path")
+              .attr("id", `path-${area.area_name}`)
+              .attr("d", line(points))
               .attr("fill", colors[area.area_name] || "white")
-              .attr("opacity", 0.2);
+              .attr("opacity", 0.6)
+              .attr("stroke", colors[area.area_name] || "white")
+              .attr("stroke-width", seatRadius * 2);
 
-            areaGroup
-              .append("circle")
-              .attr("cx", x)
-              .attr("cy", y)
-              .attr("r", seatRadius)
-              .attr("fill", colors[area.area_name] || "white")
-              .attr("stroke", "black")
-              .attr("stroke-width", 2);
+            // 경로 중앙에 텍스트 추가
+            const centerX = d3.mean(points, (d) => d[0]);
+            const centerY = d3.mean(points, (d) => d[1]);
 
             areaGroup
               .append("text")
-              .attr("x", x)
-              .attr("y", y + 8)
+              .append("textPath")
+              .attr("href", `#path-${area.area_name}`) // 경로 ID 참조
+              .attr("startOffset", "20%") // 경로의 중간에 배치
               .attr("text-anchor", "middle")
-              .attr("font-size", "24px")
+              .attr("font-size", "26px")
               .attr("font-weight", "bold")
               .attr("fill", "white")
-              .text(zone.zone);
-          });
+              .text(area.area_name);
+          } else {
+            // 각 영역의 좌석(zone) 처리
+            area.zones.forEach((zone: any) => {
+              const { x, y } = zone.coordinates;
+
+              if (zone.zone === "<<< 스카이박스 >>>") {
+                areaGroup
+                  .append("text")
+                  .attr("x", x)
+                  .attr("y", y + 8)
+                  .attr("text-anchor", "middle")
+                  .attr("font-size", "26px")
+                  .attr("font-weight", "bold")
+                  .attr("fill", "white")
+                  .text(zone.zone);
+              } else {
+                areaGroup
+                  .append("circle")
+                  .attr("cx", x)
+                  .attr("cy", y)
+                  .attr("r", auraRadius)
+                  .attr("fill", colors[area.area_name] || "white")
+                  .attr("opacity", 0.2);
+
+                areaGroup
+                  .append("circle")
+                  .attr("cx", x)
+                  .attr("cy", y)
+                  .attr("r", seatRadius)
+                  .attr("fill", colors[area.area_name] || "white")
+                  .attr("stroke", "black")
+                  .attr("stroke-width", 2);
+
+                areaGroup
+                  .append("text")
+                  .attr("x", x)
+                  .attr("y", y + 8)
+                  .attr("text-anchor", "middle")
+                  .attr("font-size", "24px")
+                  .attr("font-weight", "bold")
+                  .attr("fill", "white")
+                  .text(zone.zone);
+              }
+            });
+          }
         });
 
         const facilityWidth = 160;
@@ -148,8 +234,8 @@ const StadiumMap = () => {
         });
 
         const batterX = 1820;
-        const batterY = 2950;
-        const batter = svg
+        const batterY = 2800;
+        svg
           .append("image")
           .attr("id", "batter-image")
           .attr("href", hitterImage.src)
@@ -159,101 +245,109 @@ const StadiumMap = () => {
           .attr("height", 220)
           .attr("transform-origin", `${batterX}px ${batterY}px`);
 
-        function animateBatter() {
-          d3.select("#batter-image")
-            .transition()
-            .duration(100)
-            .attr("x", batterX - 80)
-            .transition()
-            .duration(100)
-            .attr("x", batterX - 70)
-            .transition()
-            .duration(100)
-            .attr("x", batterX - 75)
-            .on("end", () => {
-              d3.select("#batter-image").attr("x", batterX - 75);
-            });
-        }
-
-        const ball = svg
-          .append("image")
-          .attr("id", "ball-image")
-          .attr("href", ballImage.src)
-          .attr("x", batterX - 30)
-          .attr("y", batterY - 30)
-          .attr("width", 60)
-          .attr("height", 60);
-
-        const initialBallX = batterX - 30;
-        const initialBallY = batterY - 30;
-
-        function animateBall(targetX: number, targetY: number) {
-          animateBatter();
-
-          d3.select("#ball-image")
-            .transition()
-            .duration(1000)
-            .attr("x", targetX - 30)
-            .attr("y", targetY - 30)
-            .style("filter", "url(#fire-effect)")
-            .on("end", () => {
-              d3.select("#ball-image").style("filter", null);
-              svg
-                .append("circle")
-                .attr("class", "highlight-circle")
-                .attr("cx", targetX)
-                .attr("cy", targetY)
-                .attr("r", 300)
-                .attr("fill", "lightgreen")
-                .attr("opacity", 0.5);
-              setIsBallHit(true);
-            });
-        }
-
-        function resetBall() {
-          d3.select("#ball-image")
-            .transition()
-            .duration(1000)
-            .attr("x", initialBallX)
-            .attr("y", initialBallY)
-            .on("end", () => {
-              setIsBallHit(false);
-              svg.selectAll(".highlight-circle").remove();
-            });
-        }
-
-        d3.select("#hit-button").on("click", () => {
-          const targetX = 1000;
-          const targetY = 1800;
-          animateBall(targetX, targetY);
-        });
-
-        d3.select("#reset-button").on("click", () => {
-          resetBall();
-        });
+        resetBall();
       })
       .catch((error) => {
         console.error("Error loading the JSON file:", error);
       });
-  }, [isBallHit]);
+  }, []);
+
+  useEffect(() => {
+    const hitButton = d3.select("#hit-button");
+    hitButton.on("click", () => {
+      resetBall();
+      animateBatter();
+      if (selectedPlayerId === null) {
+        playersHomerunData.forEach((playerData) => {
+          animateBall(
+            playerData.x_coord,
+            playerData.y_coord,
+            playerData.playerId
+          );
+        });
+      } else {
+        const playerData = playersHomerunData.find(
+          (player) => player.playerId == selectedPlayerId
+        );
+        if (playerData) {
+          animateBall(
+            playerData.x_coord,
+            playerData.y_coord,
+            playerData.playerId
+          );
+        }
+      }
+    });
+  }, [playersHomerunData, selectedPlayerId]);
+
+  function animateBatter() {
+    const batterX = 1820;
+    const batterY = 2800;
+    d3.select("#batter-image")
+      .transition()
+      .duration(100)
+      .attr("x", batterX - 80)
+      .transition()
+      .duration(100)
+      .attr("x", batterX - 70)
+      .transition()
+      .duration(100)
+      .attr("x", batterX - 75)
+      .on("end", () => {
+        d3.select("#batter-image").attr("x", batterX - 75);
+      });
+  }
+
+  function animateBall(targetX: number, targetY: number, playerId: number) {
+    const svg = d3.select("#stadium-svg");
+    const ball = svg
+      .append("image")
+      .attr("href", ballImage.src)
+      .attr("class", "ball-image")
+      .attr("x", 1820 - 30)
+      .attr("y", 2800 - 30)
+      .attr("width", 60)
+      .attr("height", 60)
+      .transition()
+      .duration(1000 + Math.random() * 1000)
+      .attr("x", targetX - 30)
+      .attr("y", targetY - 30)
+      .style("filter", "url(#fire-effect)")
+      .on("end", () => {
+        d3.select(ball.node() as any).style("filter", null);
+        svg
+          .append("circle")
+          .attr("class", "highlight-circle")
+          .attr("cx", targetX)
+          .attr("cy", targetY)
+          .attr("r", 150)
+          .attr("fill", "lightgreen")
+          .attr("opacity", 0.5);
+      });
+
+    setIsBallHit(true);
+  }
+
+  function resetBall() {
+    const svg = d3.select("#stadium-svg");
+    svg.selectAll(".ball-image").remove();
+    svg.selectAll(".highlight-circle").remove();
+    setIsBallHit(false);
+  }
 
   return (
     <div className="relative w-full h-full">
-      {isBallHit ? (
-        <button
-          id="reset-button"
-          className="absolute top-5 left-5 z-10 bg-white p-5 rounded"
-        >
-          공 복귀
-        </button>
-      ) : (
-        <button
-          id="hit-button"
-          className="absolute top-5 left-5 z-10 bg-white p-5 rounded"
-        >
-          공 치기
-        </button>
-      )}
+      <p>{error}</p>
+      <button
+        id="hit-button"
+        className="fixed border-4 left-20 bottom-1/3 border-[#d60c0c] z-10 bg-white p-1 duration-300 shadow-md rounded-full blink"
+      >
+        <img
+          src="/images/homerunBtn.png"
+          alt="홈런클릭버튼"
+          className="size-24 object-contain rounded-full"
+        />
+      </button>
       <svg
         id="stadium-svg"
         preserveAspectRatio="xMidYMid meet"
@@ -277,4 +371,5 @@ const StadiumMap = () => {
     </div>
   );
 };
+
 export default StadiumMap;

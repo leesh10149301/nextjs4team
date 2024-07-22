@@ -36,6 +36,7 @@ export async function GET(req, { params }) {
   }
 }
 
+
 // PUT 메서드
 export async function PUT(req, { params }) {
   const { id } = params;
