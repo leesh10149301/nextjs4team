@@ -74,14 +74,23 @@ export default function PlayerItemList() {
       setFilterData(filtered);
     }
   }, [searchTerm, data]);
+  console.log(filterData.length);
   return (
     <>
       <PlayerRole searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <div className="w-full flex justify-center p-2 mb-10">
         <div className="flex flex-wrap w-[1100px]">
-          {filterData.map((player) => (
-            <PlayerItem player={player} key={player.pcode} />
-          ))}
+          {filterData.length === 0 ? (
+            <div className="flex justify-center w-full py-32 ">
+              <p className="font-bold text-3xl text-[#d60c0c]">
+                검색 결과가 없습니다.
+              </p>
+            </div>
+          ) : (
+            filterData.map((player) => (
+              <PlayerItem player={player} key={player.pcode} />
+            ))
+          )}
         </div>
       </div>
     </>
