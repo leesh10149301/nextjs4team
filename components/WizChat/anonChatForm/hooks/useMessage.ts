@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import supabase from "@/lib/utils/supabase/client";
-import { fetchMessages, fetchNickname } from "./databaseService";
+import { fetchMessages, fetchNickname } from "../actions/databaseService";
 import { kstDate } from "@/lib/kstDate";
 
 const useMessages = () => {

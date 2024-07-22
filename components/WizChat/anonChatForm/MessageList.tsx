@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import MessageItem from "./MessageItem";
-import useMessages from "./actions/useMessage";
+import useMessages from "./hooks/useMessage";
 
 export default function MessageList() {
   const messages = useMessages();
