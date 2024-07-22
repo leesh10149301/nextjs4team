@@ -20,7 +20,7 @@ const SwiperComponent: FC = () => {
       direction="vertical"
       slidesPerView={1}
       mousewheel
-      pagination={{ clickable: true }}
+      // pagination={{ clickable: true }}
       navigation
       modules={[Pagination, Mousewheel, Navigation]}
       className="h-screen"

@@ -1,7 +1,6 @@
 export const baseballResultPatterns = [
   /야구/,
   /경기/,
-  /점수/,
   /결과/,
   /승리/,
   /패배/,

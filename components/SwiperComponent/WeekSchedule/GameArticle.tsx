@@ -94,7 +94,6 @@ export function GameArticle(props: IGameArticleProps) {
               className="size-16 object-contain"
             />
           </div>
-          {/**결과가 나왔으면 결정 사항, 안나왔으면 선발투수 */}
           <dl className="text-center">
             <dt className="font-bold w-24 whitespace-nowrap overflow-hidden text-ellipsis">
               {team1.name}

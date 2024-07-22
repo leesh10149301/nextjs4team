@@ -14,7 +14,7 @@ export default function WizNews() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/news_list`
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/news_list?searchmax=5&page=1`
       );
       if (!response.ok) return;
       const {
@@ -25,7 +25,7 @@ export default function WizNews() {
     fetchData();
   }, []);
 
-  if (!newsList || newsList.length < 5)
+  if (!newsList)
     return (
       <div className="w-[540px] h-[300px] bg-gray-300 mx-2 mt-28 rounded-lg animate-pulse"></div>
     );
