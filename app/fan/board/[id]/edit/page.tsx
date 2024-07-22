@@ -7,6 +7,7 @@ export default function EditPost() {
   const { id } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [username, setUsername] = useState(""); // username 상태 추가
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -18,8 +19,10 @@ export default function EditPost() {
           throw new Error("Failed to fetch post");
         }
         const data = await response.json();
+        console.log("Post data:", data); // 게시물 데이터 로그 출력
         setTitle(data.title);
         setContent(data.content);
+        setUsername(data.username); // username 설정
         setLoading(false);
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -37,11 +40,11 @@ export default function EditPost() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content, username }), // username 포함
       });
 
       if (response.ok) {
-        router.push(`/fan/board/${id}`); // 수정 후 게시물 상세 페이지로 이동
+        router.push(`/fan/board/${id}`);
       } else {
         const errorData = await response.json();
         console.error("Error updating post:", errorData);

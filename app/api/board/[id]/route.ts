@@ -10,12 +10,13 @@ function replacer(key, value) {
   return value;
 }
 
+// GET 메서드
 export async function GET(req, { params }) {
   const { id } = params;
 
   try {
     const post = await prisma.board.findUnique({
-      where: { id: parseInt(id, 10) },
+      where: { id: id },
     });
 
     if (!post) {
@@ -35,23 +36,23 @@ export async function GET(req, { params }) {
   }
 }
 
-// 수정
+// PUT 메서드
 export async function PUT(req, { params }) {
   const { id } = params;
 
   try {
     const body = await req.json();
-    const { title, content } = body;
+    const { title, content, username } = body;
 
-    if (!title || !content) {
+    if (!title || !content || !username) {
       return NextResponse.json(
-        { error: "Title and content are required" },
+        { error: "Title, content and username are required" },
         { status: 400 }
       );
     }
 
     const post = await prisma.board.findUnique({
-      where: { id: parseInt(id, 10) },
+      where: { id: id },
     });
 
     if (!post) {
@@ -59,10 +60,11 @@ export async function PUT(req, { params }) {
     }
 
     const updatedPost = await prisma.board.update({
-      where: { id: parseInt(id, 10) },
+      where: { id: id },
       data: {
         title,
         content,
+        username,
       },
     });
 
@@ -79,13 +81,13 @@ export async function PUT(req, { params }) {
   }
 }
 
-// 삭제
+// DELETE 메서드
 export async function DELETE(req, { params }) {
   const { id } = params;
 
   try {
     const post = await prisma.board.findUnique({
-      where: { id: parseInt(id, 10) },
+      where: { id: id },
     });
 
     if (!post) {
@@ -93,7 +95,7 @@ export async function DELETE(req, { params }) {
     }
 
     await prisma.board.delete({
-      where: { id: parseInt(id, 10) },
+      where: { id: id },
     });
 
     return NextResponse.json(
