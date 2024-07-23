@@ -17,7 +17,7 @@ export default function RecentReport() {
         <thead className="bg-[#d23933] text-white">
           <tr>
             {recentThs?.map((recentTh, idx) => (
-              <th key={idx} className=" w-20 py-1">
+              <th key={idx} className=" w-20 py-2">
                 {recentTh}
               </th>
             ))}
@@ -27,10 +27,10 @@ export default function RecentReport() {
           {position === "투수"
             ? recentTds?.map((recentTd, index) => (
                 <tr key={index}>
-                  <td className="border-b text-center py-1">
+                  <td className="border-b text-center py-2">
                     {recentTd.displayDate}
                   </td>
-                  <td className="border-b text-center py-1">
+                  <td className="border-b text-center py-2">
                     {recentTd.matchTeamName}
                   </td>
                   <td
@@ -40,48 +40,48 @@ export default function RecentReport() {
                         : recentTd.wls === "L"
                         ? "text-blue-500"
                         : ""
-                    }  border-b text-center py-1`}
+                    }  border-b text-center py-2`}
                   >
                     {recentTd.wls === " " || recentTd.wls === "S"
                       ? " "
                       : recentTd.wls}
                   </td>
-                  <td className="border-b text-center py-1">{recentTd.wl}</td>
-                  <td className="border-b text-center py-1">{recentTd.pa}</td>
-                  <td className="border-b text-center py-1">{recentTd.bb}</td>
-                  <td className="border-b text-center py-1">
+                  <td className="border-b text-center py-2">{recentTd.wl}</td>
+                  <td className="border-b text-center py-2">{recentTd.pa}</td>
+                  <td className="border-b text-center py-2">{recentTd.bb}</td>
+                  <td className="border-b text-center py-2">
                     {recentTd.innDisplay}
                   </td>
-                  <td className="border-b text-center py-1">{recentTd.hit}</td>
-                  <td className="border-b text-center py-1">{recentTd.hr}</td>
-                  <td className="border-b text-center py-1">{recentTd.hp}</td>
-                  <td className="border-b text-center py-1">{recentTd.kk}</td>
-                  <td className="border-b text-center py-1">{recentTd.r}</td>
-                  <td className="border-b text-center py-1">{recentTd.er}</td>
+                  <td className="border-b text-center py-2">{recentTd.hit}</td>
+                  <td className="border-b text-center py-2">{recentTd.hr}</td>
+                  <td className="border-b text-center py-2">{recentTd.hp}</td>
+                  <td className="border-b text-center py-2">{recentTd.kk}</td>
+                  <td className="border-b text-center py-2">{recentTd.r}</td>
+                  <td className="border-b text-center py-2">{recentTd.er}</td>
                 </tr>
               ))
             : recentTds?.map((recentTd, index) => (
                 <tr key={index}>
-                  <td className="border-b text-center py-1">
+                  <td className="border-b text-center py-2">
                     {recentTd.displayDate}
                   </td>
-                  <td className="border-b text-center py-1">
+                  <td className="border-b text-center py-2">
                     {recentTd.matchTeamName}
                   </td>
-                  <td className="border-b text-center py-1">{recentTd.bra}</td>
-                  <td className="border-b text-center py-1">{recentTd.ab}</td>
-                  <td className="border-b text-center py-1">{recentTd.run}</td>
-                  <td className="border-b text-center py-1">{recentTd.hit}</td>
-                  <td className="border-b text-center py-1">{recentTd.h2}</td>
-                  <td className="border-b text-center py-1">{recentTd.h3}</td>
-                  <td className="border-b text-center py-1">{recentTd.hr}</td>
-                  <td className="border-b text-center py-1">{recentTd.rbi}</td>
-                  <td className="border-b text-center py-1">{recentTd.sb}</td>
-                  <td className="border-b text-center py-1">{recentTd.cs}</td>
-                  <td className="border-b text-center py-1">{recentTd.bb}</td>
-                  <td className="border-b text-center py-1">{recentTd.hp}</td>
-                  <td className="border-b text-center py-1">{recentTd.kk}</td>
-                  <td className="border-b text-center py-1">{recentTd.gd}</td>
+                  <td className="border-b text-center py-2">{recentTd.bra}</td>
+                  <td className="border-b text-center py-2">{recentTd.ab}</td>
+                  <td className="border-b text-center py-2">{recentTd.run}</td>
+                  <td className="border-b text-center py-2">{recentTd.hit}</td>
+                  <td className="border-b text-center py-2">{recentTd.h2}</td>
+                  <td className="border-b text-center py-2">{recentTd.h3}</td>
+                  <td className="border-b text-center py-2">{recentTd.hr}</td>
+                  <td className="border-b text-center py-2">{recentTd.rbi}</td>
+                  <td className="border-b text-center py-2">{recentTd.sb}</td>
+                  <td className="border-b text-center py-2">{recentTd.cs}</td>
+                  <td className="border-b text-center py-2">{recentTd.bb}</td>
+                  <td className="border-b text-center py-2">{recentTd.hp}</td>
+                  <td className="border-b text-center py-2">{recentTd.kk}</td>
+                  <td className="border-b text-center py-2">{recentTd.gd}</td>
                 </tr>
               ))}
         </tbody>

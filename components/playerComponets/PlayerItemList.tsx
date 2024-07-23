@@ -93,7 +93,7 @@ export default function PlayerItemList() {
       <PlayerRole searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <div className="w-full flex justify-center p-2 mb-2">
         <div className="flex flex-wrap w-[1100px]">
-          {currentPageData.length === 0 ? (
+          {!!searchTerm && currentPageData.length === 0 ? (
             <div className="flex justify-center w-full py-32 ">
               <p className="font-bold text-3xl text-[#d60c0c]">
                 검색 결과가 없습니다.
