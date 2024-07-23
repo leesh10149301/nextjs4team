@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import ChatbotForm from "./chatbotForm";
 import AnonChatForm from "./anonChatForm";
+import ChatButton from "./ChatButton";
 
 export type ChatType = "bot" | "anonymous";
 
@@ -32,26 +33,18 @@ export default function ChatModal({ isOpen, onClose }: IChatModalProps) {
             {currentChatType === "bot" ? <ChatbotForm /> : <AnonChatForm />}
           </div>
           <div className="flex justify-between border-t border-gray-300 h-16">
-            <button
+            <ChatButton
+              isActive={currentChatType === "bot"}
               onClick={() => handleChatTypeChange("bot")}
-              className={`flex-1 p-2 border-r border-gray-300 transition-colors rounded-bl-lg ${
-                currentChatType === "bot"
-                  ? "bg-red-500 text-white"
-                  : "bg-white text-red-500 hover:bg-red-100"
-              }`}
-            >
-              WizBot
-            </button>
-            <button
+              label="WizBot"
+              className="border-r border-gray-300 rounded-bl-lg"
+            />
+            <ChatButton
+              isActive={currentChatType === "anonymous"}
               onClick={() => handleChatTypeChange("anonymous")}
-              className={`flex-1 p-2 transition-colors rounded-br-lg ${
-                currentChatType === "anonymous"
-                  ? "bg-red-500 text-white"
-                  : "bg-white text-red-500 hover:bg-red-100"
-              }`}
-            >
-              응원톡
-            </button>
+              label="응원톡"
+              className="rounded-br-lg"
+            />
           </div>
         </div>
       </div>

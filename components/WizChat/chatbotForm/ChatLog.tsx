@@ -22,7 +22,7 @@ export default function ChatLog({ log, isLoading }: IChatLogProps) {
   const sanitizeHTML = (html: string) => DOMPurify.sanitize(html);
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto space-y-2">
+    <div className="flex flex-col h-full max-h-[420px] overflow-y-auto space-y-2">
       {log.map((entry: ChatLog, index: number) => (
         <div
           key={index}

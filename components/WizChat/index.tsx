@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, MouseEventHandler } from "react";
-import ChatButton from "./ChatButton";
+import BotFloatButton from "./BotFloatButton";
 import ChatModal from "./ChatModel";
 
 export default function Chatbot() {
@@ -24,7 +24,7 @@ export default function Chatbot() {
 
   return (
     <>
-      {isClient && !isOpen && <ChatButton onClick={handleOpenChatbot} />}
+      {isClient && !isOpen && <BotFloatButton onClick={handleOpenChatbot} />}
       {isClient && isOpen && (
         <ChatModal isOpen={isOpen} onClose={handleCloseChatbot} />
       )}

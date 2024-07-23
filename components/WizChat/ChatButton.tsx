@@ -1,20 +1,25 @@
-import Image from "next/image";
-
-export default function ChatButton({ onClick }) {
+interface IChatButtonProps {
+  isActive: boolean;
+  onClick: () => void;
+  label: string;
+  className?: string;
+}
+export default function ChatButton({
+  isActive,
+  onClick,
+  label,
+  className,
+}: IChatButtonProps) {
   return (
     <button
-      className="w-20 h-20 rounded-full bg-gradient-to-r from-gray-800 via-gray-900 to-black fixed bottom-4 right-4 flex items-center justify-center cursor-pointer transition-transform transform hover:scale-110 hover:shadow-lg z-50"
       onClick={onClick}
+      className={`flex-1 p-2 transition-colors ${className} ${
+        isActive
+          ? "bg-red-500 text-white"
+          : "bg-white text-red-500 hover:bg-red-100"
+      }`}
     >
-      <div className="relative size-16">
-        <Image
-          src={"/icons/img-logo-black.svg"}
-          alt="logo"
-          priority
-          fill
-          className="transform transition-transform hover:rotate-12"
-        />
-      </div>
+      {label}
     </button>
   );
 }
