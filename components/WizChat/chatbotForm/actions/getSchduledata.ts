@@ -3,6 +3,8 @@ import "dayjs/locale/ko";
 import weekday from "dayjs/plugin/weekday";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { SCHEDULE_MESSAGES } from "@/lib/constants/chatbot";
+import { API_ENDPOINT } from "@/lib/constants/api";
 
 dayjs.extend(weekday);
 dayjs.extend(isSameOrAfter);
@@ -14,11 +16,24 @@ function setDateToMidnight(date: dayjs.Dayjs): dayjs.Dayjs {
 
 dayjs.locale("ko");
 
-const SCHEDULE_API_URL =
-  process.env.NEXT_PUBLIC_API_ENDPOINT + "/get_schedule?yearMonth=";
+const TEAM_EMBLEM_PATH = "/icons/emblems/";
+
+const TEAM_KEYS = {
+  KT: "KT",
+  OB: "OB",
+  HH: "HH",
+  HT: "HT",
+  WO: "WO",
+  LG: "LG",
+  LT: "LT",
+  NC: "NC",
+  SM: "SM",
+  SS: "SS",
+  SK: "SK",
+};
 
 async function fetchScheduleData(yearMonth: string) {
-  const response = await fetch(`${SCHEDULE_API_URL}${yearMonth}`);
+  const response = await fetch(`${API_ENDPOINT.SCHEDULE}${yearMonth}`);
   if (!response.ok) return [];
   const {
     data: { list },
@@ -27,17 +42,17 @@ async function fetchScheduleData(yearMonth: string) {
 }
 
 const emblemMap: { [key: string]: string } = {
-  "OB": "/icons/emblems/dosan_emblem.png",
-  "HH": "/icons/emblems/hanhwa_emblem.png",
-  "HT": "/icons/emblems/kia_emblem.png",
-  "WO": "/icons/emblems/kiwoom_emblem.png",
-  "KT": "/icons/emblems/kt_emblem.png",
-  "LG": "/icons/emblems/lg_emblem.png",
-  "LT": "/icons/emblems/lotte_emblem.png",
-  "NC": "/icons/emblems/nc_emblem.png",
-  "SM": "/icons/emblems/sm_emblem.png",
-  "SS": "/icons/emblems/ss_emblem.png",
-  "SK": "/icons/emblems/ssg_emblem.png",
+  [TEAM_KEYS.OB]: `${TEAM_EMBLEM_PATH}dosan_emblem.png`,
+  [TEAM_KEYS.HH]: `${TEAM_EMBLEM_PATH}hanhwa_emblem.png`,
+  [TEAM_KEYS.HT]: `${TEAM_EMBLEM_PATH}kia_emblem.png`,
+  [TEAM_KEYS.WO]: `${TEAM_EMBLEM_PATH}kiwoom_emblem.png`,
+  [TEAM_KEYS.KT]: `${TEAM_EMBLEM_PATH}kt_emblem.png`,
+  [TEAM_KEYS.LG]: `${TEAM_EMBLEM_PATH}lg_emblem.png`,
+  [TEAM_KEYS.LT]: `${TEAM_EMBLEM_PATH}lotte_emblem.png`,
+  [TEAM_KEYS.NC]: `${TEAM_EMBLEM_PATH}nc_emblem.png`,
+  [TEAM_KEYS.SM]: `${TEAM_EMBLEM_PATH}sm_emblem.png`,
+  [TEAM_KEYS.SS]: `${TEAM_EMBLEM_PATH}ss_emblem.png`,
+  [TEAM_KEYS.SK]: `${TEAM_EMBLEM_PATH}ssg_emblem.png`,
 };
 
 const formatScheduleMessage = (schedule: any): string => {
@@ -46,14 +61,14 @@ const formatScheduleMessage = (schedule: any): string => {
 
   const formattedDate = dayjs(displayDate).format("MM.DD");
 
-  if (visitKey === "KT") {
+  if (visitKey === TEAM_KEYS.KT) {
     // KT가 방문팀인 경우, home과 visit을 교체합니다.
     [home, visit] = [visit, home];
     [homeKey, visitKey] = [visitKey, homeKey];
   }
 
-  const homeEmblem = emblemMap[homeKey] || "/icons/emblems/kt_emblem.png";
-  const visitEmblem = emblemMap[visitKey] || "/icons/emblems/kt_emblem.png";
+  const homeEmblem = emblemMap[homeKey] || `${TEAM_EMBLEM_PATH}kt_emblem.png`;
+  const visitEmblem = emblemMap[visitKey] || `${TEAM_EMBLEM_PATH}kt_emblem.png`;
 
   return `
   <div class="border border-gray-300 p-4 my-2 rounded-lg bg-gray-50 flex flex-col items-center">
@@ -76,10 +91,10 @@ const formatScheduleMessage = (schedule: any): string => {
   </div>
 `;
 };
-
 async function getTodaySchedule(): Promise<string> {
   const today = dayjs();
   const formattedDate = today.format("YYYYMMDD");
+  const displayDate = today.format("YYYY.MM.DD");
   const yearMonth = today.format("YYYYMM");
 
   const scheduleJson = await fetchScheduleData(yearMonth);
@@ -87,41 +102,46 @@ async function getTodaySchedule(): Promise<string> {
   const todaySchedule = scheduleJson.filter(
     (item: any) =>
       item.displayDate === formattedDate &&
-      (item.homeKey === "KT" || item.visitKey === "KT")
+      (item.homeKey === TEAM_KEYS.KT || item.visitKey === TEAM_KEYS.KT)
   );
 
   if (todaySchedule.length > 0) {
     const messages = todaySchedule.map(formatScheduleMessage).join("");
-    return `오늘(${today.format(
-      "MMDD"
-    )})의 KBO 리그 경기 일정은 다음과 같습니다.<br>
-    ${messages}`;
+    return `${SCHEDULE_MESSAGES.today(displayDate)}<br>${messages}`;
   }
 
-  return "오늘의 경기 일정이 없습니다.";
+  return SCHEDULE_MESSAGES.todayNotFound(displayDate);
 }
 
 async function getThisWeekSchedule(): Promise<string> {
   const today = dayjs();
   const startOfWeek = setDateToMidnight(today.weekday(0));
   const endOfWeek = setDateToMidnight(today.weekday(6));
+  const displayStartOfWeek = startOfWeek.format("YYYY.MM.DD");
+  const displayEndOfWeek = endOfWeek.format("YYYY.MM.DD");
 
   const yearMonth = today.format("YYYYMM");
   const scheduleJson = await fetchScheduleData(yearMonth);
 
-  let scheduleMessage = `이번 주의 KBO 리그 경기 일정은 다음과 같습니다.<br>`;
+  let scheduleMessage = `${SCHEDULE_MESSAGES.weekly(
+    displayStartOfWeek,
+    displayEndOfWeek
+  )}<br>`;
 
   const weekSchedule = scheduleJson.filter((item: any) => {
     const itemDate = setDateToMidnight(dayjs(item.displayDate, "YYYYMMDD"));
     return (
       itemDate.isSameOrAfter(startOfWeek) &&
       itemDate.isSameOrBefore(endOfWeek) &&
-      (item.homeKey === "KT" || item.visitKey === "KT")
+      (item.homeKey === TEAM_KEYS.KT || item.visitKey === TEAM_KEYS.KT)
     );
   });
 
   if (weekSchedule.length === 0) {
-    return "이번 주의 경기 일정이 없습니다.";
+    return SCHEDULE_MESSAGES.weeklyNotFound(
+      displayStartOfWeek,
+      displayEndOfWeek
+    );
   }
 
   weekSchedule.forEach((item: any) => {
@@ -135,23 +155,31 @@ async function getNextWeekSchedule(): Promise<string> {
   const today = dayjs();
   const startOfNextWeek = setDateToMidnight(today.weekday(7));
   const endOfNextWeek = setDateToMidnight(startOfNextWeek.add(6, "day"));
+  const displayStartOfNextWeek = startOfNextWeek.format("YYYY.MM.DD");
+  const displayEndOfNextWeek = endOfNextWeek.format("YYYY.MM.DD");
 
   const yearMonth = startOfNextWeek.format("YYYYMM");
   const scheduleJson = await fetchScheduleData(yearMonth);
 
-  let scheduleMessage = `다음 주의 KBO 리그 경기 일정은 다음과 같습니다.<br>`;
+  let scheduleMessage = `${SCHEDULE_MESSAGES.nextWeekly(
+    displayStartOfNextWeek,
+    displayEndOfNextWeek
+  )}<br>`;
 
   const nextWeekSchedule = scheduleJson.filter((item: any) => {
     const itemDate = setDateToMidnight(dayjs(item.displayDate, "YYYYMMDD"));
     return (
       itemDate.isSameOrAfter(startOfNextWeek) &&
       itemDate.isSameOrBefore(endOfNextWeek) &&
-      (item.homeKey === "KT" || item.visitKey === "KT")
+      (item.homeKey === TEAM_KEYS.KT || item.visitKey === TEAM_KEYS.KT)
     );
   });
 
   if (nextWeekSchedule.length === 0) {
-    return "다음 주의 경기 일정이 없습니다.";
+    return SCHEDULE_MESSAGES.nextWeeklyNotFound(
+      displayStartOfNextWeek,
+      displayEndOfNextWeek
+    );
   }
 
   nextWeekSchedule.forEach((item: any) => {
@@ -166,4 +194,5 @@ export {
   getTodaySchedule,
   getThisWeekSchedule,
   getNextWeekSchedule,
+  SCHEDULE_MESSAGES,
 };

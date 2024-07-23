@@ -7,15 +7,14 @@ import { Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css/bundle";
 import "./swiper.css";
+import { API_ENDPOINT } from "@/lib/constants/api";
 
 export default function WizNews() {
   const [newsList, setNewsList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/news_list?searchmax=5&page=1`
-      );
+      const response = await fetch(API_ENDPOINT.NEWS_LIST);
       if (!response.ok) return;
       const {
         data: { list },

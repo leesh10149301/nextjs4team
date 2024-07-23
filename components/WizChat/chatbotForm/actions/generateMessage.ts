@@ -128,7 +128,7 @@ export const generateMascotMessage =
   "KT Wiz의 마스코트는 빅(Vic)과 또리(Ddory)입니다. 빅은 공격형 파워와 강인함을 상징하고, 또리는 수비와 신속한 기동력을 상징합니다. 두 마스코트가 함께 있을 때 ‘빅또리’라고 불리며, 이는 KT Wiz의 승리를 의미합니다.";
 
 export const generateBookingMessage = `
-  KT 위즈 경기를 예매하는 방법은 다음과 같습니다:<br>
+  KT 위즈 경기를 예매하는 방법은 다음과 같습니다.<br>
 <br>
 <b>온라인 예매:</b><br>
 - KT 위즈 공식 홈페이지에서 티켓링크(<a href="http://www.ticketlink.co.kr" target="_blank">http://www.ticketlink.co.kr</a>)로 연결되어 예매할 수 있습니다.<br>

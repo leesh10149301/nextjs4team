@@ -51,9 +51,7 @@ const analyzeKeywords = async (sentences: Sentence[]) => {
 
   for (const namedEntity of sentences[0].NE) {
     if (namedEntity.type === "PS_NAME") {
-      result.hasPlayerKeyword = keywordCheckFunctions.playerKeyword(
-        namedEntity.text
-      );
+      result.hasPlayerKeyword = true;
     }
     if (namedEntity.type.includes("DT")) {
       result.hasDateResult = true;

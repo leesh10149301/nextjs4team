@@ -15,13 +15,13 @@ import {
   getThisWeekSchedule,
   getTodaySchedule,
 } from "./getSchduledata";
+import { API_ENDPOINT } from "@/lib/constants/api";
 
 // 경기 결과 질문 처리 함수
 const answerGameQuestion = async (question: string) => {
   const today = dayjs();
   const yearMonth = today.format("YYYYMM");
   const date = formatDateToYYYYMMDD(question);
-  console.log(yearMonth, date);
 
   if (!date) {
     return MESSAGES.DATE_MISSING_ERROR;
@@ -34,7 +34,6 @@ const answerGameQuestion = async (question: string) => {
         listItem.displayDate === date &&
         (listItem.home === "KT" || listItem.visit === "KT")
     );
-    console.log(response);
 
     if (!response) {
       return MESSAGES.DATE_MISSING_ERROR;
@@ -46,6 +45,7 @@ const answerGameQuestion = async (question: string) => {
     return MESSAGES.DATE_MISSING_ERROR;
   }
 };
+
 // 선수 질문 처리 함수
 const answerPlayerQuestion = async (analysisResult: any) => {
   const searchName = extractPlayerName(analysisResult.return_object.sentence);
@@ -57,9 +57,9 @@ const answerPlayerQuestion = async (analysisResult: any) => {
     if (isPlayerPerformance) {
       const { pcode, position } = await getPlayerSelectedData(searchName);
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/player_data?pcode=${pcode}`
-      ).then((res) => res.json());
+      const response = await fetch(API_ENDPOINT.PLAYER_INFO + pcode).then(
+        (res) => res.json()
+      );
       return generateSeasonMessage(response.data.seasonsummary, position);
     } else {
       const { success, data } = await getPlayerData(searchName);

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SkeletonTodayScore } from "../skeleton/SkeletonTodayScore";
+import { API_ENDPOINT } from "@/lib/constants/api";
 
 interface Score {
   rank: number;
@@ -17,9 +18,7 @@ export default function TodayScore(props: ITodayScoreProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/today_rank`
-      );
+      const response = await fetch(API_ENDPOINT.TODAY_RANK);
       if (response.ok) {
         const data = await response.json();
         const ktScore = data.filter((d) => d.팀 === "KT")[0];
