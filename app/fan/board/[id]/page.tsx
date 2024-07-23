@@ -4,30 +4,60 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import supabase from "@/app/utils/supabase/client";
 import Link from "next/link";
+import {
+  addComment,
+  deleteComment,
+  getComments,
+} from "@/app/api/board_comment/route";
 
-export default function Post() {
+type Post = {
+  id: string;
+  title: string;
+  content: string;
+  username: string;
+  createdAt: string;
+  likes: number;
+};
+
+type Comment = {
+  id: string;
+  post_id: string;
+  user_id: string;
+  username: string;
+  comment: string;
+  created_at: string;
+};
+
+export default function PostPage() {
   const router = useRouter();
-  const { id } = useParams();
-  const [post, setPost] = useState(null);
+  const params = useParams();
+  const id = Array.isArray(params.id) ? params.id[0] : params.id;
+
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null); // 현재 사용자 정보 상태
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
+    if (!id) {
+      console.error("Invalid ID value:", id);
+      return;
+    }
+
     async function fetchPost() {
-      if (id) {
-        try {
-          const response = await fetch(`/api/board/${id}`);
-          if (!response.ok) {
-            throw new Error("Failed to fetch post");
-          }
-          const data = await response.json();
-          console.log("Post data:", data); // 게시물 데이터 로그 출력
-          setPost(data);
-        } catch (error) {
-          console.error("Error fetching post:", error);
-        } finally {
-          setLoading(false);
+      try {
+        const response = await fetch(`/api/board/${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch post");
         }
+        const data = await response.json();
+        console.log("Post data:", data);
+        setPost(data);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -41,10 +71,11 @@ export default function Post() {
         if (error) {
           throw new Error("Failed to fetch current user");
         }
-        console.log("Session data:", data); // session 데이터 로그 출력
-        const user = data.session.user;
-        console.log("User data:", user); // user 데이터 로그 출력
-        setCurrentUser(user);
+        const user = data.session?.user;
+        if (user) {
+          console.log("User data:", user);
+          setCurrentUser(user);
+        }
       } catch (error) {
         console.error("Error fetching current user:", error);
       }
@@ -52,6 +83,19 @@ export default function Post() {
 
     fetchCurrentUser();
   }, []);
+
+  useEffect(() => {
+    async function fetchComments() {
+      try {
+        const data = await getComments(id);
+        setComments(data || []);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    }
+
+    fetchComments();
+  }, [id]);
 
   const editHandler = () => {
     router.push(`/fan/board/${id}/edit`);
@@ -76,22 +120,64 @@ export default function Post() {
     }
   };
 
+  const addCommentHandler = async () => {
+    if (!newComment.trim()) return;
+
+    if (
+      !currentUser ||
+      !currentUser.user_metadata ||
+      !currentUser.user_metadata.username
+    ) {
+      console.error("No user logged in or username missing");
+      return;
+    }
+
+    try {
+      await addComment({
+        post_id: id,
+        username: currentUser.user_metadata.username,
+        comment: newComment,
+      });
+      const data = await getComments(id);
+      setComments(data || []);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+  const deleteCommentHandler = async (commentId: string) => {
+    try {
+      console.log("Attempting to delete comment with ID:", commentId);
+      await deleteComment(commentId);
+      console.log("Comment deleted successfully");
+      const data = await getComments(id);
+      setComments(data || []);
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
   const formatDate = (dateString: string) => {
+    if (!dateString) return "Invalid Date";
+
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Invalid Date";
+
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
       month: "long",
       day: "numeric",
     };
-    return new Date(dateString).toLocaleDateString("ko-KR", options);
+    return date.toLocaleDateString("ko-KR", options);
   };
 
   if (loading) return <div>Loading...</div>;
 
   if (!post) return <div>Post not found</div>;
 
-  // 게시글 작성자와 현재 로그인한 사용자의 username 비교
   const canEditDelete =
-    currentUser && post.username === currentUser.user_metadata.username;
+    currentUser && post.username === currentUser.user_metadata?.username;
 
   return (
     <div className="container mx-auto py-12">
@@ -101,7 +187,7 @@ export default function Post() {
             {post.title}
           </h1>
           <div className="flex items-center mb-4">
-            <p className="text-sm text-gray-500 mr-2">
+            <p className="text-sm text-gray-500 mr=2">
               {formatDate(post.createdAt)}
             </p>
             <p className="text-sm text-gray-500">{`Likes: ${post.likes}`}</p>
@@ -128,6 +214,43 @@ export default function Post() {
               뒤로 가기
             </button>
           </Link>
+        </div>
+        <div className="p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">댓글</h2>
+          {comments.map((comment) => (
+            <div key={comment.id} className="mb-4">
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-gray-500">
+                  {comment.username} - {formatDate(comment.created_at)}
+                </p>
+                {currentUser &&
+                  comment.username === currentUser.user_metadata?.username && (
+                    <button
+                      className="text-red-600 hover:text-red-800"
+                      onClick={() => deleteCommentHandler(comment.id)}
+                    >
+                      삭제
+                    </button>
+                  )}
+              </div>
+              <p className="text-lg text-gray-800">{comment.comment}</p>
+            </div>
+          ))}
+          <div className="mt-6">
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              className="w-full border border-gray-300 p-2 rounded-lg"
+              rows={4}
+              placeholder="댓글을 입력하세요..."
+            />
+            <button
+              className="bg-blue-600 text-white py-2 px-6 rounded-lg mt-2 hover:bg-blue-500"
+              onClick={addCommentHandler}
+            >
+              댓글 추가
+            </button>
+          </div>
         </div>
       </div>
     </div>
