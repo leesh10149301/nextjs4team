@@ -120,15 +120,37 @@ const incrementSentenceCount = async (id: string) => {
 // 새로운 문장을 DB에 저장하는 함수
 const saveNewSentenceToDB = async (sentence: string) => {
   try {
-    const { error } = await supabase
+    // 문장이 이미 존재하는지 확인
+    const { data: existingSentence, error: selectError } = await supabase
+      .from("sentence")
+      .select("id, count")
+      .eq("sentence", sentence)
+      .single();
+
+    if (selectError && selectError.code !== "PGRST116") {
+      throw new Error(
+        `Error checking existing sentence: ${selectError.message}`
+      );
+    }
+
+    if (existingSentence) {
+      console.log(
+        "Sentence already exists in the database, incrementing count."
+      );
+      await incrementSentenceCount(existingSentence.id);
+      return;
+    }
+
+    // 문장이 존재하지 않으면 새 문장 저장
+    const { error: insertError } = await supabase
       .from("sentence")
       .insert([{ sentence, count: 1 }]);
 
-    if (error) {
-      throw new Error(`Error saving new sentence: ${error.message}`);
+    if (insertError) {
+      throw new Error(`Error saving new sentence: ${insertError.message}`);
     }
 
-    console.log("New sentence saved. Response:");
+    console.log("New sentence saved successfully.");
   } catch (error) {
     console.error("Error in saveNewSentenceToDB:", error);
     throw error;
