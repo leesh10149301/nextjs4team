@@ -39,42 +39,42 @@ const getPlayerSelectedData = async (keyword: string) => {
 };
 
 // DB 서버에서 경기 결과를 가져오는 함수
-const getGameResult = async (date: string) => {
-  try {
-    const { data } = await supabase
-      .from("gameResult")
-      .select("*")
-      .eq("gameDate", date);
+// const getGameResult = async (date: string) => {
+//   try {
+//     const { data } = await supabase
+//       .from("gameResult")
+//       .select("*")
+//       .eq("gameDate", date);
 
-    console.log(data);
-    if (data.length === 0) {
-      return {
-        success: true,
-        data: null,
-        message: "데이터베이스에 저장되지 않은 일정입니다.",
-      };
-    }
+//     console.log(data);
+//     if (data.length === 0) {
+//       return {
+//         success: true,
+//         data: null,
+//         message: "데이터베이스에 저장되지 않은 일정입니다.",
+//       };
+//     }
 
-    const { gameDate, home, hscore, visit, vscore, kt_win } = data[0];
-    const formattedResult = {
-      gameDate,
-      home,
-      homeScore: hscore,
-      visit,
-      visitScore: vscore,
-      result: kt_win,
-    };
+//     const { gameDate, home, hscore, visit, vscore, kt_win } = data[0];
+//     const formattedResult = {
+//       gameDate,
+//       home,
+//       homeScore: hscore,
+//       visit,
+//       visitScore: vscore,
+//       result: kt_win,
+//     };
 
-    return { success: true, data: formattedResult };
-  } catch (err) {
-    console.log("Unexpected error:", err);
-    return {
-      success: false,
-      data: null,
-      message: "서버 에러 발생, 다시 시도 해주세요.",
-    };
-  }
-};
+//     return { success: true, data: formattedResult };
+//   } catch (err) {
+//     console.log("Unexpected error:", err);
+//     return {
+//       success: false,
+//       data: null,
+//       message: "서버 에러 발생, 다시 시도 해주세요.",
+//     };
+//   }
+// };
 
 // 문장 카운트를 증가시키는 함수
 const incrementSentenceCount = async (id: string) => {
@@ -156,7 +156,6 @@ const fetchSentenceData = async (keyword: string) => {
 
 export {
   getPlayerData,
-  getGameResult,
   incrementSentenceCount,
   saveNewSentenceToDB,
   fetchSentenceData,

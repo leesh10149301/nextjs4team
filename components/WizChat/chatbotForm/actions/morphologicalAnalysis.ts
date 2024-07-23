@@ -15,41 +15,6 @@ interface Sentence {
   word: { text: string }[];
   NE: INamedEntity[];
 }
-
-// 형태소 분석을 수행하는 함수
-const performMorphologicalAnalysis = async (question: string) => {
-  const openApiURL = "http://aiopen.etri.re.kr:8000/WiseNLU";
-  const accessKey = process.env.NEXT_PUBLIC_ETRI_API;
-  const analysisCode = process.env.NEXT_PUBLIC_ETRI_ANALYSIS_CODE;
-
-  if (!accessKey || !analysisCode) {
-    throw new Error("ETRI API keys are missing");
-  }
-
-  const requestPayload = {
-    argument: {
-      analysis_code: analysisCode,
-      text: question,
-    },
-  };
-
-  const response = await fetch(openApiURL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: accessKey,
-    },
-    body: JSON.stringify(requestPayload),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Error from API: ${response.status} - ${errorText}`);
-  }
-
-  return response.json();
-};
-
 // 키워드 확인 함수 맵
 const keywordCheckFunctions: { [key: string]: (keyword: string) => boolean } = {
   baseballResult: (keyword) =>
@@ -108,9 +73,4 @@ const extractPerformance = (sentences: Sentence[]) => {
   return sentences[0].word.some((word) => word.text.includes("성적"));
 };
 
-export {
-  performMorphologicalAnalysis,
-  analyzeKeywords,
-  extractPlayerName,
-  extractPerformance,
-};
+export { analyzeKeywords, extractPlayerName, extractPerformance };

@@ -1,4 +1,4 @@
-import { paraphraseRecognition } from "./paraphraseRecognition";
+import { paraphraseRecognition } from "./koreanMorphemeParaphraseApi";
 import {
   incrementSentenceCount,
   saveNewSentenceToDB,

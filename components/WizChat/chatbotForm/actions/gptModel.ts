@@ -1,11 +1,8 @@
 "use server";
 
 import { OpenAI } from "openai";
-import { formDataSchema } from "./schemas";
-import {
-  performMorphologicalAnalysis,
-  analyzeKeywords,
-} from "./morphologicalAnalysis";
+import { z } from "zod";
+import { analyzeKeywords } from "./morphologicalAnalysis";
 import { processAndStoreSentence } from "./sentenceProcessing";
 import {
   answerDateQuestion,
@@ -19,6 +16,11 @@ import {
   generateFavoritePlayerMessage,
   generateMascotMessage,
 } from "./generateMessage";
+import { performMorphologicalAnalysis } from "./koreanMorphemeParaphraseApi";
+
+const formDataSchema = z.object({
+  question: z.string().min(1, { message: MESSAGES.EMPTY_QUESTION_ERROR }),
+});
 
 const openai = new OpenAI();
 

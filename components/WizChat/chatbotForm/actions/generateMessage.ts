@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 type TupleIndex = [number | null, number | null];
 
 let lastUsedTemplates: TupleIndex = [null, null];
@@ -15,11 +17,9 @@ const selectNonRepeatingTemplate = (
   return { template: templates[templateIndex], updatedLastUsed };
 };
 
-const formatDateString = (date: number): string => {
-  const year = date.toString().substring(0, 4);
-  const month = date.toString().substring(4, 6);
-  const day = date.toString().substring(6, 8);
-  return `${year}년 ${month}월 ${day}일`;
+const formatDateString = (date: string): string => {
+  const formattedDate = dayjs(date, "YYYYMMDD").format("YYYY년 MM월 DD일");
+  return formattedDate;
 };
 
 // 선수 정보 메시지
@@ -74,13 +74,13 @@ export const generateSeasonMessage = (
 
 // 경기 결과 메시지
 export const generateGameResultMessage = (data: {
-  gameDate: number;
+  displayDate: string;
   home: string;
   visit: string;
   homeScore: number;
   visitScore: number;
 }): string => {
-  const formattedDate = formatDateString(data.gameDate);
+  const formattedDate = formatDateString(data.displayDate);
   let { home, visit, homeScore, visitScore } = data;
 
   // visit가 KT인 경우 home, homeScore와 visit, visitScore 서로 교체.
@@ -93,10 +93,13 @@ export const generateGameResultMessage = (data: {
   const result = homeScore > visitScore ? "승리" : "패배";
 
   const templates = [
-    `${formattedDate}, ${home}는 ${visit}팀과의 경기에서 ${homeScore} 대 ${visitScore}로 ${result}했습니다.`,
-    `${formattedDate} 열린 ${home}와 ${visit}의 맞대결에서 ${homeScore}:${visitScore}로 ${home}팀이 ${result}를 거뒀습니다.`,
-    `${home}팀은 ${formattedDate} ${visit}팀 원정에서 ${homeScore}-${visitScore} ${result}를 기록했습니다.`,
-    `${home}는 ${formattedDate} 홈에서 열린 ${visit}와의 경기에서 ${homeScore}-${visitScore}로 ${result}했습니다.`,
+    `${formattedDate}, ${home}는 ${visit}팀과의 경기에서 ${homeScore} 대 ${visitScore}로 경기를 마쳤습니다.`,
+    `${home}팀은 ${formattedDate} ${visit}팀 원정에서 ${homeScore}-${visitScore} 스코어를 기록했습니다.`,
+    `${home}는 ${formattedDate} 홈에서 열린 ${visit}와의 경기에서 ${homeScore}-${visitScore}의 결과를 얻었습니다.`,
+    `${formattedDate} 경기, ${home}가 ${visit}를 상대로 ${homeScore}-${visitScore}의 스코어로 경기를 끝냈습니다.`,
+    `${home}는 ${formattedDate}에 열린 ${visit}와의 맞대결에서 ${homeScore} 대 ${visitScore}의 결과를 기록했습니다.`,
+    `${formattedDate} ${home}와 ${visit}의 경기는 ${homeScore}-${visitScore}로 종료되었습니다.`,
+    `${home}는 ${visit}와의 ${formattedDate} 경기에서 ${homeScore}-${visitScore}의 스코어를 남겼습니다.`,
   ];
 
   const { template, updatedLastUsed } = selectNonRepeatingTemplate(

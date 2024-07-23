@@ -1,9 +1,6 @@
+import dayjs from "dayjs";
 import { extractPerformance, extractPlayerName } from "./morphologicalAnalysis";
-import {
-  getPlayerSelectedData,
-  getGameResult,
-  getPlayerData,
-} from "./databaseService";
+import { getPlayerSelectedData, getPlayerData } from "./databaseService";
 import {
   generateGameResultMessage,
   generatePlayerDataMessage,
@@ -18,7 +15,6 @@ import {
   getThisWeekSchedule,
   getTodaySchedule,
 } from "./getSchduledata";
-import dayjs from "dayjs";
 
 // 경기 결과 질문 처리 함수
 const answerGameQuestion = async (question: string) => {
