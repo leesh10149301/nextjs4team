@@ -1,3 +1,19 @@
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import weekday from "dayjs/plugin/weekday";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(weekday);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
+
+function setDateToMidnight(date: dayjs.Dayjs): dayjs.Dayjs {
+  return date.startOf("day");
+}
+
+dayjs.locale("ko");
+
 const SCHEDULE_API_URL =
   process.env.NEXT_PUBLIC_API_ENDPOINT + "/get_schedule?yearMonth=";
 
@@ -9,25 +25,6 @@ async function fetchScheduleData(yearMonth: string) {
   } = await response.json();
   return list;
 }
-
-const formatDate = (date: Date): string =>
-  `${String(date.getFullYear())}${String(date.getMonth() + 1).padStart(
-    2,
-    "0"
-  )}${String(date.getDate()).padStart(2, "0")}`;
-
-const parseDate = (dateStr: string): Date => {
-  const year = parseInt(dateStr.slice(0, 4), 10);
-  const month = parseInt(dateStr.slice(4, 6), 10) - 1;
-  const day = parseInt(dateStr.slice(6, 8), 10);
-  return new Date(year, month, day);
-};
-
-const setDateToMidnight = (date: Date): Date => {
-  const newDate = new Date(date);
-  newDate.setHours(0, 0, 0, 0);
-  return newDate;
-};
 
 const emblemMap: { [key: string]: string } = {
   "OB": "/icons/emblems/dosan_emblem.png",
@@ -44,7 +41,10 @@ const emblemMap: { [key: string]: string } = {
 };
 
 const formatScheduleMessage = (schedule: any): string => {
-  let { home, visit, gtime, stadium, homeKey, visitKey } = schedule;
+  let { home, visit, gtime, stadium, homeKey, visitKey, displayDate } =
+    schedule;
+
+  const formattedDate = dayjs(displayDate).format("MM.DD");
 
   if (visitKey === "KT") {
     // KT가 방문팀인 경우, home과 visit을 교체합니다.
@@ -56,11 +56,13 @@ const formatScheduleMessage = (schedule: any): string => {
   const visitEmblem = emblemMap[visitKey] || "/icons/emblems/kt_emblem.png";
 
   return `
-    <div class="border border-gray-300 p-4 my-2 rounded-lg bg-gray-50 flex items-center justify-between">
-      <div class="flex flex-col items-center">
-        <img src="${homeEmblem}" alt="${home} 로고" class="w-12 h-12 object-contain" />
-        <div class="mt-2">${home}</div>
-      </div>
+  <div class="border border-gray-300 p-4 my-2 rounded-lg bg-gray-50 flex flex-col items-center">
+    <div class="mb-2">${formattedDate}</div>
+      <div class="flex items-center justify-between w-full">
+        <div class="flex flex-col items-center">
+          <img src="${homeEmblem}" alt="${home} 로고" class="w-12 h-12 object-contain" />
+          <div class="mt-2">${home}</div>
+        </div>
       <div class="text-center">
         <div class="font-bold text-lg">${stadium}</div>
         <div>vs</div>
@@ -70,13 +72,15 @@ const formatScheduleMessage = (schedule: any): string => {
         <img src="${visitEmblem}" alt="${visit} 로고" class="w-12 h-12 object-contain" />
         <div class="mt-2">${visit}</div>
       </div>
-    </div>`;
+    </div>
+  </div>
+`;
 };
 
-export async function getTodaySchedule(): Promise<string> {
-  const today = new Date();
-  const formattedDate = formatDate(today);
-  const yearMonth = formattedDate.slice(0, 6);
+async function getTodaySchedule(): Promise<string> {
+  const today = dayjs();
+  const formattedDate = today.format("YYYYMMDD");
+  const yearMonth = today.format("YYYYMM");
 
   const scheduleJson = await fetchScheduleData(yearMonth);
 
@@ -88,8 +92,8 @@ export async function getTodaySchedule(): Promise<string> {
 
   if (todaySchedule.length > 0) {
     const messages = todaySchedule.map(formatScheduleMessage).join("");
-    return `오늘(${formattedDate.slice(
-      4
+    return `오늘(${today.format(
+      "MMDD"
     )})의 KBO 리그 경기 일정은 다음과 같습니다.<br>
     ${messages}`;
   }
@@ -97,22 +101,21 @@ export async function getTodaySchedule(): Promise<string> {
   return "오늘의 경기 일정이 없습니다.";
 }
 
-export async function getThisWeekSchedule(): Promise<string> {
-  const today = new Date();
-  const startOfWeek = setDateToMidnight(today);
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + (6 - startOfWeek.getDay()));
+async function getThisWeekSchedule(): Promise<string> {
+  const today = dayjs();
+  const startOfWeek = setDateToMidnight(today.weekday(0));
+  const endOfWeek = setDateToMidnight(today.weekday(6));
 
-  const yearMonth = formatDate(today).slice(0, 6);
+  const yearMonth = today.format("YYYYMM");
   const scheduleJson = await fetchScheduleData(yearMonth);
 
   let scheduleMessage = `이번 주의 KBO 리그 경기 일정은 다음과 같습니다.<br>`;
 
   const weekSchedule = scheduleJson.filter((item: any) => {
-    const itemDate = setDateToMidnight(parseDate(item.displayDate));
+    const itemDate = setDateToMidnight(dayjs(item.displayDate, "YYYYMMDD"));
     return (
-      itemDate >= startOfWeek &&
-      itemDate <= endOfWeek &&
+      itemDate.isSameOrAfter(startOfWeek) &&
+      itemDate.isSameOrBefore(endOfWeek) &&
       (item.homeKey === "KT" || item.visitKey === "KT")
     );
   });
@@ -128,23 +131,21 @@ export async function getThisWeekSchedule(): Promise<string> {
   return scheduleMessage.trim();
 }
 
-export async function getNextWeekSchedule(): Promise<string> {
-  const today = new Date();
-  const startOfNextWeek = new Date(today);
-  startOfNextWeek.setDate(today.getDate() + (7 - today.getDay()));
-  const endOfNextWeek = new Date(startOfNextWeek);
-  endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
+async function getNextWeekSchedule(): Promise<string> {
+  const today = dayjs();
+  const startOfNextWeek = setDateToMidnight(today.weekday(7));
+  const endOfNextWeek = setDateToMidnight(startOfNextWeek.add(6, "day"));
 
-  const yearMonth = formatDate(startOfNextWeek).slice(0, 6);
+  const yearMonth = startOfNextWeek.format("YYYYMM");
   const scheduleJson = await fetchScheduleData(yearMonth);
 
   let scheduleMessage = `다음 주의 KBO 리그 경기 일정은 다음과 같습니다.<br>`;
 
   const nextWeekSchedule = scheduleJson.filter((item: any) => {
-    const itemDate = parseDate(item.displayDate);
+    const itemDate = setDateToMidnight(dayjs(item.displayDate, "YYYYMMDD"));
     return (
-      itemDate >= startOfNextWeek &&
-      itemDate <= endOfNextWeek &&
+      itemDate.isSameOrAfter(startOfNextWeek) &&
+      itemDate.isSameOrBefore(endOfNextWeek) &&
       (item.homeKey === "KT" || item.visitKey === "KT")
     );
   });
@@ -159,3 +160,10 @@ export async function getNextWeekSchedule(): Promise<string> {
 
   return scheduleMessage.trim();
 }
+
+export {
+  fetchScheduleData,
+  getTodaySchedule,
+  getThisWeekSchedule,
+  getNextWeekSchedule,
+};

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import MessageItem from "./MessageItem";
 import useMessages from "./hooks/useMessage";
 
-export default function MessageList() {
+export default function MessageLog() {
   const messages = useMessages();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 

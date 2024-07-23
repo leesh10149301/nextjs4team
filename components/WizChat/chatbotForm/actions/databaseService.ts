@@ -46,6 +46,15 @@ const getGameResult = async (date: string) => {
       .select("*")
       .eq("gameDate", date);
 
+    console.log(data);
+    if (data.length === 0) {
+      return {
+        success: true,
+        data: null,
+        message: "데이터베이스에 저장되지 않은 일정입니다.",
+      };
+    }
+
     const { gameDate, home, hscore, visit, vscore, kt_win } = data[0];
     const formattedResult = {
       gameDate,

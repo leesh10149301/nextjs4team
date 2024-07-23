@@ -77,18 +77,25 @@ export const generateGameResultMessage = (data: {
   gameDate: number;
   home: string;
   visit: string;
-  homeScore: string;
-  visitScore: string;
-  result: string;
+  homeScore: number;
+  visitScore: number;
 }): string => {
   const formattedDate = formatDateString(data.gameDate);
-  const { home, visit, homeScore, visitScore, result } = data;
+  let { home, visit, homeScore, visitScore } = data;
+
+  // visit가 KT인 경우 home, homeScore와 visit, visitScore 서로 교체.
+  if (visit === "KT") {
+    [home, visit] = [visit, home];
+    [homeScore, visitScore] = [visitScore, homeScore];
+  }
+
+  // KT의 score가 높으면 승리, 낮으면 패배
+  const result = homeScore > visitScore ? "승리" : "패배";
 
   const templates = [
     `${formattedDate}, ${home}는 ${visit}팀과의 경기에서 ${homeScore} 대 ${visitScore}로 ${result}했습니다.`,
-    `${formattedDate}, ${visit}는 ${home}팀과의 원정경기에서 ${visitScore} 대 ${homeScore}로 ${result}했습니다.`,
     `${formattedDate} 열린 ${home}와 ${visit}의 맞대결에서 ${homeScore}:${visitScore}로 ${home}팀이 ${result}를 거뒀습니다.`,
-    `${visit}팀은 ${formattedDate} ${home}팀 원정에서 ${visitScore}-${homeScore} ${result}를 기록했습니다.`,
+    `${home}팀은 ${formattedDate} ${visit}팀 원정에서 ${homeScore}-${visitScore} ${result}를 기록했습니다.`,
     `${home}는 ${formattedDate} 홈에서 열린 ${visit}와의 경기에서 ${homeScore}-${visitScore}로 ${result}했습니다.`,
   ];
 

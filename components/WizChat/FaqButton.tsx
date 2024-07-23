@@ -1,7 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
 import { useFaq } from "./chatbotForm/FaqProvider";
-
-interface IFaqButtonProps {}
 
 export default function FaqButton({}) {
   const { faqVisible, setFaqVisible } = useFaq();

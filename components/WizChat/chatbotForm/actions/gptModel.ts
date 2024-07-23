@@ -60,7 +60,7 @@ export async function gptModel(userQuestion: string) {
   );
 
   if (hasRelevantKeyword) {
-    if (keywordAnalysis.hasBaseballKeyword) {
+    if (keywordAnalysis.hasBaseballResult) {
       responseMessage = await answerGameQuestion(question);
     } else if (keywordAnalysis.hasPlayerKeyword) {
       responseMessage = await answerPlayerQuestion(analysisResult);

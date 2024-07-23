@@ -27,11 +27,11 @@ export default function WizNews() {
 
   if (!newsList)
     return (
-      <div className="w-[540px] h-[300px] bg-gray-300 mx-2 mt-28 rounded-lg animate-pulse"></div>
+      <div className="w-[540px] h-[300px] bg-gray-300 mx-2 mt-28 rounded-2xl animate-pulse"></div>
     );
 
   return (
-    <div className="relative w-[540px] h-[300px] mx-2 mt-28 rounded-lg news">
+    <div className="relative w-[540px] h-[300px] mx-2 mt-28 news">
       <Swiper
         direction="horizontal"
         slidesPerView={1}
@@ -40,7 +40,7 @@ export default function WizNews() {
         loop
         autoplay={{ delay: 3000, disableOnInteraction: true }}
         modules={[Pagination, Autoplay]}
-        className="size-full rounded-lg"
+        className="size-full rounded-xl"
       >
         {newsList.map((newsItem, index) => (
           <SwiperSlide key={index} className="relative">
@@ -49,7 +49,7 @@ export default function WizNews() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <div className="relative w-full h-full rounded-lg">
+              <div className="relative w-full h-full rounded-2xl">
                 <Image
                   src={newsItem.imgFilePath}
                   alt="news"

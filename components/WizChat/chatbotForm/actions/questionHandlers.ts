@@ -13,31 +13,43 @@ import {
 import { MESSAGES } from "@/lib/constants/chatbot";
 import { formatDateToYYYYMMDD } from "@/lib/formatDateToYYYMMDD";
 import {
+  fetchScheduleData,
   getNextWeekSchedule,
   getThisWeekSchedule,
   getTodaySchedule,
 } from "./getSchduledata";
+import dayjs from "dayjs";
 
 // 경기 결과 질문 처리 함수
 const answerGameQuestion = async (question: string) => {
+  const today = dayjs();
+  const yearMonth = today.format("YYYYMM");
   const date = formatDateToYYYYMMDD(question);
+  console.log(yearMonth, date);
+
   if (!date) {
     return MESSAGES.DATE_MISSING_ERROR;
   }
 
   try {
-    const { success, data, message } = await getGameResult(date);
-    if (success) {
-      return generateGameResultMessage(data);
-    } else {
-      return message;
+    const data = await fetchScheduleData(yearMonth);
+    const response = data.find(
+      (listItem) =>
+        listItem.displayDate === date &&
+        (listItem.home === "KT" || listItem.visit === "KT")
+    );
+    console.log(response);
+
+    if (!response) {
+      return MESSAGES.DATE_MISSING_ERROR;
     }
-  } catch (error) {
-    console.error(error);
-    return MESSAGES.SERVER_ERROR;
+
+    return generateGameResultMessage(response);
+  } catch (e) {
+    console.log(e);
+    return MESSAGES.DATE_MISSING_ERROR;
   }
 };
-
 // 선수 질문 처리 함수
 const answerPlayerQuestion = async (analysisResult: any) => {
   const searchName = extractPlayerName(analysisResult.return_object.sentence);

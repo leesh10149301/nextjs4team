@@ -66,7 +66,7 @@ const keywordCheckFunctions: { [key: string]: (keyword: string) => boolean } = {
 // 문장을 검사하는 함수
 const analyzeKeywords = async (sentences: Sentence[]) => {
   const result = {
-    hasBaseballKeyword: false,
+    hasBaseballResult: false,
     hasPlayerKeyword: false,
     hasDateResult: false,
     hasScoreResult: false,
