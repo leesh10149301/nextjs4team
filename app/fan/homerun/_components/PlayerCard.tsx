@@ -28,31 +28,32 @@ const PlayerCard = ({ onCardSelect }: PlayerCardProps) => {
       const response = await fetch("/api/homerun/predict/players");
       const data = await response.json();
       setPlayers(data);
+      console.log(data);
     }
 
     fetchPlayers();
   }, []);
 
   return (
-    <div className="w-1/4 overflow-y-scroll bg-white p-4">
-      <div className="flex flex-col h-[calc(100vh)]">
+    <div className="w-1/4 overflow-y-scroll bg-white pr-4 pl-4">
+      <div className="flex flex-col h-[calc(100vh)] ">
         <div
-          className={`flex items-center mb-4 p-2 border-b hover:shadow-xl hover:scale-105 cursor-pointer ${
+          className={`content-center mb-4 p-2 border-b hover:shadow-xl hover:scale-105 cursor-pointer h-[65px] text-center ${
             selectedPlayerId === null ? "text-[#d60c0c]" : ""
           }`}
           onClick={() => handleClick(null)}
         >
-          <img
+          {/* <img
             src=""
             alt="select_all_image"
             className="w-12 h-12 rounded-full mr-4"
-          />
-          <h2 className="text-lg font-semibold">전체 선택</h2>
+          /> */}
+          <h2 className="text-lg font-semibold ">전체 선수 </h2>
         </div>
         {players.map((player) => (
           <div
             key={player.id}
-            className="flex items-center mb-4 p-2 border-b hover:shadow-xl hover:scale-105"
+            className="flex items-center mb-4 p-2 border-b hover:shadow-xl hover:scale-105 h-[65px]"
             onClick={() => handleClick(player.id)}
           >
             <img

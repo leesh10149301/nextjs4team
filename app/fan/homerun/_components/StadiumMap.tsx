@@ -5,17 +5,20 @@ import * as d3 from "d3";
 import hitterImage from "@/public/images/hitter.png";
 import ballImage from "@/public/images/home-run-ball.png";
 import { PlayerHomerunData } from "@/app/fan/homerun/page";
+import { all } from "@tensorflow/tfjs";
 
 interface StadiumMapProps {
   selectedPlayerId: number | null;
   playersHomerunData: PlayerHomerunData[];
   error: string | null;
+  onStadiumData: (areaNames: string) => void;
 }
 
 const StadiumMap = ({
   selectedPlayerId,
   playersHomerunData,
   error,
+  onStadiumData,
 }: StadiumMapProps) => {
   const [isBallHit, setIsBallHit] = useState(false);
 
@@ -143,7 +146,6 @@ const StadiumMap = ({
               .attr("stroke", colors[area.area_name] || "white")
               .attr("stroke-width", seatRadius * 2);
 
-            // 경로 중앙에 텍스트 추가
             const centerX = d3.mean(points, (d) => d[0]);
             const centerY = d3.mean(points, (d) => d[1]);
 
@@ -298,7 +300,13 @@ const StadiumMap = ({
       });
   }
 
-  function animateBall(targetX: number, targetY: number, playerId: number) {
+  function animateBall(
+    targetX: number,
+    targetY: number,
+    playerId: number,
+    areaNames: Set<string>,
+    onAnimationEnd: () => void
+  ) {
     const svg = d3.select("#stadium-svg");
     const ball = svg
       .append("image")
@@ -323,10 +331,80 @@ const StadiumMap = ({
           .attr("r", 150)
           .attr("fill", "lightgreen")
           .attr("opacity", 0.5);
+
+        getAreaName(targetX, targetY).then((areaName) => {
+          areaNames.add(areaName);
+          onAnimationEnd();
+        });
       });
 
     setIsBallHit(true);
   }
+
+  async function getAreaName(x: number, y: number): Promise<string> {
+    let closestAreaName = "알 수 없음";
+    let closestDistance = Infinity;
+    const data: any = await d3.json("/data/stadium_coordinates.json");
+
+    data.areas.forEach((area: any) => {
+      area.zones.forEach((zone: any) => {
+        const { x: zoneX, y: zoneY } = zone.coordinates;
+        const distance = Math.sqrt((x - zoneX) ** 2 + (y - zoneY) ** 2);
+        if (distance < 500 && distance < closestDistance) {
+          // 반경 500 내에 포함되는지 확인하고 가장 가까운 구역 선택
+          closestDistance = distance;
+          closestAreaName = area.area_name;
+        }
+      });
+    });
+
+    return closestAreaName;
+  }
+
+  useEffect(() => {
+    const hitButton = d3.select("#hit-button");
+    hitButton.on("click", () => {
+      resetBall();
+      animateBatter();
+      const areaNames = new Set<string>();
+      let animationsCompleted = 0;
+      const totalAnimations =
+        selectedPlayerId === null ? playersHomerunData.length : 1;
+
+      const onAnimationEnd = () => {
+        animationsCompleted += 1;
+        if (animationsCompleted === totalAnimations) {
+          const allAreaNames = Array.from(areaNames).join(", ");
+          onStadiumData(allAreaNames);
+        }
+      };
+
+      if (selectedPlayerId === null) {
+        playersHomerunData.forEach((playerData) => {
+          animateBall(
+            playerData.x_coord,
+            playerData.y_coord,
+            playerData.playerId,
+            areaNames,
+            onAnimationEnd
+          );
+        });
+      } else {
+        const playerData = playersHomerunData.find(
+          (player) => player.playerId == selectedPlayerId
+        );
+        if (playerData) {
+          animateBall(
+            playerData.x_coord,
+            playerData.y_coord,
+            playerData.playerId,
+            areaNames,
+            onAnimationEnd
+          );
+        }
+      }
+    });
+  }, [playersHomerunData, selectedPlayerId]);
 
   function resetBall() {
     const svg = d3.select("#stadium-svg");
@@ -340,7 +418,7 @@ const StadiumMap = ({
       <p>{error}</p>
       <button
         id="hit-button"
-        className="fixed border-4 left-20 bottom-1/3 border-[#d60c0c] z-10 bg-white p-1 duration-300 shadow-md rounded-full blink"
+        className="fixed border-4 left-20 bottom-3 border-[#d60c0c] z-10 bg-white p-1 duration-300 shadow-md rounded-full blink"
       >
         <img
           src="/images/homerunBtn.png"
