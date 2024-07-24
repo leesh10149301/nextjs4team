@@ -45,7 +45,7 @@ const MENU_SUB_ITEM = {
   ],
   "팬페이지": [
     { name: "홈런볼 예측", href: "/fan/homerun" },
-    { name: "경기 예측", href: "/" },
+    { name: "경기 예측", href: "/fan/gameprediction" },
     { name: "응원 게시판", href: "/fan/board" },
   ],
   "티켓구매": [
