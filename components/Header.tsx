@@ -1,12 +1,16 @@
 "use client";
 
-import Logout from "@/app/auth/logout/page";
 import useUserInfo from "@/app/stores/useUserInfo";
 import Link from "next/link";
 import { MENU_ITEM, MENU_SUB_ITEM } from "@/lib/constants/headerItem";
+import Logout from "@/app/auth/logout/page";
+import useAuth from "@/app/hooks/useAuth";
 
 export default function Header() {
+  const { loading, user } = useAuth();
   const { isLoggedIn, userInfo } = useUserInfo();
+
+  if (loading) return <p>로딩 중...</p>;
 
   return (
     <nav className="fixed w-full z-[100] bg-black group">
@@ -35,11 +39,8 @@ export default function Header() {
           </div>
           <div className="ml-9">
             <ul className="flex h-full items-center">
-              {isLoggedIn ? (
+              {isLoggedIn && userInfo ? (
                 <>
-                  <span className="text-white">
-                    welcome, {userInfo.nickname}
-                  </span>
                   <Logout />
                 </>
               ) : (
@@ -102,9 +103,8 @@ export default function Header() {
               </div>
               <div className="ml-9">
                 <ul className="flex h-full  items-center">
-                  {isLoggedIn ? (
+                  {isLoggedIn && userInfo ? (
                     <>
-                      <span>welcome, {userInfo.nickname}</span>
                       <Logout />
                     </>
                   ) : (
