@@ -38,6 +38,7 @@ export default function PostPage() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -96,6 +97,59 @@ export default function PostPage() {
 
     fetchComments();
   }, [id]);
+
+  useEffect(() => {
+    const checkIfLiked = async () => {
+      if (currentUser && post) {
+        try {
+          const response = await fetch(`/api/board_like/${post.id}`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch likes: ${response.statusText}`);
+          }
+          const likes = await response.json();
+          const liked = likes.some(
+            (like: any) => like.user_id === currentUser.id
+          );
+          setIsLiked(liked);
+        } catch (error) {
+          console.error("Error checking like status:", error);
+        }
+      }
+    };
+
+    checkIfLiked();
+  }, [currentUser, post]);
+
+  const handleLike = async () => {
+    if (!currentUser) {
+      console.error("No user logged in");
+      return;
+    }
+
+    try {
+      const method = isLiked ? "DELETE" : "POST";
+      const response = await fetch(`/api/board_like/${post?.id}`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        setIsLiked(!isLiked);
+        setPost(
+          (prevPost) =>
+            prevPost && {
+              ...prevPost,
+              likes: prevPost.likes + (isLiked ? -1 : 1),
+            }
+        );
+      } else {
+        console.error(`Error updating like status: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error updating like status:", error);
+    }
+  };
 
   const editHandler = () => {
     router.push(`/fan/board/${id}/edit`);
@@ -193,7 +247,15 @@ export default function PostPage() {
             <p className="text-sm text-gray-500">{`Likes: ${post.likes}`}</p>
           </div>
           <p className="text-lg text-gray-800 mb-6">{post.content}</p>
-          <div className="flex justify-between items-center mb-6">
+          <button
+            className={`py-2 px-4 rounded-lg ${
+              isLiked ? "bg-red-600 text-white" : "bg-gray-300 text-black"
+            } hover:bg-red-500`}
+            onClick={handleLike}
+          >
+            {isLiked ? "Unlike" : "Like"}
+          </button>
+          <div className="flex justify-between items-center mb-6 mt-4">
             <div>
               <Link href="/fan/board" passHref>
                 <button className="bg-red-600 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-red-500">

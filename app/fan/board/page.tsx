@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+export default function Board() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const [viewType, setViewType] = useState("list");
@@ -83,7 +83,7 @@ export default function Home() {
               <div className="w-1/4">좋아요</div>
             </li>
             {posts.map((post) => (
-              <Link href={`/fan/board//${post.id}`}>
+              <Link href={`/fan/board//${post.id}`} key={post.id}>
                 <li key={post.id} className="flex justify-between py-4">
                   <div className="w-1/4">{post.title}</div>
                   <div className="w-1/4">{post.content}</div>
