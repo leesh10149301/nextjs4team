@@ -74,7 +74,7 @@ function ScheduleComponent() {
   }
 
   return (
-    <div className="flex justify-between space-x-4">
+    <div className="flex space-x-3">
       {renderGameArticle({ gameArticle: schedule.prev })}
       {renderGameArticle({ gameArticle: schedule.current })}
       {renderGameArticle({ gameArticle: schedule.next })}

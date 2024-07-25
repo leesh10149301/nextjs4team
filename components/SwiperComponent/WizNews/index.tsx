@@ -26,11 +26,11 @@ export default function WizNews() {
 
   if (!newsList)
     return (
-      <div className="w-[540px] h-[300px] bg-gray-300 mx-2 rounded-2xl animate-pulse"></div>
+      <div className="w-[500px] h-[280px] bg-gray-300 mx-2 rounded-2xl animate-pulse"></div>
     );
 
   return (
-    <div className="relative w-[540px] h-[300px] mx-2 news">
+    <div className="relative w-[500px] h-[280px] mx-2 news">
       <Swiper
         direction="horizontal"
         slidesPerView={1}
