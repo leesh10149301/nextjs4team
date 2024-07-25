@@ -15,7 +15,6 @@ export default function PlayerRole({
     <>
       <div className="w-full h-16 flex justify-center items-center my-10 ">
         <div className="w-[1100px] flex justify-between text-xl font-bold items-center ">
-          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           {pathname.split("/").pop() === "coach" ? (
             <div className="mr-10 border-b-2 border-[#d60c0c] p-2">
               코칭스태프
@@ -75,6 +74,9 @@ export default function PlayerRole({
                 </li>
               </ul>
             </div>
+          )}
+          {pathname.split("/").pop() === "player" && (
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           )}
         </div>
       </div>

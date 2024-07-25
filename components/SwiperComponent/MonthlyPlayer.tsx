@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function MonthlyPlayer() {
   return (
-    <div className="w-[550px] h-[300px] bg-gray-100 flex items-center justify-center mx-2 mt-28 relative">
+    <div className="w-[550px] h-[300px] bg-gray-100 flex items-center justify-center mx-2 relative">
       <Image
         src={
           "https://www.ktwiz.co.kr/v2/imgs/dummy/main/img/banner/player@2x.png"

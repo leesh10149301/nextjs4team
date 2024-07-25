@@ -7,15 +7,14 @@ import { Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css/bundle";
 import "./swiper.css";
+import { API_ENDPOINT } from "@/lib/constants/api";
 
 export default function WizNews() {
   const [newsList, setNewsList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/news_list`
-      );
+      const response = await fetch(API_ENDPOINT.NEWS_LIST);
       if (!response.ok) return;
       const {
         data: { list },
@@ -25,13 +24,13 @@ export default function WizNews() {
     fetchData();
   }, []);
 
-  if (!newsList || newsList.length < 5)
+  if (!newsList)
     return (
-      <div className="w-[540px] h-[300px] bg-gray-300 mx-2 mt-28 rounded-lg animate-pulse"></div>
+      <div className="w-[540px] h-[300px] bg-gray-300 mx-2 rounded-2xl animate-pulse"></div>
     );
 
   return (
-    <div className="relative w-[540px] h-[300px] mx-2 mt-28 rounded-lg news">
+    <div className="relative w-[540px] h-[300px] mx-2 news">
       <Swiper
         direction="horizontal"
         slidesPerView={1}
@@ -40,7 +39,7 @@ export default function WizNews() {
         loop
         autoplay={{ delay: 3000, disableOnInteraction: true }}
         modules={[Pagination, Autoplay]}
-        className="size-full rounded-lg"
+        className="size-full rounded-xl"
       >
         {newsList.map((newsItem, index) => (
           <SwiperSlide key={index} className="relative">
@@ -49,7 +48,7 @@ export default function WizNews() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <div className="relative w-full h-full rounded-lg">
+              <div className="relative w-full h-full rounded-2xl">
                 <Image
                   src={newsItem.imgFilePath}
                   alt="news"

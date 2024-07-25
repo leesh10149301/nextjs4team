@@ -1,14 +1,7 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useFaq } from "./chatbotForm/FaqProvider";
 
-interface IFaqButtonProps {
-  faqVisible: boolean;
-  setFaqVisible: Dispatch<SetStateAction<boolean>>;
-}
-
-export default function FaqButton({
-  faqVisible,
-  setFaqVisible,
-}: IFaqButtonProps) {
+export default function FaqButton({}) {
+  const { faqVisible, setFaqVisible } = useFaq();
   return (
     <div className="flex justify-end items-center py-1">
       <button

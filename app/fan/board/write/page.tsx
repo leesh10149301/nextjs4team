@@ -48,31 +48,50 @@ export default function NewPost() {
   };
 
   return (
-    <>
-      <h1>Create a New Post</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="flex items-center justify-center h-[680px]"
-      >
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
+      <h1 className="text-4xl font-bold mb-6 text-center text-red-500">
+        게시글 쓰기
+      </h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="title">Title</label>
+          <label
+            htmlFor="title"
+            className="block text-lg font-medium text-gray-700"
+          >
+            Title
+          </label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Enter the title"
           />
         </div>
         <div>
-          <label htmlFor="content">Content</label>
+          <label
+            htmlFor="content"
+            className="block text-lg font-medium text-gray-700"
+          >
+            Content
+          </label>
           <textarea
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Enter the content"
+            rows={6}
           ></textarea>
         </div>
-        <button type="submit">Create Post</button>
+        <button
+          type="submit"
+          className="w-full py-3 bg-black text-white font-semibold rounded-md hover:bg-red-600 transition duration-300"
+        >
+          Create Post
+        </button>
       </form>
-    </>
+    </div>
   );
 }

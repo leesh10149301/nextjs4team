@@ -10,7 +10,7 @@ export default function FanLayout({ children }: { children: React.ReactNode }) {
     {
       category: "홈런볼예측",
       url: "/fan/homerun",
-      desc: "홈런볼 예측 페이지를 소개합니다.",
+      desc: "선발 타자에 따른 홈런볼 예측 화면입니다.",
     },
     {
       category: "경기예측",
@@ -23,6 +23,7 @@ export default function FanLayout({ children }: { children: React.ReactNode }) {
       desc: "KT wiz 팀을 응원해주세요.",
     },
   ];
+
   return (
     <div>
       <Banner items={data} />

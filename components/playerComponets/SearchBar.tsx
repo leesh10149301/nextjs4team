@@ -12,7 +12,11 @@ export default function SearchBar({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchPlayer(e.target.value);
   };
-
+  const keyDownSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
   const handleSearch = () => {
     setSearchTerm(searchPlayer);
   };
@@ -22,6 +26,7 @@ export default function SearchBar({
       <input
         type="text"
         value={searchPlayer}
+        onKeyDown={keyDownSearch}
         onChange={handleInputChange}
         placeholder="선수검색"
         className="w-44 ml-4 py-2 font-normal text-base placeholder-gray-500 bg-white focus:outline-none flex-grow"

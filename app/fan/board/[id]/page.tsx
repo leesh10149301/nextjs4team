@@ -193,27 +193,31 @@ export default function PostPage() {
             <p className="text-sm text-gray-500">{`Likes: ${post.likes}`}</p>
           </div>
           <p className="text-lg text-gray-800 mb-6">{post.content}</p>
-          {canEditDelete && (
-            <div className="flex justify-end space-x-3">
-              <button
-                className="bg-gray-900 text-white py-2 px-6 rounded-lg hover:bg-gray-800"
-                onClick={editHandler}
-              >
-                수정
-              </button>
-              <button
-                className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-500"
-                onClick={deleteHandler}
-              >
-                삭제
-              </button>
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <Link href="/fan/board" passHref>
+                <button className="bg-red-600 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-red-500">
+                  뒤로 가기
+                </button>
+              </Link>
             </div>
-          )}
-          <Link href="/fan/board" passHref>
-            <button className="bg-red-600 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-red-500">
-              뒤로 가기
-            </button>
-          </Link>
+            {canEditDelete && (
+              <div className="flex space-x-4">
+                <button
+                  className="bg-gray-900 text-white py-2 px-6 rounded-lg hover:bg-gray-800"
+                  onClick={editHandler}
+                >
+                  수정
+                </button>
+                <button
+                  className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-500"
+                  onClick={deleteHandler}
+                >
+                  삭제
+                </button>
+              </div>
+            )}
+          </div>
         </div>
         <div className="p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">댓글</h2>
@@ -245,7 +249,7 @@ export default function PostPage() {
               placeholder="댓글을 입력하세요..."
             />
             <button
-              className="bg-blue-600 text-white py-2 px-6 rounded-lg mt-2 hover:bg-blue-500"
+              className="bg-red-600 text-white py-2 px-6 rounded-lg mt-2 hover:bg-black"
               onClick={addCommentHandler}
             >
               댓글 추가

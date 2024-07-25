@@ -20,7 +20,7 @@ const SwiperComponent: FC = () => {
       direction="vertical"
       slidesPerView={1}
       mousewheel
-      pagination={{ clickable: true }}
+      // pagination={{ clickable: true }}
       navigation
       modules={[Pagination, Mousewheel, Navigation]}
       className="h-screen"
@@ -30,16 +30,16 @@ const SwiperComponent: FC = () => {
       </SwiperSlide>
       <SwiperSlide className="h-screen flex flex-col items-center justify-center">
         {/* 다음 섹션 */}
-        <div className="p-5 text-center">
+        <div className="p-5 text-center mt-7">
           <img
             src="/images/ktwiz_schedule.png"
-            className="w-[826px] mx-auto my-auto mt-20"
+            className="w-[826px] mx-auto my-20"
           />
-          <div className="w-[1099.99px] h-[680.95px] flex flex-col items-center justify-center mx-auto mt-5">
-            <div className="w-full h-[302px] flex items-center justify-center">
+          <div className="w-[1099.99px] flex flex-col items-center justify-center mx-auto">
+            <div className="w-full flex items-center justify-center">
               <WeekSchedule />
             </div>
-            <div className="w-full h-[189.98px] flex">
+            <div className="w-full h-[189.98px] mt-14 flex">
               <MonthlyPlayer />
               <WizNews />
             </div>
