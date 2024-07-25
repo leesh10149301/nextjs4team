@@ -106,7 +106,7 @@ export function GameArticle(props: IGameArticleProps) {
           </dl>
         </div>
         {/** info */}
-        <div className="flex flex-col items-center mx-4">
+        <div className="flex flex-col items-center mx-2">
           <span className="text-2xl font-bold my-2 whitespace-nowrap overflow-hidden text-ellipsis">
             {team1.score ?? 0} : {team2.score ?? 0}
           </span>
