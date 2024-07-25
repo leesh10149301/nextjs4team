@@ -1,4 +1,3 @@
-// src/app/components/LogIn.tsx (컴포넌트 파일 경로 가정)
 "use client";
 
 import { useEffect, useState } from "react";
