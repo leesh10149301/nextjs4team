@@ -102,7 +102,9 @@ export default function PostPage() {
     const checkIfLiked = async () => {
       if (currentUser && post) {
         try {
-          const response = await fetch(`/api/board_like/${post.id}`);
+          const response = await fetch(`/api/board_like/${post.id}`, {
+            method: "GET",
+          });
           if (!response.ok) {
             throw new Error(`Failed to fetch likes: ${response.statusText}`);
           }
@@ -133,6 +135,7 @@ export default function PostPage() {
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ userId: currentUser.id }),
       });
       if (response.ok) {
         setIsLiked(!isLiked);

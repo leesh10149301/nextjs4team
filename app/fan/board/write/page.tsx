@@ -66,7 +66,7 @@ export default function NewPost() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter the title"
+            placeholder="제목을 입력해주세요"
           />
         </div>
         <div>
@@ -81,7 +81,7 @@ export default function NewPost() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter the content"
+            placeholder="내용을 입력해주세요"
             rows={6}
           ></textarea>
         </div>

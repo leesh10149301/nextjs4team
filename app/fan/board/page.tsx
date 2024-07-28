@@ -76,7 +76,7 @@ export default function Board() {
       <div>
         {viewType === "list" && (
           <ul className="divide-y divide-gray-300">
-            <li className="flex justify-between py-4 font-bold">
+            <li className="flex justify-between py-4 font-bold text-gray-500 border-gray-200 border-b-2">
               <div className="w-1/4">제목</div>
               <div className="w-1/4">내용</div>
               <div className="w-1/4">날짜</div>
@@ -84,7 +84,10 @@ export default function Board() {
             </li>
             {posts.map((post) => (
               <Link href={`/fan/board//${post.id}`} key={post.id}>
-                <li key={post.id} className="flex justify-between py-4">
+                <li
+                  key={post.id}
+                  className="flex justify-between py-4 hover:underline"
+                >
                   <div className="w-1/4">{post.title}</div>
                   <div className="w-1/4">{post.content}</div>
                   <div className="w-1/4">{formatDate(post.createdAt)}</div>
