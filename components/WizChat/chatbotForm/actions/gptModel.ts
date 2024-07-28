@@ -1,11 +1,8 @@
 "use server";
 
 import { OpenAI } from "openai";
-import { formDataSchema } from "./schemas";
-import {
-  performMorphologicalAnalysis,
-  analyzeKeywords,
-} from "./morphologicalAnalysis";
+import { z } from "zod";
+import { analyzeKeywords } from "./morphologicalAnalysis";
 import { processAndStoreSentence } from "./sentenceProcessing";
 import {
   answerDateQuestion,
@@ -19,6 +16,11 @@ import {
   generateFavoritePlayerMessage,
   generateMascotMessage,
 } from "./generateMessage";
+import { performMorphologicalAnalysis } from "./koreanMorphemeParaphraseApi";
+
+const formDataSchema = z.object({
+  question: z.string().min(1, { message: MESSAGES.EMPTY_QUESTION_ERROR }),
+});
 
 const openai = new OpenAI();
 
@@ -53,26 +55,30 @@ export async function gptModel(userQuestion: string) {
     })
   );
 
-  await processAndStoreSentence(question, keywords);
-
   const hasRelevantKeyword = Object.values(keywordAnalysis).some(
     (v) => v === true
   );
 
   if (hasRelevantKeyword) {
-    if (keywordAnalysis.hasBaseballKeyword) {
+    if (keywordAnalysis.hasBaseballResult) {
       responseMessage = await answerGameQuestion(question);
-    } else if (keywordAnalysis.hasPlayerKeyword) {
+    }
+    if (keywordAnalysis.hasPlayerKeyword) {
       responseMessage = await answerPlayerQuestion(analysisResult);
-    } else if (keywordAnalysis.hasDateResult) {
+    }
+    if (keywordAnalysis.hasDateResult) {
       responseMessage = await answerDateQuestion(namedEntity[0], question);
-    } else if (keywordAnalysis.hasMascot) {
+    }
+    if (keywordAnalysis.hasMascot) {
       responseMessage = generateMascotMessage;
-    } else if (keywordAnalysis.hasBooking) {
+    }
+    if (keywordAnalysis.hasBooking) {
       responseMessage = generateBookingMessage;
-    } else if (keywordAnalysis.hasFavlite) {
+    }
+    if (keywordAnalysis.hasFavlite) {
       responseMessage = generateFavoritePlayerMessage;
-    } else if (keywordAnalysis.hasCreateTeam) {
+    }
+    if (keywordAnalysis.hasCreateTeam) {
       responseMessage = generateCreateMessage;
     }
   } else {
@@ -98,6 +104,8 @@ export async function gptModel(userQuestion: string) {
       responseMessage = MESSAGES.GPT_API_ERROR;
     }
   }
+
+  await processAndStoreSentence(question, keywords);
 
   return responseMessage;
 }

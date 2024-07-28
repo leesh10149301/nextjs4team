@@ -3,6 +3,7 @@
 import { useState, useEffect, useTransition } from "react";
 import { GameArticle } from "./GameArticle";
 import { SkeletonGameArticle } from "@/components/skeleton/SkeletonGameArticle";
+import { API_ENDPOINT } from "@/lib/constants/api";
 
 interface GameArticleOptinalProps {
   homeDecision?: string;
@@ -47,9 +48,7 @@ interface IScheduleData {
 }
 
 const fetchScheduleData = async () => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/get_current_info`
-  );
+  const response = await fetch(API_ENDPOINT.CURRENT_INFO);
   if (response.ok) {
     const data = await response.json();
     return data as IScheduleData;
@@ -75,7 +74,7 @@ function ScheduleComponent() {
   }
 
   return (
-    <div className="flex justify-between space-x-4">
+    <div className="flex space-x-3">
       {renderGameArticle({ gameArticle: schedule.prev })}
       {renderGameArticle({ gameArticle: schedule.current })}
       {renderGameArticle({ gameArticle: schedule.next })}

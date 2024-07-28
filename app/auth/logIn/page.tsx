@@ -1,10 +1,12 @@
+// src/app/components/LogIn.tsx (컴포넌트 파일 경로 가정)
 "use client";
 
 import { useEffect, useState } from "react";
 import useUserInfo from "@/app/stores/useUserInfo";
-import { LoginApi } from "@/app/api/auth/route";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import useAuth from "@/app/hooks/useAuth";
+import { LoginApi } from "@/app/api/auth/route";
 
 export default function LogIn() {
   const [email, setEmail] = useState<string>("");
@@ -14,32 +16,16 @@ export default function LogIn() {
   const [isValid, setIsValid] = useState<boolean>(false);
   const { setUserInfo } = useUserInfo();
   const router = useRouter();
+  const { loading, user } = useAuth();
 
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    async function fetchUserInfo() {
-      const response = await fetch("/api/auth");
-      const data = await response.json();
-      setUsers(data);
-      console.log(data);
-    }
-
-    fetchUserInfo();
-  }, []);
-
-  // inp;ut
   const handleEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const email = e.target.value;
-    setEmail(email);
+    setEmail(e.target.value);
   };
 
   const handlePasswordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const password = e.target.value;
-    setPassword(password);
+    setPassword(e.target.value);
   };
 
-  // validate check
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) setEmailError("이메일 아이디를 입력해주세요.");
@@ -65,11 +51,11 @@ export default function LogIn() {
 
     try {
       const user = await LoginApi(email, password);
+
       setUserInfo({
-        email: user.email,
-        nickname: user.username,
+        email: user!.email,
+        nickname: user!.user_metadata?.nickname || "",
       });
-      console.log("로그인 성공:", user.username);
       router.push("/");
     } catch (err: any) {
       setPasswordError(err.message);
@@ -84,61 +70,60 @@ export default function LogIn() {
     setIsValid(true);
   }, [email, password]);
 
+  if (loading) return <p>로딩 중...</p>;
+
   return (
     <div className="flex items-center justify-center h-[680px]">
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            <p>{user}</p>
-          </li>
-        ))}
-      </ul>
-      <div className="w-[800px] h-[393px] border-4 flex justify-center items-center p-4">
-        <img src="/images/ktwiz_login.png" className="w-[150px] mr-8" />
-        <div className="w-[80px]"></div> {/* 가운데 여백 */}
-        <form
-          onSubmit={handleLoginBtnClick}
-          className="flex flex-col justify-center p-4"
-        >
-          <input
-            placeholder="이메일 주소를 입력해주세요"
-            value={email}
-            onChange={handleEmailInput}
-            required
-            onBlur={validateEmail}
-            className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
-          />
-          <div className="text-red-500 text-sm mb-2">{emailError}</div>
-          <input
-            type="password"
-            placeholder="비밀번호를 입력해주세요"
-            value={password}
-            onChange={handlePasswordInput}
-            required
-            onBlur={validatePassword}
-            className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
-          />
-          <div className="text-red-500 text-sm mb-2">{passwordError}</div>
-          <button
-            disabled={!isValid}
-            className={`p-2 rounded mb-2 ${
-              isValid
-                ? "bg-green-500 text-white"
-                : "bg-red-500 text-white w-[250px]"
-            }`}
+      {user ? (
+        <div className="flex flex-col items-center"></div>
+      ) : (
+        <div className="w-[800px] h-[393px] border-4 flex justify-center items-center p-4">
+          <img src="/images/ktwiz_login.png" className="w-[150px] mr-8" />
+          <div className="w-[80px]"></div>
+          <form
+            onSubmit={handleLoginBtnClick}
+            className="flex flex-col justify-center p-4"
           >
-            로그인
-          </button>
-          <div className="flex justify-center w-full">
-            <Link
-              href={`/auth/join`}
-              className="p-2 bg-gray-300 text-black rounded w-[250px] text-center"
+            <input
+              placeholder="이메일 주소를 입력해주세요"
+              value={email}
+              onChange={handleEmailInput}
+              required
+              onBlur={validateEmail}
+              className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
+            />
+            <div className="text-red-500 text-sm mb-2">{emailError}</div>
+            <input
+              type="password"
+              placeholder="비밀번호를 입력해주세요"
+              value={password}
+              onChange={handlePasswordInput}
+              required
+              onBlur={validatePassword}
+              className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
+            />
+            <div className="text-red-500 text-sm mb-2">{passwordError}</div>
+            <button
+              disabled={!isValid}
+              className={`p-2 rounded mb-2 ${
+                isValid
+                  ? "bg-green-500 text-white"
+                  : "bg-red-500 text-white w-[250px]"
+              }`}
             >
-              회원가입
-            </Link>
-          </div>
-        </form>
-      </div>
+              로그인
+            </button>
+            <div className="flex justify-center w-full">
+              <Link
+                href={`/auth/join`}
+                className="p-2 bg-gray-300 text-black rounded w-[250px] text-center"
+              >
+                회원가입
+              </Link>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

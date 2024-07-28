@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SkeletonTodayScore } from "../skeleton/SkeletonTodayScore";
+import { API_ENDPOINT } from "@/lib/constants/api";
 
 interface Score {
   rank: number;
@@ -17,9 +18,7 @@ export default function TodayScore(props: ITodayScoreProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/today_rank`
-      );
+      const response = await fetch(API_ENDPOINT.TODAY_RANK);
       if (response.ok) {
         const data = await response.json();
         const ktScore = data.filter((d) => d.팀 === "KT")[0];
@@ -37,16 +36,8 @@ export default function TodayScore(props: ITodayScoreProps) {
     fetchData();
   }, []);
   return (
-    <div className="h-screen flex flex-col items-center mt-[84px]">
-      <iframe
-        className="w-full h-2/3 border-none min-h-[500px] mx-auto"
-        src="https://www.youtube.com/embed/yCqLhzTVgTs?si=2lA05OiqC4p63lfF&mute=1&autoplay=1"
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-      />
-      <div className="w-full flex justify-center items-center space-x-4 p-4 *:my-[60px] *:h-24">
+    <div className="h-screen flex flex-col items-center">
+      <div className="w-full flex justify-center items-center space-x-4 p-4 *:h-24">
         {score ? (
           <>
             <div className="flex-1 text-center p-4 bg-[#ec0a0b] text-white rounded-lg">

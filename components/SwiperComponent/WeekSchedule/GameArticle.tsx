@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { IGameArticleProps } from ".";
 
 const emblemMap: { [key: string]: string } = {
@@ -14,14 +15,10 @@ const emblemMap: { [key: string]: string } = {
   "SK": "/icons/emblems/ssg_emblem.png",
 };
 
-const formatDateString = (dateString: string) => {
+const formatDateString = (dateString: string): string => {
   if (!dateString) return "";
-  return `${dateString.substring(0, 4)}.${dateString.substring(
-    4,
-    6
-  )}.${dateString.substring(6, 8)}`;
+  return dayjs(dateString, "YYYYMMDD").format("YYYY.MM.DD");
 };
-
 export function GameArticle(props: IGameArticleProps) {
   const isToday = props.game === "current" ? "bg-[#ec0a0b]" : "bg-black";
 
@@ -94,7 +91,6 @@ export function GameArticle(props: IGameArticleProps) {
               className="size-16 object-contain"
             />
           </div>
-          {/**결과가 나왔으면 결정 사항, 안나왔으면 선발투수 */}
           <dl className="text-center">
             <dt className="font-bold w-24 whitespace-nowrap overflow-hidden text-ellipsis">
               {team1.name}
@@ -110,7 +106,7 @@ export function GameArticle(props: IGameArticleProps) {
           </dl>
         </div>
         {/** info */}
-        <div className="flex flex-col items-center mx-4">
+        <div className="flex flex-col items-center mx-2">
           <span className="text-2xl font-bold my-2 whitespace-nowrap overflow-hidden text-ellipsis">
             {team1.score ?? 0} : {team2.score ?? 0}
           </span>
