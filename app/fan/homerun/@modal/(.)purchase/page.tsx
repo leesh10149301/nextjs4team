@@ -17,7 +17,7 @@ export default function PurchaseModal({
   };
 
   return (
-    <div className="p-2 flex flex-col  w-1/5 h-36 rounded-md right-1/2 bottom-1/3 bg-white fixed z-50 opacity-90 ">
+    <div className="p-2 flex flex-col  w-1/5 h-50 rounded-md right-1/2 bottom-1/3 bg-white fixed z-50 opacity-90 ">
       <button
         onClick={handleClose}
         className="p-1 bg-black text-white rounded ml-auto text-sm shadow-xl"
