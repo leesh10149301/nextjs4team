@@ -19,7 +19,7 @@ ChartJS.register(
 );
 import { predictPlayerRecordData } from "./helper";
 
-const PredictPlayerChart = ({ predictData }) => {
+const PredictPlayerChart = ({ predictData, position }) => {
   const data = {
     labels: predictData.map((d) => d[0]),
     datasets: [
@@ -41,8 +41,13 @@ const PredictPlayerChart = ({ predictData }) => {
   };
 
   return (
-    <div className="w-[500px] h-[400px] flex items-center">
+    <div className="w-[500px] h-[400px] flex flex-col justify-center items-center">
       <Bar data={data} options={options} />
+      <span className="mt-5 text-xs text-gray-400">
+        {position === "투수"
+          ? "ERA: 자책점 WHIP: 출루율 K/BB: 삼진/볼넷 OBA: 피안타율"
+          : "BA: 타율 OBP: 출루율 SLG: 장타율 HR: 홈런 "}
+      </span>
     </div>
   );
 };
