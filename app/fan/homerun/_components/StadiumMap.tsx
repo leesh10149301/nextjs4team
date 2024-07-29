@@ -342,6 +342,22 @@ const StadiumMap = ({
       });
   }
 
+  const usedColors = new Set<string>();
+
+  function getRandomColor(): string {
+    let color;
+    let attempts = 0;
+    const maxAttempts = 20;
+
+    do {
+      color = `hsl(${Math.random() * 360}, 100%, 75%)`;
+      attempts++;
+    } while (usedColors.has(color) && attempts < maxAttempts);
+
+    usedColors.add(color);
+    return color;
+  }
+
   function animateBall(
     targetX: number,
     targetY: number,
@@ -365,13 +381,16 @@ const StadiumMap = ({
       .style("filter", "url(#fire-effect)")
       .on("end", () => {
         d3.select(ball.node() as any).style("filter", null);
+
+        const randomColor = getRandomColor();
+
         svg
           .append("circle")
           .attr("class", "highlight-circle")
           .attr("cx", targetX)
           .attr("cy", targetY)
           .attr("r", 150)
-          .attr("fill", "lightgreen")
+          .attr("fill", randomColor)
           .attr("opacity", 0.5);
 
         getAreaName(targetX, targetY).then((areaName) => {
