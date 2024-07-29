@@ -133,7 +133,7 @@ export default function GamePrediction() {
         {
           label: "승리 확률 (%)",
           data: [ktWinProbability ?? 0, opponentWinProbability ?? 0],
-          backgroundColor: ["#c51734", "#000"],
+          backgroundColor: ["#da0b2d", "#000"],
           borderRadius: 4,
           borderWidth: 1,
           borderColor: "#fffbfb", // 테두리 색상
