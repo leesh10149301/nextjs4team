@@ -10,13 +10,19 @@ import { useEffect, useMemo, useState } from "react";
 import { TCoach, TPlayer } from "@/app/types/player";
 import PlayerItem from "./PlayerItem";
 import PlayerRole from "./PlayerRole";
+
+const ITEMS_PER_PAGE = 8;
+
 export default function PlayerItemList() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterData, setFilterData] = useState([]);
+  const [filterData, setFilterData] = useState<(TPlayer | TCoach)[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const pathname = usePathname();
+
   const sortByPlayerName = (a: TPlayer | TCoach, b: TPlayer | TCoach) => {
     return a.playerName.localeCompare(b.playerName, "ko");
   };
+
   const searchData = [
     ...pitcherData.data.list,
     ...catcherData.data.list,
@@ -24,6 +30,7 @@ export default function PlayerItemList() {
     ...outfielderData.data.list,
     ...coachData.data.list,
   ];
+
   let data: (TPlayer | TCoach)[] = useMemo(() => {
     switch (pathname.split("/").pop()) {
       case "player":
@@ -41,47 +48,83 @@ export default function PlayerItemList() {
           ...infielderData.data.list,
           ...outfielderData.data.list,
         ].sort(sortByPlayerName);
-        break;
       case "pitcher":
         return pitcherData.data.list;
-        break;
       case "catcher":
         return catcherData.data.list;
-        break;
       case "infielder":
         return infielderData.data.list;
-        break;
       case "outfielder":
         return outfielderData.data.list;
-        break;
       case "coach":
         return coachData.data.list;
-        break;
       default:
         return [];
     }
   }, [pathname]);
-  //지우기
 
   useEffect(() => {
     if (searchTerm === "") {
       setFilterData(data);
     } else {
-      //플레이어
       const filtered = searchData.filter((player) =>
         player.playerName.includes(searchTerm)
       );
       setFilterData(filtered);
     }
+    setCurrentPage(1);
   }, [searchTerm, data]);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentPageData = filterData.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+
+  const handlePageChange = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  const totalPages = Math.ceil(filterData.length / ITEMS_PER_PAGE);
+
   return (
     <>
       <PlayerRole searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <div className="w-full flex justify-center p-2 mb-10">
+      <div className="w-full flex justify-center p-2 mb-2">
         <div className="flex flex-wrap w-[1100px]">
-          {filterData.map((player) => (
-            <PlayerItem player={player} key={player.pcode} />
-          ))}
+          {!!searchTerm && currentPageData.length === 0 ? (
+            <div className="flex justify-center w-full py-32 ">
+              <p className="font-bold text-3xl text-[#d60c0c]">
+                검색 결과가 없습니다.
+              </p>
+            </div>
+          ) : (
+            currentPageData.map((player) => (
+              <PlayerItem player={player} key={player.pcode} />
+            ))
+          )}
+        </div>
+      </div>
+      <div className="w-full flex justify-center mb-10">
+        <div className="flex gap-1 items-center">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            className={`px-4 py-2 ${currentPage === 1 ? "text-gray-200" : ""}`}
+            disabled={currentPage === 1}
+          >
+            {"<"}
+          </button>
+          <span className="px-4 py-2 \ bg-white">{currentPage}</span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            className={`px-4 py-2 ${
+              currentPage === totalPages ? "text-gray-200" : ""
+            }`}
+            disabled={currentPage === totalPages}
+          >
+            {">"}
+          </button>
         </div>
       </div>
     </>

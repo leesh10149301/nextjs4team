@@ -39,33 +39,42 @@ const getPlayerSelectedData = async (keyword: string) => {
 };
 
 // DB 서버에서 경기 결과를 가져오는 함수
-const getGameResult = async (date: string) => {
-  try {
-    const { data } = await supabase
-      .from("gameResult")
-      .select("*")
-      .eq("gameDate", date);
+// const getGameResult = async (date: string) => {
+//   try {
+//     const { data } = await supabase
+//       .from("gameResult")
+//       .select("*")
+//       .eq("gameDate", date);
 
-    const { gameDate, home, hscore, visit, vscore, kt_win } = data[0];
-    const formattedResult = {
-      gameDate,
-      home,
-      homeScore: hscore,
-      visit,
-      visitScore: vscore,
-      result: kt_win,
-    };
+//     console.log(data);
+//     if (data.length === 0) {
+//       return {
+//         success: true,
+//         data: null,
+//         message: "데이터베이스에 저장되지 않은 일정입니다.",
+//       };
+//     }
 
-    return { success: true, data: formattedResult };
-  } catch (err) {
-    console.log("Unexpected error:", err);
-    return {
-      success: false,
-      data: null,
-      message: "서버 에러 발생, 다시 시도 해주세요.",
-    };
-  }
-};
+//     const { gameDate, home, hscore, visit, vscore, kt_win } = data[0];
+//     const formattedResult = {
+//       gameDate,
+//       home,
+//       homeScore: hscore,
+//       visit,
+//       visitScore: vscore,
+//       result: kt_win,
+//     };
+
+//     return { success: true, data: formattedResult };
+//   } catch (err) {
+//     console.log("Unexpected error:", err);
+//     return {
+//       success: false,
+//       data: null,
+//       message: "서버 에러 발생, 다시 시도 해주세요.",
+//     };
+//   }
+// };
 
 // 문장 카운트를 증가시키는 함수
 const incrementSentenceCount = async (id: string) => {
@@ -111,15 +120,37 @@ const incrementSentenceCount = async (id: string) => {
 // 새로운 문장을 DB에 저장하는 함수
 const saveNewSentenceToDB = async (sentence: string) => {
   try {
-    const { error } = await supabase
+    // 문장이 이미 존재하는지 확인
+    const { data: existingSentence, error: selectError } = await supabase
+      .from("sentence")
+      .select("id, count")
+      .eq("sentence", sentence)
+      .single();
+
+    if (selectError && selectError.code !== "PGRST116") {
+      throw new Error(
+        `Error checking existing sentence: ${selectError.message}`
+      );
+    }
+
+    if (existingSentence) {
+      console.log(
+        "Sentence already exists in the database, incrementing count."
+      );
+      await incrementSentenceCount(existingSentence.id);
+      return;
+    }
+
+    // 문장이 존재하지 않으면 새 문장 저장
+    const { error: insertError } = await supabase
       .from("sentence")
       .insert([{ sentence, count: 1 }]);
 
-    if (error) {
-      throw new Error(`Error saving new sentence: ${error.message}`);
+    if (insertError) {
+      throw new Error(`Error saving new sentence: ${insertError.message}`);
     }
 
-    console.log("New sentence saved. Response:");
+    console.log("New sentence saved successfully.");
   } catch (error) {
     console.error("Error in saveNewSentenceToDB:", error);
     throw error;
@@ -147,7 +178,6 @@ const fetchSentenceData = async (keyword: string) => {
 
 export {
   getPlayerData,
-  getGameResult,
   incrementSentenceCount,
   saveNewSentenceToDB,
   fetchSentenceData,

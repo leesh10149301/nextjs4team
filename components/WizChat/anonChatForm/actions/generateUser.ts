@@ -67,7 +67,7 @@ const ttoriTemplates = [
   "노래 부르며 응원하는 또리",
 ];
 
-function getRandomNicname(arr: string[]) {
+function getRandomNickname(arr: string[]) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
@@ -77,7 +77,7 @@ function generateRandomNumber() {
 
 function generateNickname() {
   const bigOrTtori = Math.random() < 0.5 ? bigTemplates : ttoriTemplates;
-  const nickname = getRandomNicname(bigOrTtori);
+  const nickname = getRandomNickname(bigOrTtori);
   const randomNumber = generateRandomNumber();
   return `${nickname} ${randomNumber}`;
 }

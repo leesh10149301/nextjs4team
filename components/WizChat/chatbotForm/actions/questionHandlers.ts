@@ -1,9 +1,6 @@
+import dayjs from "dayjs";
 import { extractPerformance, extractPlayerName } from "./morphologicalAnalysis";
-import {
-  getPlayerSelectedData,
-  getGameResult,
-  getPlayerData,
-} from "./databaseService";
+import { getPlayerSelectedData, getPlayerData } from "./databaseService";
 import {
   generateGameResultMessage,
   generatePlayerDataMessage,
@@ -13,28 +10,39 @@ import {
 import { MESSAGES } from "@/lib/constants/chatbot";
 import { formatDateToYYYYMMDD } from "@/lib/formatDateToYYYMMDD";
 import {
+  fetchScheduleData,
   getNextWeekSchedule,
   getThisWeekSchedule,
   getTodaySchedule,
 } from "./getSchduledata";
+import { API_ENDPOINT } from "@/lib/constants/api";
 
 // 경기 결과 질문 처리 함수
 const answerGameQuestion = async (question: string) => {
+  const today = dayjs();
+  const yearMonth = today.format("YYYYMM");
   const date = formatDateToYYYYMMDD(question);
+
   if (!date) {
     return MESSAGES.DATE_MISSING_ERROR;
   }
 
   try {
-    const { success, data, message } = await getGameResult(date);
-    if (success) {
-      return generateGameResultMessage(data);
-    } else {
-      return message;
+    const data = await fetchScheduleData(yearMonth);
+    const response = data.find(
+      (listItem) =>
+        listItem.displayDate === date &&
+        (listItem.home === "KT" || listItem.visit === "KT")
+    );
+
+    if (!response) {
+      return MESSAGES.DATE_MISSING_ERROR;
     }
-  } catch (error) {
-    console.error(error);
-    return MESSAGES.SERVER_ERROR;
+
+    return generateGameResultMessage(response);
+  } catch (e) {
+    console.log(e);
+    return MESSAGES.DATE_MISSING_ERROR;
   }
 };
 
@@ -49,9 +57,9 @@ const answerPlayerQuestion = async (analysisResult: any) => {
     if (isPlayerPerformance) {
       const { pcode, position } = await getPlayerSelectedData(searchName);
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/player_data?pcode=${pcode}`
-      ).then((res) => res.json());
+      const response = await fetch(API_ENDPOINT.PLAYER_INFO + pcode).then(
+        (res) => res.json()
+      );
       return generateSeasonMessage(response.data.seasonsummary, position);
     } else {
       const { success, data } = await getPlayerData(searchName);

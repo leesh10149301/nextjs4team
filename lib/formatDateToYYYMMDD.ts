@@ -1,6 +1,7 @@
+import dayjs from "dayjs";
 import { datePatterns } from "./patterns";
 
-const getCurrentYear = (): string => new Date().getFullYear().toString();
+const getCurrentYear = (): string => dayjs().year().toString();
 
 export const formatDateToYYYYMMDD = (dateString: string): string | null => {
   for (const pattern of datePatterns) {
@@ -18,7 +19,10 @@ export const formatDateToYYYYMMDD = (dateString: string): string | null => {
       } else {
         continue;
       }
-      return `${year}${month}${day}`;
+      const formattedDate = dayjs(`${year}-${month}-${day}`, "YYYY-MM-DD");
+      if (formattedDate.isValid()) {
+        return formattedDate.format("YYYYMMDD");
+      }
     }
   }
   return null;

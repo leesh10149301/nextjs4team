@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Header />
-        {children}
+        <div className="min-h-[900px]">{children}</div>
         <Footer />
         <Chatbot />
         <div id="chatBot"></div>

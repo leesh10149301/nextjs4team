@@ -5,18 +5,18 @@
     height: 8px;
   }
   .swiper-pagination-bullet {
-    background-color: #ec0a0b; /* 빨간색 배경 */
-    width: 16px; /* 너비 */
-    height: 8px; /* 높이 */
-    opacity: 0.2; /* 불투명도 */
-    border-radius: 50%; /* 타원형으로 만들기 */
-    transition: width 0.3s, height 0.3s; /* 애니메이션 효과 */
+    background-color: #ec0a0b;
+    width: 16px;
+    height: 8px;
+    opacity: 0.2;
+    border-radius: 50%;
+    transition: width 0.3s, height 0.3s;
   }
   .swiper-pagination-bullet-active {
-    background-color: #ec0a0b; /* 초록색 배경 */
-    width: 32px; /* 활성화된 불릿 너비 */
-    height: 8px; /* 활성화된 불릿 높이 */
-    border-radius: 10%; /* 타원형으로 만들기 */
+    background-color: #ec0a0b;
+    width: 32px;
+    height: 8px;
+    border-radius: 10%;
     opacity: 0.8;
   }
 }

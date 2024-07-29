@@ -18,7 +18,7 @@ export default function PlayerItem({ player }: { player: TPlayer | TCoach }) {
   const playerPosition = getPosition(player);
 
   return (
-    <div className="ml-2 w-[23%]  shadow-lg hover:shadow-xl rounded-lg transform transition-transform hover:scale-105 my-5 mx-1">
+    <div className="ml-2 w-[23%] border shadow-lg hover:shadow-xl rounded-lg transform transition-transform hover:scale-105 my-5 mx-1">
       <Link
         href={`/player/${playerPosition}/detail/${player.pcode}`}
         className="w-[23%] "
@@ -26,7 +26,7 @@ export default function PlayerItem({ player }: { player: TPlayer | TCoach }) {
         <img
           src={player.playerPrvwImg}
           alt={player.playerName}
-          className="pt-5 w-full rounded-lg min-h-[233px]"
+          className="pt-5 w-full rounded-t-lg min-h-[233px]"
           loading="lazy"
         />
 

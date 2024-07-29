@@ -17,7 +17,7 @@ export default function PredictReport() {
   });
 
   return (
-    <div className="w-full   p-6 rounded-lg">
+    <div className="w-full  p-6 rounded-lg">
       <div className="flex justify-around">
         <div className="flex flex-col">
           <div className="flex items-center mb-8 text-lg font-bold">
@@ -31,18 +31,7 @@ export default function PredictReport() {
             <div className="w-1 h-5 bg-[#d23933] mr-2" />
             다음 경기 확률 예측
           </div>
-          {/* <div className="w-80 h-80 bg-white border-2 border-black p-6 rounded-lg shadow-lg flex flex-col justify-around">
-            {predictData.map((data, idx) => (
-              <p
-                className="flex justify-between items-center text-xl"
-                key={idx}
-              >
-                <span className="font-bold text-black ">{data[0]} : </span>{" "}
-                <span className="text-red-600 font-semibold">{data[1]}</span>
-              </p>
-            ))}
-          </div> */}
-          <PredictPlayerChart predictData={predictData} />
+          <PredictPlayerChart predictData={predictData} position={position} />
         </div>
       </div>
     </div>
