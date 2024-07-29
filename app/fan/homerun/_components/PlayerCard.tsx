@@ -36,7 +36,7 @@ const PlayerCard = ({ onCardSelect, setTooltipVisible }: PlayerCardProps) => {
   }, []);
 
   return (
-    <div className="w-1/4 overflow-y-scroll bg-white pr-4 pl-4">
+    <div className="w-1/4 overflow-y-scroll bg-white pr-4 pl-4 border">
       <div className="flex flex-col h-[calc(100vh)] ">
         <div
           className={`content-center mb-4 p-2 border-b hover:shadow-xl hover:scale-105 cursor-pointer h-[65px] text-center ${
