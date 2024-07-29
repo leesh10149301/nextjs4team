@@ -115,7 +115,7 @@ export default function PlayerDetail() {
               </ul>
             </div>
           </div>
-          <div className="w-[1200px] p-5 flex flex-col items-start mb-10">
+          <div className="w-[1200px] p-5 flex flex-col items-start mb-20">
             {checkBtn === "recent" ? <RecentReport /> : null}
             {checkBtn === "total" ? <TotalReport /> : null}
             {checkBtn === "predict" ? <PredictReport /> : null}
