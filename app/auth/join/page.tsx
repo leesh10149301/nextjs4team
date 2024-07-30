@@ -5,10 +5,8 @@ import { useEffect, useState } from "react";
 import { signUp, validateEmail, validateNickname } from "@/app/api/auth/route";
 import useUserInfo from "@/app/stores/useUserInfo";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function Join() {
-  const router = useRouter();
   // iuput
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -124,7 +122,6 @@ export default function Join() {
         nickname: user.user.user_metadata.username,
       });
       console.log("회원가입 성공:", user.user.user_metadata.username);
-      router.push("/auth/login");
       console.log("userinfo 테이블 업데이트 완료");
     } catch (error: any) {
       console.error("회원가입 오류:", error.message);
@@ -224,7 +221,7 @@ export default function Join() {
                 isValid ? "bg-green-500 text-white" : "bg-red-500 text-white"
               }`}
             >
-              <Link href={`/auth/login`}>회원가입</Link>
+              <Link href={`/auth/logIn`}>회원가입</Link>
             </button>
           </form>
         </div>

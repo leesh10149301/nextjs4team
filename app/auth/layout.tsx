@@ -13,7 +13,7 @@ export default function BoardLayout({
   const data = [
     {
       category: "로그인",
-      url: "/auth/login",
+      url: "/auth/logIn",
       desc: "로그인 후 kt wiz 사이트를 더욱 다양하게 이용해 보세요.",
     },
     {
