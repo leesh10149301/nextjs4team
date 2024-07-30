@@ -109,7 +109,7 @@ export default function LogIn() {
             <button
               disabled={!isValid}
               className={`p-2 rounded mb-2 w-2/3 ${
-                isValid ? "bg-green-500 text-white" : "bg-gray-500 text-white"
+                isValid ? "bg-red-500 text-white" : "bg-gray-500 text-white"
               }`}
             >
               로그인

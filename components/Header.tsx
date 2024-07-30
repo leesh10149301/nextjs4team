@@ -46,7 +46,7 @@ export default function Header() {
               ) : (
                 <>
                   <li className="text-white text-opacity-70 text-sm after:content-['|'] after:pl-2 after:mr-2 after:align-top">
-                    <Link href={`/auth/login`} className="align-middle">
+                    <Link href={`/auth/logIn`} className="align-middle">
                       로그인
                     </Link>
                   </li>
