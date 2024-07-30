@@ -15,6 +15,34 @@ interface StadiumMapProps {
   setTooltipVisible: (visible: boolean) => void;
 }
 
+interface Coordinates {
+  x: number;
+  y: number;
+}
+
+interface Zone {
+  zone: string;
+  coordinates: Coordinates;
+}
+
+interface Area {
+  area_name: string;
+  price: number;
+  zones: Zone[];
+}
+
+interface Facility {
+  facility_name: string;
+  zones: Zone[];
+}
+
+interface StadiumData {
+  stadium: string;
+  info: string;
+  areas: Area[];
+  facilities: Facility[];
+}
+
 const StadiumMap = ({
   selectedPlayerId,
   playersHomerunData,
@@ -77,16 +105,16 @@ const StadiumMap = ({
     };
 
     d3.json("/data/stadium_coordinates.json")
-      .then((data: any) => {
+      .then((data: StadiumData) => {
         const allCoordinates = [
-          ...data.areas.flatMap((area: any) =>
-            area.zones.map((zone: any) => [
+          ...data.areas.flatMap((area: Area) =>
+            area.zones.map((zone: Zone) => [
               zone.coordinates.x,
               zone.coordinates.y,
             ])
           ),
-          ...data.facilities.flatMap((facility: any) =>
-            facility.zones.map((zone: any) => [
+          ...data.facilities.flatMap((facility: Facility) =>
+            facility.zones.map((zone: Zone) => [
               zone.coordinates.x,
               zone.coordinates.y,
             ])
@@ -129,7 +157,7 @@ const StadiumMap = ({
             .attr("stroke-opacity", 0.5);
         }
 
-        data.areas.forEach((area: any) => {
+        data.areas.forEach((area: Area) => {
           const areaGroup = svg.append("g").attr("class", "area-group");
 
           const seatRadius = 40;
@@ -146,7 +174,7 @@ const StadiumMap = ({
               "외야잔디/자유석2",
             ].includes(area.area_name)
           ) {
-            const points = area.zones.map((zone: any) => [
+            const points = area.zones.map((zone: Zone) => [
               zone.coordinates.x,
               zone.coordinates.y,
             ]);
@@ -171,7 +199,7 @@ const StadiumMap = ({
 
             defineAreaFontStyle(area, areaGroup);
           } else {
-            area.zones.forEach((zone: any) => {
+            area.zones.forEach((zone: Zone) => {
               const { x, y } = zone.coordinates;
 
               if (zone.zone === "<<< 스카이박스 >>>") {
@@ -219,8 +247,8 @@ const StadiumMap = ({
         const facilityWidth = 160;
         const facilityHeight = 70;
 
-        data.facilities.forEach((facility: any) => {
-          facility.zones.forEach((zone: any) => {
+        data.facilities.forEach((facility: Facility) => {
+          facility.zones.forEach((zone: Zone) => {
             const { x, y } = zone.coordinates;
 
             svg
@@ -294,7 +322,7 @@ const StadiumMap = ({
   }, [playersHomerunData, selectedPlayerId]);
 
   function defineAreaFontStyle(
-    area: any,
+    area: Area,
     areaGroup: d3.Selection<SVGGElement>
   ) {
     const areaStyles: { [key: string]: { dy: string; startOffset: string } } = {
@@ -380,7 +408,7 @@ const StadiumMap = ({
       .attr("y", targetY - 30)
       .style("filter", "url(#fire-effect)")
       .on("end", () => {
-        d3.select(ball.node() as any).style("filter", null);
+        d3.select(ball.node() as SVGImageElement).style("filter", null);
 
         const randomColor = getRandomColor();
 
@@ -405,10 +433,10 @@ const StadiumMap = ({
   async function getAreaName(x: number, y: number): Promise<string> {
     let closestAreaName = "알 수 없음";
     let closestDistance = Infinity;
-    const data: any = await d3.json("/data/stadium_coordinates.json");
+    const data: StadiumData = await d3.json("/data/stadium_coordinates.json");
 
-    data.areas.forEach((area: any) => {
-      area.zones.forEach((zone: any) => {
+    data.areas.forEach((area: Area) => {
+      area.zones.forEach((zone: Zone) => {
         const { x: zoneX, y: zoneY } = zone.coordinates;
         const distance = Math.sqrt((x - zoneX) ** 2 + (y - zoneY) ** 2);
         if (distance < 500 && distance < closestDistance) {
