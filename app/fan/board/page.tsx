@@ -1,10 +1,12 @@
 "use client";
 
+import { getLikesCount } from "@/app/api/board_like/route";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+export default function Board() {
   const [posts, setPosts] = useState([]);
+  const [likesCounts, setLikesCounts] = useState({});
   const [error, setError] = useState(null);
   const [viewType, setViewType] = useState("list");
 
@@ -19,7 +21,22 @@ export default function Home() {
         if (!Array.isArray(data)) {
           throw new Error("Received data is not an array");
         }
+
+        // 최신순으로 정렬
+        data.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+
         setPosts(data);
+
+        // 각 게시물의 좋아요 수를 가져옵니다.
+        const likesData = {};
+        for (const post of data) {
+          const count = await getLikesCount(post.id);
+          likesData[post.id] = count;
+        }
+        setLikesCounts(likesData);
       } catch (err) {
         console.error("Failed to fetch posts:", err);
         setError(err.message);
@@ -40,6 +57,13 @@ export default function Home() {
       day: "numeric",
     };
     return new Date(dateString).toLocaleDateString("ko-KR", options);
+  };
+
+  const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + "...";
   };
 
   return (
@@ -76,19 +100,19 @@ export default function Home() {
       <div>
         {viewType === "list" && (
           <ul className="divide-y divide-gray-300">
-            <li className="flex justify-between py-4 font-bold">
-              <div className="w-1/4">제목</div>
-              <div className="w-1/4">내용</div>
-              <div className="w-1/4">날짜</div>
-              <div className="w-1/4">좋아요</div>
+            <li className="flex justify-between py-4 font-bold text-gray-500 border-gray-200 border-b-2">
+              <div className="w-1/5">제목</div>
+              <div className="w-2/5">내용</div>
+              <div className="w-1/5">날짜</div>
+              <div className="w-1/5">좋아요</div>
             </li>
             {posts.map((post) => (
-              <Link href={`/fan/board//${post.id}`}>
-                <li key={post.id} className="flex justify-between py-4">
-                  <div className="w-1/4">{post.title}</div>
-                  <div className="w-1/4">{post.content}</div>
-                  <div className="w-1/4">{formatDate(post.createdAt)}</div>
-                  <div className="w-1/4">{post.likes}</div>
+              <Link href={`/fan/board/${post.id}`} key={post.id}>
+                <li className="flex justify-between py-4 hover:underline">
+                  <div className="w-1/5">{truncateText(post.title, 10)}</div>
+                  <div className="w-2/5">{truncateText(post.content, 23)}</div>
+                  <div className="w-1/5">{formatDate(post.createdAt)}</div>
+                  <div className="w-1/5">{likesCounts[post.id] || 0}</div>
                 </li>
               </Link>
             ))}
@@ -104,14 +128,18 @@ export default function Home() {
                 <Link href={`/fan/board/${post.id}`} passHref>
                   <div className="hover:underline">
                     <div className="text-xl font-semibold text-black">
-                      {post.title}
+                      {truncateText(post.title, 10)}
                     </div>
-                    <div className="text-gray-600">{post.content}</div>
+                    <div className="text-gray-600">
+                      {truncateText(post.content, 17)}
+                    </div>
                     <div className="flex justify-between items-center mt-2">
                       <div className="text-gray-500">
                         {formatDate(post.createdAt)}
                       </div>
-                      <div className="text-gray-500">좋아요: {post.likes}</div>
+                      <div className="text-gray-500">
+                        좋아요: {likesCounts[post.id] || 0}
+                      </div>
                     </div>
                   </div>
                 </Link>

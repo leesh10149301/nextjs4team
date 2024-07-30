@@ -1,4 +1,3 @@
-// src/app/stores/useUserInfo.ts
 import { create } from "zustand";
 
 interface userInfoType {

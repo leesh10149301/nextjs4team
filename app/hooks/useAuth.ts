@@ -1,4 +1,3 @@
-// app/hooks/useAuth.ts
 import { useEffect, useState } from "react";
 import useUserInfo from "@/app/stores/useUserInfo";
 import supabase from "../utils/supabase/client";

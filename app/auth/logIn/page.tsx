@@ -1,7 +1,6 @@
-// src/app/components/LogIn.tsx (컴포넌트 파일 경로 가정)
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import useUserInfo from "@/app/stores/useUserInfo";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -28,17 +27,23 @@ export default function LogIn() {
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) setEmailError("이메일 아이디를 입력해주세요.");
-    else if (!emailRegex.test(email))
+    if (!email) {
+      setEmailError("이메일 아이디를 입력해주세요.");
+    } else if (!emailRegex.test(email)) {
       setEmailError("올바른 이메일 형식이 아닙니다.");
-    else setEmailError("");
+    } else {
+      setEmailError("");
+    }
   };
 
   const validatePassword = () => {
-    if (!password) setPasswordError("비밀번호를 입력해주세요.");
-    else if (password.length < 8)
+    if (!password) {
+      setPasswordError("비밀번호를 입력해주세요.");
+    } else if (password.length < 8) {
       setPasswordError("비밀번호는 8자 이상이어야 합니다.");
-    else setPasswordError("");
+    } else {
+      setPasswordError("");
+    }
   };
 
   const handleLoginBtnClick = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,10 +56,9 @@ export default function LogIn() {
 
     try {
       const user = await LoginApi(email, password);
-
       setUserInfo({
-        email: user!.email,
-        nickname: user!.user_metadata?.nickname || "",
+        email: user.email,
+        nickname: user.user_metadata?.nickname || "",
       });
       router.push("/");
     } catch (err: any) {
@@ -108,7 +112,7 @@ export default function LogIn() {
               className={`p-2 rounded mb-2 ${
                 isValid
                   ? "bg-green-500 text-white"
-                  : "bg-red-500 text-white w-[250px]"
+                  : "bg-gray-500 text-white w-[250px]"
               }`}
             >
               로그인

@@ -10,6 +10,22 @@ export const getId = async () => {
   return data?.session?.user?.id || null;
 };
 
+const addUserInfo = async (userId: string, email: string, nickname: string) => {
+  try {
+    const { error } = await supabase
+      .from("userinfo")
+      .insert([{ id: userId, email: email, username: nickname }]);
+
+    if (error) {
+      console.error("userinfo 테이블에 데이터 삽입 중 오류 발생:", error);
+      throw new Error("회원가입 중 문제가 발생했습니다. 다시 시도해주세요.");
+    }
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    throw new Error("Unexpected error: " + error.message);
+  }
+};
+
 // 회원가입
 export const signUp = async (email, password, nickname) => {
   try {
@@ -30,10 +46,13 @@ export const signUp = async (email, password, nickname) => {
         throw new Error(error.message);
       }
     } else {
+      const user = data.user;
+      await addUserInfo(user.id, email, nickname);
       return data;
     }
   } catch (error) {
-    throw new Error("Unexpected error: " + error);
+    console.error("Unexpected error:", error);
+    throw new Error("Unexpected error: " + error.message);
   }
 };
 
@@ -94,7 +113,7 @@ export const validateNickname = async (nickname) => {
 };
 
 // 로그인
-export const LoginApi = async (email, password) => {
+export const LoginApi = async (email: string, password: string) => {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -117,8 +136,8 @@ export const LoginApi = async (email, password) => {
     if (userinfoError) throw new Error("사용자 이름 가져오는데 실패했습니다.");
 
     return { ...user, username: userinfo.username };
-  } catch (err) {
-    console.error("로그인 요청 중 오류 발생:", err);
+  } catch (err: any) {
+    console.error("로그인 요청 중 오류 발생:", err.message);
     throw new Error("로그인에 실패하였습니다.");
   }
 };
