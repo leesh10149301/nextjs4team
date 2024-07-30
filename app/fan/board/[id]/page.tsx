@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import supabase from "@/app/utils/supabase/client";
 import Link from "next/link";
+import { FiArrowLeft } from "react-icons/fi";
 import {
   addComment,
   deleteComment,
   getComments,
 } from "@/app/api/board_comment/route";
+import { BoardLike } from "@/components/board/like";
 
 type Post = {
   id: string;
@@ -38,7 +40,6 @@ export default function PostPage() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
-  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -97,62 +98,6 @@ export default function PostPage() {
 
     fetchComments();
   }, [id]);
-
-  useEffect(() => {
-    const checkIfLiked = async () => {
-      if (currentUser && post) {
-        try {
-          const response = await fetch(`/api/board_like/${post.id}`, {
-            method: "GET",
-          });
-          if (!response.ok) {
-            throw new Error(`Failed to fetch likes: ${response.statusText}`);
-          }
-          const likes = await response.json();
-          const liked = likes.some(
-            (like: any) => like.user_id === currentUser.id
-          );
-          setIsLiked(liked);
-        } catch (error) {
-          console.error("Error checking like status:", error);
-        }
-      }
-    };
-
-    checkIfLiked();
-  }, [currentUser, post]);
-
-  const handleLike = async () => {
-    if (!currentUser) {
-      console.error("No user logged in");
-      return;
-    }
-
-    try {
-      const method = isLiked ? "DELETE" : "POST";
-      const response = await fetch(`/api/board_like/${post?.id}`, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: currentUser.id }),
-      });
-      if (response.ok) {
-        setIsLiked(!isLiked);
-        setPost(
-          (prevPost) =>
-            prevPost && {
-              ...prevPost,
-              likes: prevPost.likes + (isLiked ? -1 : 1),
-            }
-        );
-      } else {
-        console.error(`Error updating like status: ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error("Error updating like status:", error);
-    }
-  };
 
   const editHandler = () => {
     router.push(`/fan/board/${id}/edit`);
@@ -237,45 +182,39 @@ export default function PostPage() {
     currentUser && post.username === currentUser.user_metadata?.username;
 
   return (
-    <div className="container mx-auto py-12">
-      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="container mx-auto py-12 relative">
+      <Link href="/fan/board" passHref>
+        <button className="absolute top-[25px] left-[370px] p-2 bg-black text-white rounded-full hover:bg-gray-800 transition duration-300">
+          <FiArrowLeft size={24} />
+        </button>
+      </Link>
+      <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
         <div className="p-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
-            {post.title}
-          </h1>
+          <div className="flex justify-between">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">
+              {post.title}
+            </h1>
+            <BoardLike postId={post.id} userId={currentUser?.id} />
+          </div>
           <div className="flex items-center mb-4">
-            <p className="text-sm text-gray-500 mr=2">
+            <p className="text-sm text-gray-600 mr-4">
               {formatDate(post.createdAt)}
             </p>
-            <p className="text-sm text-gray-500">{`Likes: ${post.likes}`}</p>
           </div>
-          <p className="text-lg text-gray-800 mb-6">{post.content}</p>
-          <button
-            className={`py-2 px-4 rounded-lg ${
-              isLiked ? "bg-red-600 text-white" : "bg-gray-300 text-black"
-            } hover:bg-red-500`}
-            onClick={handleLike}
-          >
-            {isLiked ? "Unlike" : "Like"}
-          </button>
-          <div className="flex justify-between items-center mb-6 mt-4">
-            <div>
-              <Link href="/fan/board" passHref>
-                <button className="bg-red-600 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-red-500">
-                  뒤로 가기
-                </button>
-              </Link>
-            </div>
+          <p className="text-gray-800 text-base leading-relaxed mb-6 text-left">
+            {post.content}
+          </p>
+          <div className="flex justify-between items-center mb-6">
             {canEditDelete && (
-              <div className="flex space-x-4">
+              <div className="flex space-x-2">
                 <button
-                  className="bg-gray-900 text-white py-2 px-6 rounded-lg hover:bg-gray-800"
+                  className="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-300"
                   onClick={editHandler}
                 >
                   수정
                 </button>
                 <button
-                  className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-500"
+                  className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300"
                   onClick={deleteHandler}
                 >
                   삭제
@@ -284,13 +223,13 @@ export default function PostPage() {
             )}
           </div>
         </div>
-        <div className="p-8">
+        <div className="p-8 bg-gray-100 border-t border-gray-200">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">댓글</h2>
           {comments.map((comment) => (
             <div key={comment.id} className="mb-4">
-              <div className="flex justify-between items-center">
-                <p className="text-sm text-gray-500">
-                  {comment.username} - {formatDate(comment.created_at)}
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-sm text-gray-600">
+                  {formatDate(comment.created_at)}
                 </p>
                 {currentUser &&
                   comment.username === currentUser.user_metadata?.username && (
@@ -302,22 +241,24 @@ export default function PostPage() {
                     </button>
                   )}
               </div>
-              <p className="text-lg text-gray-800">{comment.comment}</p>
+              <p className="text-gray-700 text-base text-left">
+                {comment.comment}
+              </p>
             </div>
           ))}
           <div className="mt-6">
             <textarea
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded-lg"
-              rows={4}
+              className="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:border-red-500"
+              rows={2}
               placeholder="댓글을 입력하세요..."
             />
             <button
-              className="bg-red-600 text-white py-2 px-6 rounded-lg mt-2 hover:bg-black"
+              className="mt-4 bg-red-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-red-500 transition duration-300"
               onClick={addCommentHandler}
             >
-              댓글 추가
+              댓글 작성
             </button>
           </div>
         </div>

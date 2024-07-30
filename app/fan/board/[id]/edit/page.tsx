@@ -57,16 +57,54 @@ export default function EditPost() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <>
-      <h1>Edit Post</h1>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <textarea value={content} onChange={(e) => setContent(e.target.value)} />
-      <button onClick={saveHandle}>저장</button>
-      <button onClick={() => router.push(`/fan/board/${id}`)}>취소</button>
-    </>
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10 mb-10">
+      {/* <h1 className="text-4xl font-bold mb-6 text-center text-red-500">
+        게시글 수정
+      </h1> */}
+      <div className="space-y-6">
+        <div>
+          <label
+            htmlFor="title"
+            className="block text-lg font-medium text-gray-700"
+          >
+            제목
+          </label>
+          <input
+            type="text"
+            value={title}
+            className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="content"
+            className="block text-lg font-medium text-gray-700"
+          >
+            내용
+          </label>
+          <textarea
+            value={content}
+            className="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            rows={6}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        </div>
+        <div className="flex justify-end">
+          <button
+            onClick={saveHandle}
+            className="w-1/6 py-3 bg-black text-white font-semibold rounded-md hover:bg-red-600 transition duration-300"
+          >
+            저장
+          </button>
+          <button
+            onClick={() => router.push(`/fan/board/${id}`)}
+            className="w-1/6 py-3 ml-4 bg-black text-white font-semibold rounded-md hover:bg-red-600 transition duration-300"
+          >
+            취소
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

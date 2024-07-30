@@ -48,17 +48,17 @@ export default function NewPost() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
-      <h1 className="text-4xl font-bold mb-6 text-center text-red-500">
-        게시글 쓰기
-      </h1>
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10 mb-10">
+      {/* <h1 className="text-4xl font-bold mb-6 text-center text-red-500">
+        게시글 작성
+      </h1> */}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label
             htmlFor="title"
             className="block text-lg font-medium text-gray-700"
           >
-            Title
+            제목
           </label>
           <input
             type="text"
@@ -74,7 +74,7 @@ export default function NewPost() {
             htmlFor="content"
             className="block text-lg font-medium text-gray-700"
           >
-            Content
+            내용
           </label>
           <textarea
             id="content"
@@ -85,12 +85,14 @@ export default function NewPost() {
             rows={6}
           ></textarea>
         </div>
-        <button
-          type="submit"
-          className="w-full py-3 bg-black text-white font-semibold rounded-md hover:bg-red-600 transition duration-300"
-        >
-          Create Post
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="w-1/6 py-3 bg-black text-white font-semibold rounded-md hover:bg-red-600 transition duration-300"
+          >
+            작성
+          </button>
+        </div>
       </form>
     </div>
   );
