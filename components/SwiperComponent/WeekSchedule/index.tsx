@@ -4,6 +4,7 @@ import { useState, useEffect, useTransition } from "react";
 import { GameArticle } from "./GameArticle";
 import { SkeletonGameArticle } from "@/components/skeleton/SkeletonGameArticle";
 import { API_ENDPOINT } from "@/lib/constants/api";
+import Image from "next/image";
 
 interface GameArticleOptinalProps {
   homeDecision?: string;
@@ -74,10 +75,19 @@ function ScheduleComponent() {
   }
 
   return (
-    <div className="flex space-x-3">
-      {renderGameArticle({ gameArticle: schedule.prev })}
-      {renderGameArticle({ gameArticle: schedule.current })}
-      {renderGameArticle({ gameArticle: schedule.next })}
+    <div className="relative container mx-auto p-4 flex items-center justify-center">
+      <Image
+        src="/images/ktwiz_schedule.png"
+        alt="schedule"
+        width={826}
+        height={300}
+        className="opacity-30 object-cover absolute"
+      />
+      <div className="flex items-center justify-center space-x-3 z-10">
+        {renderGameArticle({ gameArticle: schedule.prev })}
+        {renderGameArticle({ gameArticle: schedule.current })}
+        {renderGameArticle({ gameArticle: schedule.next })}
+      </div>
     </div>
   );
 }

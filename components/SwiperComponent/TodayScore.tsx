@@ -36,7 +36,7 @@ export default function TodayScore(props: ITodayScoreProps) {
     fetchData();
   }, []);
   return (
-    <div className="h-screen flex flex-col items-center">
+    <div className="h-screen flex flex-col items-center py-4">
       <div className="w-full flex justify-center items-center space-x-4 p-4 *:h-24">
         {score ? (
           <>
