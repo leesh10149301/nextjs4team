@@ -1,43 +1,39 @@
-"use client"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type TBannerItem = {
-  desc: string
-  category: string
-  url: string
-}
+  desc: string;
+  category: string;
+  url: string;
+};
 type TBannerProps = {
-  items: TBannerItem[]
-}
+  items: TBannerItem[];
+};
 export default function Banner({ items }: TBannerProps) {
-
-  const pathname = usePathname()
-  const categoryPath = pathname.split("/").pop() || items[0].url
+  const pathname = usePathname();
   const [activeCategory, setActiveCategory] = useState<string>(
-    items.find((item) => item.url.split("/").pop() === categoryPath)
-      ?.category || items[0].category
-  )
-  const [title, setTitle] = useState(
-    items.find((item) => item.url.split("/").pop() === categoryPath)
-      ?.category || items[0].category
-  )
-  const [desc, setDesc] = useState(
-    items.find((item) => item.url.split("/").pop() === categoryPath)?.desc ||
-      items[0].desc
-  )
+    items[0].category
+  );
+  const [title, setTitle] = useState(items[0].category);
+  const [desc, setDesc] = useState(items[0].desc);
+
+  useEffect(() => {
+    const categoryPath = pathname.split("/").pop();
+    const activeItem = items.find(
+      (item) => item.url.split("/").pop() === categoryPath
+    );
+    if (activeItem) {
+      setActiveCategory(activeItem.category);
+      setTitle(activeItem.category);
+      setDesc(activeItem.desc);
+    }
+  }, [pathname, items]);
 
   const onClick = (category: string) => {
-    setActiveCategory(category)
-  }
-  useEffect(() => {
-    const activeItem = items.find((item) => item.category === activeCategory)
-    if (activeItem) {
-      setTitle(activeItem.category)
-      setDesc(activeItem.desc)
-    }
-  }, [activeCategory])
+    setActiveCategory(category);
+  };
   return (
     <div className="pt-[84px]">
       <div className="h-[253px] w-full bg-[url('/images/sub-bg.png')] bg-no-repeat bg-cover bg-center bg-[#202020]">
@@ -70,5 +66,5 @@ export default function Banner({ items }: TBannerProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
