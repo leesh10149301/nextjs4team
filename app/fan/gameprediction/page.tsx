@@ -11,6 +11,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
+import { PostSeasonChance } from "@/components/PostSeasonChance";
 
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
@@ -34,15 +35,19 @@ export default function GamePrediction() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/teamdata");
+        const response = await fetch("/api/teamdata", {
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+          },
+        });
         const result = await response.json();
 
         if (result && Array.isArray(result)) {
           const ktTeam = result.find(
-            (team: any) => team["팀명"].trim() === "KT"
+            (team: any) => team["팀명"] && team["팀명"].trim() === "KT"
           );
           const oppTeam = result.find(
-            (team: any) => team["팀명"].trim() === opponent
+            (team: any) => team["팀명"] && team["팀명"].trim() === opponent
           );
 
           if (ktTeam) {
@@ -53,12 +58,10 @@ export default function GamePrediction() {
               if (key.includes("승-패-무")) {
                 const opponent = key.split("(")[0].trim();
                 const record = ktTeam[key];
-
                 recentMatches[opponent] = record;
               }
             }
-            const formattedKtData = { teamName, recentMatches };
-            setKtData(formattedKtData);
+            setKtData({ teamName, recentMatches });
           } else {
             console.error("KT 팀 데이터를 찾을 수 없습니다.");
           }
@@ -71,17 +74,15 @@ export default function GamePrediction() {
               if (key.includes("승-패-무")) {
                 const opponent = key.split("(")[0].trim();
                 const record = oppTeam[key];
-
                 recentMatches[opponent] = record;
               }
             }
-            const formattedOppData = { teamName, recentMatches };
-            setOpponentData(formattedOppData);
+            setOpponentData({ teamName, recentMatches });
           } else {
             console.error("상대 팀 데이터를 찾을 수 없습니다.");
           }
         } else {
-          console.error("Invalid data format");
+          console.error("Invalid data format", result);
         }
       } catch (error) {
         console.error("Error fetching data", error);
@@ -200,77 +201,53 @@ export default function GamePrediction() {
       {/* 고정된 차트 영역 */}
       <div
         className="mt-6 w-full max-w-3xl relative"
-        style={{ height: "400px" }}
+        style={{ height: "340px" }}
       >
-        {/* 차트 영역 */}
-        <div className="absolute inset-0 flex items-center justify-center border border-gray-300 rounded-md">
-          {showProbability ? (
-            <Bar
-              data={getChartData()}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    display: true,
-                    position: "top" as const,
-                    labels: {
-                      color: "#333",
-                      font: {
-                        size: 14,
-                        weight: "bold",
-                      },
-                    },
-                  },
-                  tooltip: {
-                    callbacks: {
-                      label: function (context) {
-                        const label = context.dataset.label || "";
-                        const value = context.raw as number;
-                        return `${label}: ${value.toFixed(2)}%`;
-                      },
-                    },
+        <Bar
+          data={getChartData()}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                grid: {
+                  color: "rgba(200, 200, 200, 0.3)", // 연한 회색
+                },
+                ticks: {
+                  backdropColor: "rgba(255, 255, 255, 0.5)", // 회색 배경
+                  color: "black", // 검은색 글씨
+                },
+              },
+              x: {
+                grid: {
+                  color: "rgba(200, 200, 200, 0.3)", // 연한 회색
+                },
+                ticks: {
+                  backdropColor: "rgba(255, 255, 255, 0.5)", // 회색 배경
+                  color: "black", // 검은색 글씨
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return `승리 확률: ${context.raw}%`;
                   },
                 },
-                scales: {
-                  x: {
-                    grid: {
-                      display: true,
-                      color: "#e0e0e0",
-                    },
-                    ticks: {
-                      font: {
-                        size: 12,
-                        weight: "bold",
-                      },
-                      color: "#333",
-                    },
-                  },
-                  y: {
-                    beginAtZero: true,
-                    grid: {
-                      display: true,
-                      color: "#e0e0e0",
-                    },
-                    ticks: {
-                      callback: function (value) {
-                        return `${value}%`;
-                      },
-                      font: {
-                        size: 12,
-                        weight: "bold",
-                      },
-                      color: "#333",
-                    },
-                  },
-                },
-              }}
-            />
-          ) : (
-            <p className="text-gray-600">
-              확률을 계산하려면 버튼을 클릭하세요.
-            </p>
-          )}
-        </div>
+              },
+            },
+          }}
+        />
+      </div>
+
+      <div className="w-full max-w-4xl">
+        <PostSeasonChance />
       </div>
     </div>
   );
