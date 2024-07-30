@@ -136,7 +136,7 @@ export default function GamePrediction() {
           backgroundColor: ["#da0b2d", "#000"],
           borderRadius: 4,
           borderWidth: 1,
-          borderColor: "#fffbfb", // 테두리 색상
+          borderColor: "#fffbfb",
         },
       ],
     };
@@ -153,14 +153,13 @@ export default function GamePrediction() {
           <label htmlFor="ourTeam" className="text-gray-800 font-semibold mb-2">
             우리 팀
           </label>
-          <select
+          <input
+            type="text"
             id="ourTeam"
             value={ourTeam}
-            onChange={(e) => setOurTeam(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:ring-red-500 focus:border-red-500"
-          >
-            <option value="KT">KT</option>
-          </select>
+            readOnly
+            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:ring-red-500 focus:border-red-500 cursor-not-allowed"
+          />
         </div>
         <div className="flex flex-col w-full md:w-1/2">
           <label
