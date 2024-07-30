@@ -151,7 +151,6 @@ export default function Join() {
       <div className="flex items-center justify-center h-[700px]">
         <div className="w-[500px] h-[600px] border-4 flex flex-col justify-center items-center p-4">
           <img src="/images/ktwiz_login.png" className="w-[150px] mb-8" />
-          <div className="w-[50px]"></div> {/* 가운데 여백 */}
           <form
             onSubmit={handleJoinBtnClick}
             className="flex flex-col justify-center p-4"

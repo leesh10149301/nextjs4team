@@ -77,16 +77,15 @@ export default function LogIn() {
   if (loading) return <p>로딩 중...</p>;
 
   return (
-    <div className="flex items-center justify-center h-[680px]">
+    <div className="flex items-center justify-center h-[700px]">
       {user ? (
         <div className="flex flex-col items-center"></div>
       ) : (
-        <div className="w-[800px] h-[393px] border-4 flex justify-center items-center p-4">
-          <img src="/images/ktwiz_login.png" className="w-[150px] mr-8" />
-          <div className="w-[80px]"></div>
+        <div className="w-[500px] h-[500px] max-w-md p-4 border-4 flex flex-col items-center justify-center">
+          <img src="/images/ktwiz_login.png" className="w-[150px] mb-4" />
           <form
             onSubmit={handleLoginBtnClick}
-            className="flex flex-col justify-center p-4"
+            className="w-full flex flex-col items-center"
           >
             <input
               placeholder="이메일 주소를 입력해주세요"
@@ -94,7 +93,7 @@ export default function LogIn() {
               onChange={handleEmailInput}
               required
               onBlur={validateEmail}
-              className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
+              className="w-2/3 mb-2 p-2 border border-gray-300 rounded"
             />
             <div className="text-red-500 text-sm mb-2">{emailError}</div>
             <input
@@ -104,27 +103,23 @@ export default function LogIn() {
               onChange={handlePasswordInput}
               required
               onBlur={validatePassword}
-              className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
+              className="w-2/3 mb-2 p-2 border border-gray-300 rounded"
             />
             <div className="text-red-500 text-sm mb-2">{passwordError}</div>
             <button
               disabled={!isValid}
-              className={`p-2 rounded mb-2 ${
-                isValid
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-500 text-white w-[250px]"
+              className={`p-2 rounded mb-2 w-2/3 ${
+                isValid ? "bg-green-500 text-white" : "bg-gray-500 text-white"
               }`}
             >
               로그인
             </button>
-            <div className="flex justify-center w-full">
-              <Link
-                href={`/auth/join`}
-                className="p-2 bg-gray-300 text-black rounded w-[250px] text-center"
-              >
-                회원가입
-              </Link>
-            </div>
+            <Link
+              href={`/auth/join`}
+              className="p-2 bg-gray-300 text-black rounded w-2/3 text-center"
+            >
+              회원가입
+            </Link>
           </form>
         </div>
       )}
