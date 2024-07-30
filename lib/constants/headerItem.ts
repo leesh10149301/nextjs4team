@@ -28,12 +28,7 @@ const MENU_SUB_ITEM = {
   ],
   "Player": [
     { name: "코칭스텝", href: "/player/coach" },
-    { name: "투수", href: "/player/pitcher" },
-    { name: "타자", href: "/player/hitter" },
-    { name: "응원단", href: "/" },
-    { name: "신입선수", href: "/" },
-    { name: "군입대 선수", href: "/" },
-    { name: "육성 선수", href: "/" },
+    { name: "선수단", href: "/player/pitcher" },
   ],
   "Media": [
     { name: "wiz 뉴스", href: "/" },
