@@ -13,6 +13,14 @@ export interface PlayerHomerunData {
   y_coord: number;
 }
 
+interface Player {
+  id: string;
+  created_at: string;
+  p_code: number;
+  player_name: string;
+  back_number: number;
+}
+
 export default function Page() {
   const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
   const [playersHomerunData, setPlayersHomerunData] = useState<
@@ -22,11 +30,13 @@ export default function Page() {
   const [allAreaNames, setAllAreaNames] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [previousPath, setPreviousPath] = useState<string>("");
+  const [tooltipVisible, setTooltipVisible] = useState<boolean>(false);
 
   const router = useRouter();
 
   const handleCardSelect = (playerId: number | null) => {
     setSelectedPlayerId(playerId);
+    setTooltipVisible(true);
     if (isModalOpen) {
       setIsModalOpen(false);
     }
@@ -60,13 +70,21 @@ export default function Page() {
       const response = await fetch("/api/homerun/predict/players");
 
       if (response.ok) {
-        const allPlayers = await response.json();
+        const allPlayers: Player[] = await response.json();
 
-        const homerunData = await Promise.all(
-          allPlayers.map(async (player: any) => {
+        const homerunData: PlayerHomerunData[] = await Promise.all(
+          allPlayers.map(async (player: Player) => {
             const res = await fetch(`/api/homerun/predict/${player.id}`);
-            console.log(res);
-            return res.json();
+            if (res.ok) {
+              const data = await res.json();
+              return {
+                playerId: parseInt(player.id, 10),
+                x_coord: data.x_coord,
+                y_coord: data.y_coord,
+              } as PlayerHomerunData;
+            } else {
+              throw new Error(`Failed to fetch data for player ${player.id}`);
+            }
           })
         );
         setPlayersHomerunData(homerunData);
@@ -83,25 +101,35 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="flex flex-col p-10">
-      <div className="flex mb-10">
-        <Description />
+    <div className="flex justify-center">
+      <div className="p-10 w-[1200px]">
+        <div className="flex mb-10">
+          <Description />
+        </div>
+
+        <div className="flex flex-row border">
+          <StadiumMap
+            playersHomerunData={playersHomerunData}
+            selectedPlayerId={selectedPlayerId}
+            error={error}
+            onStadiumData={handleStadiumData}
+            tooltipVisible={tooltipVisible}
+            setTooltipVisible={setTooltipVisible}
+          />
+
+          <PlayerCard
+            onCardSelect={handleCardSelect}
+            setTooltipVisible={setTooltipVisible}
+          />
+        </div>
+
+        {isModalOpen && (
+          <PurchaseModal
+            onClose={handleModalClose}
+            allAreaNames={allAreaNames}
+          />
+        )}
       </div>
-
-      <div className="flex flex-row">
-        <StadiumMap
-          playersHomerunData={playersHomerunData}
-          selectedPlayerId={selectedPlayerId}
-          error={error}
-          onStadiumData={handleStadiumData}
-        />
-
-        <PlayerCard onCardSelect={handleCardSelect} />
-      </div>
-
-      {isModalOpen && (
-        <PurchaseModal onClose={handleModalClose} allAreaNames={allAreaNames} />
-      )}
     </div>
   );
 }

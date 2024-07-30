@@ -31,7 +31,7 @@ export default function PredictReport() {
             <div className="w-1 h-5 bg-[#d23933] mr-2" />
             다음 경기 확률 예측
           </div>
-          <PredictPlayerChart predictData={predictData} />
+          <PredictPlayerChart predictData={predictData} position={position} />
         </div>
       </div>
     </div>
