@@ -5,13 +5,42 @@ import * as d3 from "d3";
 import hitterImage from "@/public/images/hitter.png";
 import ballImage from "@/public/images/home-run-ball.png";
 import { PlayerHomerunData } from "@/app/fan/homerun/page";
-import { all } from "@tensorflow/tfjs";
 
 interface StadiumMapProps {
   selectedPlayerId: number | null;
   playersHomerunData: PlayerHomerunData[];
   error: string | null;
   onStadiumData: (areaNames: string) => void;
+  tooltipVisible: boolean;
+  setTooltipVisible: (visible: boolean) => void;
+}
+
+interface Coordinates {
+  x: number;
+  y: number;
+}
+
+interface Zone {
+  zone: string;
+  coordinates: Coordinates;
+}
+
+interface Area {
+  area_name: string;
+  price: number;
+  zones: Zone[];
+}
+
+interface Facility {
+  facility_name: string;
+  zones: Zone[];
+}
+
+interface StadiumData {
+  stadium: string;
+  info: string;
+  areas: Area[];
+  facilities: Facility[];
 }
 
 const StadiumMap = ({
@@ -19,15 +48,17 @@ const StadiumMap = ({
   playersHomerunData,
   error,
   onStadiumData,
+  tooltipVisible,
+  setTooltipVisible,
 }: StadiumMapProps) => {
   const [isBallHit, setIsBallHit] = useState(false);
 
   useEffect(() => {
     resetBall();
-    const hitButton = d3.select("#hit-button");
-    hitButton.classed("animate-bounce", true);
+    const hitTag = d3.select("#hit-tag");
+    hitTag.classed("animate-bounce", true);
     setTimeout(() => {
-      hitButton.classed("animate-bounce", false);
+      hitTag.classed("animate-bounce", false);
     }, 2000);
   }, [selectedPlayerId]);
 
@@ -54,19 +85,36 @@ const StadiumMap = ({
       "지니존": "#4864CB",
       "익사이팅석": "#37A09B",
       "하이파이브존": "#37A09B",
+      "Gate1-1": "#020c24",
+      "Gate1-2": "#020c24",
+      "Gate3-1": "#020c24",
+      "Gate3-2": "#020c24",
+      "Gate3-3": "#020c24",
+      "1루 메인게이트": "#020c24",
+      "3루 메인게이트": "#020c24",
+      "화장실1": "#2ab8b8",
+      "화장실2": "#2ab8b8",
+      "매점1": "#ff7e42",
+      "매점2": "#ff7e42",
+      "매점3": "#ff7e42",
+      "매점4": "#ff7e42",
+      "매점5": "#ff7e42",
+      "매점6": "#ff7e42",
+      "매점7": "#ff7e42",
+      "매점8": "#ff7e42",
     };
 
     d3.json("/data/stadium_coordinates.json")
-      .then((data: any) => {
+      .then((data: StadiumData) => {
         const allCoordinates = [
-          ...data.areas.flatMap((area: any) =>
-            area.zones.map((zone: any) => [
+          ...data.areas.flatMap((area: Area) =>
+            area.zones.map((zone: Zone) => [
               zone.coordinates.x,
               zone.coordinates.y,
             ])
           ),
-          ...data.facilities.flatMap((facility: any) =>
-            facility.zones.map((zone: any) => [
+          ...data.facilities.flatMap((facility: Facility) =>
+            facility.zones.map((zone: Zone) => [
               zone.coordinates.x,
               zone.coordinates.y,
             ])
@@ -109,7 +157,7 @@ const StadiumMap = ({
             .attr("stroke-opacity", 0.5);
         }
 
-        data.areas.forEach((area: any) => {
+        data.areas.forEach((area: Area) => {
           const areaGroup = svg.append("g").attr("class", "area-group");
 
           const seatRadius = 40;
@@ -126,7 +174,7 @@ const StadiumMap = ({
               "외야잔디/자유석2",
             ].includes(area.area_name)
           ) {
-            const points = area.zones.map((zone: any) => [
+            const points = area.zones.map((zone: Zone) => [
               zone.coordinates.x,
               zone.coordinates.y,
             ]);
@@ -149,19 +197,9 @@ const StadiumMap = ({
             const centerX = d3.mean(points, (d) => d[0]);
             const centerY = d3.mean(points, (d) => d[1]);
 
-            areaGroup
-              .append("text")
-              .append("textPath")
-              .attr("href", `#path-${area.area_name}`) // 경로 ID 참조
-              .attr("startOffset", "20%") // 경로의 중간에 배치
-              .attr("text-anchor", "middle")
-              .attr("font-size", "26px")
-              .attr("font-weight", "bold")
-              .attr("fill", "white")
-              .text(area.area_name);
+            defineAreaFontStyle(area, areaGroup);
           } else {
-            // 각 영역의 좌석(zone) 처리
-            area.zones.forEach((zone: any) => {
+            area.zones.forEach((zone: Zone) => {
               const { x, y } = zone.coordinates;
 
               if (zone.zone === "<<< 스카이박스 >>>") {
@@ -170,7 +208,7 @@ const StadiumMap = ({
                   .attr("x", x)
                   .attr("y", y + 8)
                   .attr("text-anchor", "middle")
-                  .attr("font-size", "26px")
+                  .attr("font-size", "35px")
                   .attr("font-weight", "bold")
                   .attr("fill", "white")
                   .text(zone.zone);
@@ -209,8 +247,8 @@ const StadiumMap = ({
         const facilityWidth = 160;
         const facilityHeight = 70;
 
-        data.facilities.forEach((facility: any) => {
-          facility.zones.forEach((zone: any) => {
+        data.facilities.forEach((facility: Facility) => {
+          facility.zones.forEach((zone: Zone) => {
             const { x, y } = zone.coordinates;
 
             svg
@@ -219,7 +257,7 @@ const StadiumMap = ({
               .attr("y", y - facilityHeight / 2)
               .attr("width", facilityWidth)
               .attr("height", facilityHeight)
-              .attr("fill", "red")
+              .attr("fill", colors[facility.facility_name] || "red")
               .attr("stroke", "black")
               .attr("stroke-width", 2);
 
@@ -259,6 +297,7 @@ const StadiumMap = ({
     hitButton.on("click", () => {
       resetBall();
       animateBatter();
+      setTooltipVisible(true);
       if (selectedPlayerId === null) {
         playersHomerunData.forEach((playerData) => {
           animateBall(
@@ -282,6 +321,37 @@ const StadiumMap = ({
     });
   }, [playersHomerunData, selectedPlayerId]);
 
+  function defineAreaFontStyle(
+    area: Area,
+    areaGroup: d3.Selection<SVGGElement>
+  ) {
+    const areaStyles: { [key: string]: { dy: string; startOffset: string } } = {
+      "지니존": { dy: "-18", startOffset: "17%" },
+      "KT알파쇼핑석": { dy: "-10", startOffset: "17%" },
+      "익사이팅석": { dy: "10", startOffset: "17%" },
+      "외야잔디/자유석1": { dy: "20", startOffset: "20%" },
+      "외야잔디/자유석2": { dy: "20", startOffset: "20%" },
+      "키즈랜드 캠핑존": { dy: "20", startOffset: "20%" },
+      "하이파이브존": { dy: "15", startOffset: "11%" },
+    };
+
+    const defaultStyle = { dy: "-18", startOffset: "16%" };
+
+    const style = areaStyles[area.area_name] || defaultStyle;
+
+    areaGroup
+      .append("text")
+      .attr("dy", style.dy)
+      .append("textPath")
+      .attr("href", `#path-${area.area_name}`)
+      .attr("startOffset", style.startOffset)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "35px")
+      .attr("font-weight", "bold")
+      .attr("fill", "white")
+      .text(area.area_name);
+  }
+
   function animateBatter() {
     const batterX = 1820;
     const batterY = 2800;
@@ -298,6 +368,22 @@ const StadiumMap = ({
       .on("end", () => {
         d3.select("#batter-image").attr("x", batterX - 75);
       });
+  }
+
+  const usedColors = new Set<string>();
+
+  function getRandomColor(): string {
+    let color;
+    let attempts = 0;
+    const maxAttempts = 20;
+
+    do {
+      color = `hsl(${Math.random() * 360}, 100%, 75%)`;
+      attempts++;
+    } while (usedColors.has(color) && attempts < maxAttempts);
+
+    usedColors.add(color);
+    return color;
   }
 
   function animateBall(
@@ -322,14 +408,17 @@ const StadiumMap = ({
       .attr("y", targetY - 30)
       .style("filter", "url(#fire-effect)")
       .on("end", () => {
-        d3.select(ball.node() as any).style("filter", null);
+        d3.select(ball.node() as SVGImageElement).style("filter", null);
+
+        const randomColor = getRandomColor();
+
         svg
           .append("circle")
           .attr("class", "highlight-circle")
           .attr("cx", targetX)
           .attr("cy", targetY)
           .attr("r", 150)
-          .attr("fill", "lightgreen")
+          .attr("fill", randomColor)
           .attr("opacity", 0.5);
 
         getAreaName(targetX, targetY).then((areaName) => {
@@ -344,14 +433,13 @@ const StadiumMap = ({
   async function getAreaName(x: number, y: number): Promise<string> {
     let closestAreaName = "알 수 없음";
     let closestDistance = Infinity;
-    const data: any = await d3.json("/data/stadium_coordinates.json");
+    const data: StadiumData = await d3.json("/data/stadium_coordinates.json");
 
-    data.areas.forEach((area: any) => {
-      area.zones.forEach((zone: any) => {
+    data.areas.forEach((area: Area) => {
+      area.zones.forEach((zone: Zone) => {
         const { x: zoneX, y: zoneY } = zone.coordinates;
         const distance = Math.sqrt((x - zoneX) ** 2 + (y - zoneY) ** 2);
         if (distance < 500 && distance < closestDistance) {
-          // 반경 500 내에 포함되는지 확인하고 가장 가까운 구역 선택
           closestDistance = distance;
           closestAreaName = area.area_name;
         }
@@ -366,6 +454,7 @@ const StadiumMap = ({
     hitButton.on("click", () => {
       resetBall();
       animateBatter();
+      setTooltipVisible(false);
       const areaNames = new Set<string>();
       let animationsCompleted = 0;
       const totalAnimations =
@@ -416,16 +505,29 @@ const StadiumMap = ({
   return (
     <div className="relative w-full h-full">
       <p>{error}</p>
-      <button
-        id="hit-button"
-        className="fixed border-4 left-20 bottom-3 border-[#d60c0c] z-10 bg-white p-1 duration-300 shadow-md rounded-full blink"
-      >
-        <img
-          src="/images/homerunBtn.png"
-          alt="홈런클릭버튼"
-          className="size-24 object-contain rounded-full"
-        />
-      </button>
+      <div className="fixed m-5">
+        <div className="relative" id="hit-tag">
+          <span
+            className={`z-10 tooltiptext text-center rounded-lg p-2 bg-black text-white absolute bottom-full left-1/2 transform -translate-x-1/2 w-[150px] mb-1 ${
+              tooltipVisible ? "opacity-70" : "opacity-0"
+            }`}
+          >
+            아래 버튼을 클릭하여 <br />
+            홈런볼을 날려보세요!
+          </span>
+          <button
+            id="hit-button"
+            className="border-4  border-[#d60c0c] z-10 bg-white p-1 duration-300 shadow-md rounded-full  "
+          >
+            <img
+              src="/images/homerunBtn.png"
+              alt="홈런클릭버튼"
+              className="size-24 object-contain rounded-full"
+            />
+          </button>
+        </div>
+      </div>
+
       <svg
         id="stadium-svg"
         preserveAspectRatio="xMidYMid meet"

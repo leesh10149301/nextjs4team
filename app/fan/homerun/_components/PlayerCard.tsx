@@ -11,9 +11,10 @@ export interface Player {
 
 interface PlayerCardProps {
   onCardSelect: (playerId: number | null) => void;
+  setTooltipVisible: (visible: boolean) => void;
 }
 
-const PlayerCard = ({ onCardSelect }: PlayerCardProps) => {
+const PlayerCard = ({ onCardSelect, setTooltipVisible }: PlayerCardProps) => {
   const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
 
@@ -35,19 +36,14 @@ const PlayerCard = ({ onCardSelect }: PlayerCardProps) => {
   }, []);
 
   return (
-    <div className="w-1/4 overflow-y-scroll bg-white pr-4 pl-4">
-      <div className="flex flex-col h-[calc(100vh)] ">
+    <div className="w-1/4  bg-white pr-4 pl-4 ">
+      <div className="flex flex-col h-full cursor-pointer">
         <div
           className={`content-center mb-4 p-2 border-b hover:shadow-xl hover:scale-105 cursor-pointer h-[65px] text-center ${
             selectedPlayerId === null ? "text-[#d60c0c]" : ""
           }`}
           onClick={() => handleClick(null)}
         >
-          {/* <img
-            src=""
-            alt="select_all_image"
-            className="w-12 h-12 rounded-full mr-4"
-          /> */}
           <h2 className="text-lg font-semibold ">전체 선수 </h2>
         </div>
         {players.map((player) => (

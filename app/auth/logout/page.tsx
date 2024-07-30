@@ -1,9 +1,8 @@
-// src/app/components/Logout.tsx
 "use client";
 
 import useUserInfo from "@/app/stores/useUserInfo";
-import { LogoutApi } from "@/app/api/auth/route";
 import { useRouter } from "next/navigation";
+import supabase from "@/app/utils/supabase/client";
 
 export default function Logout() {
   const { deleteUserInfo } = useUserInfo();
@@ -11,7 +10,9 @@ export default function Logout() {
 
   const handleLogout = async () => {
     try {
-      await LogoutApi();
+      const { error } = await supabase.auth.signOut();
+      if (error) throw new Error("로그아웃 중 오류가 발생하였습니다.");
+
       deleteUserInfo();
       console.log("로그아웃 성공");
       router.push("/");

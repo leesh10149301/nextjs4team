@@ -50,7 +50,7 @@ const deleteComment = async (id: string) => {
     .from("board_comment")
     .delete()
     .eq("id", id)
-    .eq("user_id", user.user?.id); // user_id를 확인하여 자신의 댓글만 삭제
+    .eq("user_id", user.user?.id);
 
   if (error) {
     console.error("Failed to delete comment:", error);

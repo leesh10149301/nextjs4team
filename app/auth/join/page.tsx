@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import { signUp, validateEmail, validateNickname } from "@/app/api/auth/route";
 import useUserInfo from "@/app/stores/useUserInfo";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Join() {
+  const router = useRouter();
   // iuput
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -122,6 +124,8 @@ export default function Join() {
         nickname: user.user.user_metadata.username,
       });
       console.log("회원가입 성공:", user.user.user_metadata.username);
+      router.push("/auth/login");
+      console.log("userinfo 테이블 업데이트 완료");
     } catch (error: any) {
       console.error("회원가입 오류:", error.message);
       setEmailError(error.message);
