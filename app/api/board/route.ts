@@ -78,7 +78,6 @@ export async function GET() {
   }
 }
 
-
 // PUT 메서드
 export async function PUT(req: NextRequest, { params }) {
   const { id } = params;
