@@ -203,47 +203,53 @@ export default function GamePrediction() {
         className="mt-6 w-full max-w-3xl relative"
         style={{ height: "340px" }}
       >
-        <Bar
-          data={getChartData()}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 100,
-                grid: {
-                  color: "rgba(200, 200, 200, 0.3)", // 연한 회색
+        {showProbability ? (
+          <Bar
+            data={getChartData()}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                  grid: {
+                    color: "rgba(200, 200, 200, 0.3)", // 연한 회색
+                  },
+                  ticks: {
+                    backdropColor: "rgba(255, 255, 255, 0.5)", // 회색 배경
+                    color: "black", // 검은색 글씨
+                  },
                 },
-                ticks: {
-                  backdropColor: "rgba(255, 255, 255, 0.5)", // 회색 배경
-                  color: "black", // 검은색 글씨
-                },
-              },
-              x: {
-                grid: {
-                  color: "rgba(200, 200, 200, 0.3)", // 연한 회색
-                },
-                ticks: {
-                  backdropColor: "rgba(255, 255, 255, 0.5)", // 회색 배경
-                  color: "black", // 검은색 글씨
-                },
-              },
-            },
-            plugins: {
-              legend: {
-                display: false,
-              },
-              tooltip: {
-                callbacks: {
-                  label: function (context) {
-                    return `승리 확률: ${context.raw}%`;
+                x: {
+                  grid: {
+                    color: "rgba(200, 200, 200, 0.3)", // 연한 회색
+                  },
+                  ticks: {
+                    backdropColor: "rgba(255, 255, 255, 0.418)", // 회색 배경
+                    color: "black", // 검은색 글씨
                   },
                 },
               },
-            },
-          }}
-        />
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return `승리 확률: ${context.raw}%`;
+                    },
+                  },
+                },
+              },
+            }}
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full border border-gray-300 rounded-md">
+            <p>확률을 보려면 버튼을 눌러주세요.</p>
+          </div>
+        )}
       </div>
 
       <div className="w-full max-w-4xl">
