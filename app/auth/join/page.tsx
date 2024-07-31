@@ -1,33 +1,33 @@
-// src/app/components/Join.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { signUp, validateEmail, validateNickname } from "@/app/api/_auth/route";
-import Link from "next/link";
+import { useRouter } from "next/navigation"; // useRouter 임포트 추가
 import useUserInfo from "@/lib/stores/userInfoStore";
 
 export default function Join() {
-  // iuput
+  // State 관리
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isCheckedPassword, setIsCheckedPassword] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
 
-  // error
+  // Error 관리
   const [emailError, setEmailError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
   const [isCheckedPasswordError, setIsCheckedPasswordError] =
     useState<string>("");
   const [nicknameError, setNicknameError] = useState<string>("");
 
-  //validate check
+  // Validation 체크
   const [isCheckedEmail, setIsCheckedEmail] = useState<boolean>(false);
   const [isCheckedNickname, setIsCheckedNickname] = useState<boolean>(false);
 
   const { setUserInfo } = useUserInfo();
+  const router = useRouter(); // useRouter 훅 사용
 
-  // input
+  // Input 핸들러
   const handleEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -76,7 +76,7 @@ export default function Join() {
     }
   };
 
-  // 이메일 중복
+  // 이메일 중복 확인
   const handleValidationEmail = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -86,14 +86,14 @@ export default function Join() {
       // console.log(message);
       setIsCheckedEmail(true);
       setEmailError("");
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message);
       setIsCheckedEmail(false);
       setEmailError(error.message);
     }
   };
 
-  // 닉네임 중복
+  // 닉네임 중복 확인
   const handleValidateNickname = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -103,13 +103,14 @@ export default function Join() {
       // console.log(message);
       setIsCheckedNickname(true);
       setNicknameError("");
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message);
       setIsCheckedNickname(false);
       setNicknameError(error.message);
     }
   };
 
+  // 회원가입 버튼 클릭
   const handleJoinBtnClick = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -123,12 +124,14 @@ export default function Join() {
       });
       // console.log("회원가입 성공:", user.user.user_metadata.username);
       // console.log("userinfo 테이블 업데이트 완료");
+      router.push("/");
     } catch (error: any) {
       console.error("회원가입 오류:", error.message);
       setEmailError(error.message);
     }
   };
 
+  // 유효성 검사
   useEffect(() => {
     if (
       !email.includes("@") ||
@@ -144,88 +147,86 @@ export default function Join() {
   }, [email, password, isCheckedPassword, nickname, isCheckedNickname]);
 
   return (
-    <>
-      <div className="flex items-center justify-center h-[700px]">
-        <div className="w-[500px] h-[600px] border-4 flex flex-col justify-center items-center p-4">
-          <img src="/images/ktwiz_login.png" className="w-[150px] mb-8" />
-          <form
-            onSubmit={handleJoinBtnClick}
-            className="flex flex-col justify-center p-4"
-          >
-            <div>
-              <input
-                placeholder="이메일 주소를 입력해주세요"
-                value={email}
-                onChange={handleEmailInput}
-                required
-                className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
-              />
-              <button
-                type="button"
-                className={`p-2 rounded ml-4 ${
-                  isCheckedEmail
-                    ? "bg-green-500 text-white"
-                    : "bg-red-500 text-white"
-                }`}
-                onClick={handleValidationEmail}
-              >
-                중복확인
-              </button>
-            </div>
-            <div className="text-red-500 text-sm mb-2">{emailError}</div>
+    <div className="flex items-center justify-center h-[700px]">
+      <div className="w-[500px] h-[600px] border-4 flex flex-col justify-center items-center p-4">
+        <img src="/images/ktwiz_login.png" className="w-[150px] mb-8" />
+        <form
+          onSubmit={handleJoinBtnClick}
+          className="flex flex-col justify-center p-4"
+        >
+          <div>
             <input
-              placeholder="비밀번호를 입력해주세요"
-              type="password"
-              value={password}
-              onChange={handlePasswordInput}
+              placeholder="이메일 주소를 입력해주세요"
+              value={email}
+              onChange={handleEmailInput}
               required
               className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
             />
-            <div className="text-red-500 text-sm mb-2">{passwordError}</div>
-            <input
-              placeholder="비밀번호 확인"
-              type="password"
-              value={isCheckedPassword}
-              onChange={handleIsCheckedPasswordInput}
-              required
-              className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
-            />
-            <div className="text-red-500 text-sm mb-2">
-              {isCheckedPasswordError}
-            </div>
-            <div>
-              <input
-                placeholder="사용할 닉네임 입력"
-                value={nickname}
-                onChange={handleNicknameInput}
-                required
-                className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
-              />
-              <button
-                type="button"
-                className={`p-2 rounded ml-4 ${
-                  isCheckedNickname
-                    ? "bg-green-500 text-white"
-                    : "bg-red-500 text-white"
-                }`}
-                onClick={handleValidateNickname}
-              >
-                중복확인
-              </button>
-            </div>
-            <div className="text-red-500 text-sm mb-2">{nicknameError}</div>
             <button
-              type="submit"
-              disabled={!isValid}
-              className={`p-2 rounded mb-2 ${
-                isValid ? "bg-green-500 text-white" : "bg-red-500 text-white"
+              type="button"
+              className={`p-2 rounded ml-4 ${
+                isCheckedEmail
+                  ? "bg-green-500 text-white"
+                  : "bg-red-500 text-white"
               }`}
+              onClick={handleValidationEmail}
             >
-              <Link href={`/auth/logIn`}>회원가입</Link>
+              중복확인
             </button>
-          </form>
-        </div>
+          </div>
+          <div className="text-red-500 text-sm mb-2">{emailError}</div>
+          <input
+            placeholder="비밀번호를 입력해주세요"
+            type="password"
+            value={password}
+            onChange={handlePasswordInput}
+            required
+            className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
+          />
+          <div className="text-red-500 text-sm mb-2">{passwordError}</div>
+          <input
+            placeholder="비밀번호 확인"
+            type="password"
+            value={isCheckedPassword}
+            onChange={handleIsCheckedPasswordInput}
+            required
+            className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
+          />
+          <div className="text-red-500 text-sm mb-2">
+            {isCheckedPasswordError}
+          </div>
+          <div>
+            <input
+              placeholder="사용할 닉네임 입력"
+              value={nickname}
+              onChange={handleNicknameInput}
+              required
+              className="w-[250px] mb-2 p-2 border border-gray-300 rounded"
+            />
+            <button
+              type="button"
+              className={`p-2 rounded ml-4 ${
+                isCheckedNickname
+                  ? "bg-green-500 text-white"
+                  : "bg-red-500 text-white"
+              }`}
+              onClick={handleValidateNickname}
+            >
+              중복확인
+            </button>
+          </div>
+          <div className="text-red-500 text-sm mb-2">{nicknameError}</div>
+          <button
+            type="submit"
+            disabled={!isValid}
+            className={`p-2 rounded mb-2 ${
+              isValid ? "bg-green-500 text-white" : "bg-red-500 text-white"
+            }`}
+          >
+            회원가입
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
