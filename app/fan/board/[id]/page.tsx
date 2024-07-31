@@ -183,21 +183,20 @@ export default function PostPage() {
 
   return (
     <div className="container mx-auto py-12 relative">
-      <Link href="/fan/board" passHref>
-        <button className="absolute top-[25px] left-[370px] p-2 bg-black text-white rounded-full hover:bg-gray-800 transition duration-300">
-          <FiArrowLeft size={24} />
-        </button>
-      </Link>
-      <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
+      <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg overflow-hidden border-t border-gray-200">
+        <div className="flex justify-between mt-4 ml-4">
+          <Link href="/fan/board" passHref>
+            <button className="p-2 bg-black text-white rounded-full hover:bg-gray-800 transition duration-300">
+              <FiArrowLeft size={24} />
+            </button>
+          </Link>
+        </div>
         <div className="p-8">
           <div className="flex justify-between">
             <h1 className="text-3xl font-bold text-gray-900 mb-6">
               {post.title}
             </h1>
-            <BoardLike postId={post.id} userId={currentUser?.id} />
-          </div>
-          <div className="flex items-center mb-4">
-            <p className="text-sm text-gray-600 mr-4">
+            <p className="text-sm text-gray-600 mr-4 pt-3">
               {formatDate(post.createdAt)}
             </p>
           </div>
@@ -205,6 +204,7 @@ export default function PostPage() {
             {post.content}
           </p>
           <div className="flex justify-between items-center mb-6">
+            <BoardLike postId={post.id} userId={currentUser?.id} />
             {canEditDelete && (
               <div className="flex space-x-2">
                 <button
@@ -254,12 +254,14 @@ export default function PostPage() {
               rows={2}
               placeholder="댓글을 입력하세요..."
             />
-            <button
-              className="mt-4 bg-red-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-red-500 transition duration-300"
-              onClick={addCommentHandler}
-            >
-              댓글 작성
-            </button>
+            <div className="flex justify-end">
+              <button
+                className="mt-4 bg-red-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-red-500 transition duration-300"
+                onClick={addCommentHandler}
+              >
+                댓글 작성
+              </button>
+            </div>
           </div>
         </div>
       </div>
