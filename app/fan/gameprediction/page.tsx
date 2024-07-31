@@ -159,7 +159,7 @@ export default function GamePrediction() {
             id="ourTeam"
             value={ourTeam}
             readOnly
-            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:ring-red-500 focus:border-red-500 cursor-not-allowed"
+            className="h-[39px] mt-[1px] px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:ring-red-500 focus:border-red-500 cursor-not-allowed"
           />
         </div>
         <div className="flex flex-col w-full md:w-1/2">
