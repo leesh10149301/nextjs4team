@@ -18,7 +18,7 @@ export const fetchMessages = async () => {
   try {
     const { data } = await supabase.rpc("get_messages_with_nicknames");
     if (data.error) {
-      console.log(data.error);
+      // console.log(data.error);
     } else {
       // 데이터 포맷팅
       const formattedData = data.map((message: any) => {

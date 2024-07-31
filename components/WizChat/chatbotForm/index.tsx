@@ -7,7 +7,6 @@ import FaqButton from "../FaqButton";
 import ChatLog from "./ChatLog";
 import FaqList from "./FaqList";
 import InputForm from "./InputForm";
-import { FaqProvider } from "./FaqProvider";
 
 type ChatLog = {
   role: "user" | "assistant" | "system";
@@ -57,23 +56,21 @@ export default function ChatbotForm() {
   };
 
   return (
-    <FaqProvider>
-      <div className="relative h-full">
-        <div className="p-4 flex flex-col h-full">
-          <ChatLog log={log} isLoading={isLoading} />
-          <div className="flex flex-col mt-auto">
-            <FaqButton />
-            <FaqList handleFaqClick={handleFaqClick} />
-            <InputForm
-              input={input}
-              setInput={setInput}
-              faqClick={faqClick}
-              setFaqClick={setFaqClick}
-              handleSubmit={handleSubmit}
-            />
-          </div>
+    <div className="relative h-full">
+      <div className="p-4 flex flex-col h-full">
+        <ChatLog log={log} isLoading={isLoading} />
+        <div className="flex flex-col mt-auto">
+          <FaqButton />
+          <FaqList handleFaqClick={handleFaqClick} />
+          <InputForm
+            input={input}
+            setInput={setInput}
+            faqClick={faqClick}
+            setFaqClick={setFaqClick}
+            handleSubmit={handleSubmit}
+          />
         </div>
       </div>
-    </FaqProvider>
+    </div>
   );
 }

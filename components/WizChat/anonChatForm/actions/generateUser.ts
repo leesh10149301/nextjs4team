@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
-import supabase from "@/app/utils/supabase/client";
+import supabase from "@/lib/utils/supabase/client";
 
 // 중복 생성 방지
 let hasGenerated = false;

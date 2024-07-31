@@ -111,9 +111,9 @@ export const generateGameResultMessage = (data: {
 };
 
 export const generateRankResultMessage = (ktRankResult) => {
-  return `KT는 현재 리그 ${ktRankResult[0].순위}위입니다.<br>
-   KT는 ${ktRankResult[0].G}경기를 치러 ${ktRankResult[0].승}승 ${ktRankResult[0].패}패 ${ktRankResult[0].무}무, 승률 ${ktRankResult[0].승률}을 기록 중입니다.<br>
-   1위 팀과의 격차는 ${ktRankResult[0].승차}경기입니다.`;
+  return `KT는 현재 리그 ${ktRankResult.rank}위입니다.<br>
+   KT는 ${ktRankResult.game}경기를 치러 ${ktRankResult.win}승 ${ktRankResult.defeat}패 ${ktRankResult.draw}무, 승률 ${ktRankResult.winRate}을 기록 중입니다.<br>
+   1위 팀과의 격차는 ${ktRankResult.gamesBehind}경기입니다.`;
 };
 
 export const generateCreateMessage = `KT Wiz는 2013년에 창단된 구단입니다. 2013년 5월 7일에 구단명을 공모전을 통해 발표했고, 같은 해에 한국프로야구 신인 드래프트를 통해 신인 선수를 선발했습니다. 2014년에는 한국야구퓨처스리그(2군 리그)에 참여했으며, 2015년부터는 KBO 리그(1군 리그)에 정식으로 참가하기 시작했습니다. KT Wiz는 KBO 리그의 10번째 구단으로, 프로야구 10구단 창단에 대한 논의는 2002년부터 있었지만 실제 창단은 2013년에 이루어졌습니다. `;

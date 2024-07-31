@@ -1,4 +1,4 @@
-import { TCoach, TPlayer } from "@/app/types/player";
+import { TCoach, TPlayer } from "@/lib/types/player";
 import Link from "next/link";
 
 export default function PlayerItem({ player }: { player: TPlayer | TCoach }) {

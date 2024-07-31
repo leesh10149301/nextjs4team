@@ -1,16 +1,16 @@
 "use client";
 
-import useUserInfo from "@/app/stores/useUserInfo";
 import Link from "next/link";
 import { MENU_ITEM, MENU_SUB_ITEM } from "@/lib/constants/headerItem";
 import Logout from "@/app/auth/logout/page";
-import useAuth from "@/app/hooks/useAuth";
+import useAuth from "@/lib/hooks/useAuth";
+import useUserInfo from "@/lib/stores/userInfoStore";
 
 export default function Header() {
   const { loading, user } = useAuth();
   const { isLoggedIn, userInfo } = useUserInfo();
 
-  if (loading) return <p>로딩 중...</p>;
+  if (loading) return;
 
   return (
     <nav className="fixed w-full z-[100] bg-black group">

@@ -21,7 +21,7 @@ const PlayerCard = ({ onCardSelect, setTooltipVisible }: PlayerCardProps) => {
   const handleClick = (playerId: number | null) => {
     setSelectedPlayerId(playerId);
     onCardSelect(playerId);
-    console.log(playerId);
+    // console.log(playerId);
   };
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const PlayerCard = ({ onCardSelect, setTooltipVisible }: PlayerCardProps) => {
       const response = await fetch("/api/homerun/predict/players");
       const data = await response.json();
       setPlayers(data);
-      console.log(data);
+      // console.log(data);
     }
 
     fetchPlayers();

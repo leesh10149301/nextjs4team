@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { addLike, getLikesCount, removeLike } from "@/app/api/board_like/route";
-import supabase from "@/app/utils/supabase/client";
+import {
+  addLike,
+  getLikesCount,
+  removeLike,
+} from "@/app/api/_board_like/route";
+import supabase from "@/lib/utils/supabase/client";
 
 export function BoardLike({ postId, userId }) {
   const [likesCount, setLikesCount] = useState(0);
@@ -36,7 +40,7 @@ export function BoardLike({ postId, userId }) {
 
   const handleLike = async () => {
     try {
-      console.log(`postId: ${postId}, userId: ${userId}`);
+      // console.log(`postId: ${postId}, userId: ${userId}`);
       if (isLiked) {
         await removeLike(postId, userId);
         setLikesCount((prev) => prev - 1);

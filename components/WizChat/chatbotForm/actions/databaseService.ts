@@ -23,8 +23,8 @@ const getPlayerSelectedData = async (keyword: string) => {
   try {
     const { data, error } = await supabase
       .from("player")
-      .select("pcode, position")
-      .eq("playerName", keyword)
+      .select("p_code, position")
+      .eq("player_name", keyword)
       .single();
 
     if (error) {

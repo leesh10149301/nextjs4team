@@ -1,6 +1,6 @@
 "use client";
 
-import { getLikesCount } from "@/app/api/board_like/route";
+import { getLikesCount } from "@/app/api/_board_like/route";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -20,8 +20,7 @@ export default function Board() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log("API Response:", data); // 응답 데이터 확인
-
+        // console.log("API Response:", data); // 응답 데이터 확인
         if (!Array.isArray(data)) {
           throw new Error("Received data is not an array");
         }

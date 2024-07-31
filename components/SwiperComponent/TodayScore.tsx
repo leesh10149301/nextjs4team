@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { SkeletonTodayScore } from "../skeleton/SkeletonTodayScore";
-import { API_ENDPOINT } from "@/lib/constants/api";
 
 interface Score {
   rank: number;
@@ -12,31 +11,24 @@ interface Score {
   draw: number;
 }
 
-interface ITodayScoreProps {}
-export default function TodayScore(props: ITodayScoreProps) {
+const fetchData = async () => {
+  const response = await fetch("/api/today_rank");
+  if (response.ok) {
+    const data = (await response.json()) as Score;
+    return data;
+  } else {
+    console.error("Failed to fetch rank data");
+  }
+};
+
+export default function TodayScore() {
   const [score, setScore] = useState<Score | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(API_ENDPOINT.TODAY_RANK);
-      if (response.ok) {
-        const data = await response.json();
-        const ktScore = data.filter((d) => d.팀 === "KT")[0];
-        const record: Score = {
-          rank: ktScore.순위,
-          game: ktScore.G,
-          win: ktScore.승,
-          defeat: ktScore.패,
-          draw: ktScore.무,
-        };
-
-        setScore(record);
-      }
-    };
-    fetchData();
+    fetchData().then(setScore);
   }, []);
   return (
-    <div className="h-screen flex flex-col items-center">
+    <div className="h-screen flex flex-col items-center py-4">
       <div className="w-full flex justify-center items-center space-x-4 p-4 *:h-24">
         {score ? (
           <>

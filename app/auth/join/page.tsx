@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { signUp, validateEmail, validateNickname } from "@/app/api/_auth/route";
 import { useRouter } from "next/navigation"; // useRouter 임포트 추가
-import { signUp, validateEmail, validateNickname } from "@/app/api/auth/route";
-import useUserInfo from "@/app/stores/useUserInfo";
-import Link from "next/link";
+import useUserInfo from "@/lib/stores/userInfoStore";
 
 export default function Join() {
   // State 관리
@@ -84,7 +83,7 @@ export default function Join() {
     e.preventDefault();
     try {
       const message = await validateEmail(email);
-      console.log(message);
+      // console.log(message);
       setIsCheckedEmail(true);
       setEmailError("");
     } catch (error: any) {
@@ -101,7 +100,7 @@ export default function Join() {
     e.preventDefault();
     try {
       const message = await validateNickname(nickname);
-      console.log(message);
+      // console.log(message);
       setIsCheckedNickname(true);
       setNicknameError("");
     } catch (error: any) {
@@ -123,9 +122,6 @@ export default function Join() {
         email: user.user.email,
         nickname: user.user.user_metadata.username,
       });
-      console.log("회원가입 성공:", user.user.user_metadata.username);
-      console.log("userinfo 테이블 업데이트 완료");
-
       router.push("/");
     } catch (error: any) {
       console.error("회원가입 오류:", error.message);

@@ -1,4 +1,4 @@
-import supabase from "@/app/utils/supabase/client";
+import supabase from "@/lib/utils/supabase/client";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -12,7 +12,7 @@ function replacer(key, value) {
 }
 
 // supabase에서 username 가져오기
-export async function getUsernameFromToken(req: NextRequest) {
+async function getUsernameFromToken(req: NextRequest) {
   const token = req.headers.get("Authorization")?.replace("Bearer", "").trim();
   if (!token) throw new Error("Authentication token is missing");
 

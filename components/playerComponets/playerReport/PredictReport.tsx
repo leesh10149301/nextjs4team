@@ -1,10 +1,10 @@
 import { calculateTalentData, predictPlayerRecordData } from "../helper";
 import PlayerChart from "../PlayerChart";
 import PredictPlayerChart from "../PredictPlayerChart";
-import useDetailStore from "../zustand";
+import useDetailStore from "@/lib/stores/playerDetailStore";
 
 export default function PredictReport() {
-  const { detailData, setDetailData } = useDetailStore();
+  const { detailData } = useDetailStore();
   const position = detailData?.data?.gameplayer?.position;
   const talentData: (string | Number)[] = calculateTalentData({
     records: detailData?.data?.yearrecordlist,
