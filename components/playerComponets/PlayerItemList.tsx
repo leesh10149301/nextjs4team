@@ -7,7 +7,7 @@ import outfielderData from "../../public/data/outfielder_data.json";
 import coachData from "../../public/data/coach_data.json";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { TCoach, TPlayer } from "@/app/types/player";
+import { TCoach, TPlayer } from "@/lib/types/player";
 import PlayerItem from "./PlayerItem";
 import PlayerRole from "./PlayerRole";
 

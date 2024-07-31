@@ -1,9 +1,4 @@
-import {
-  Recentgamerecordlistfuture,
-  Seasonsummary,
-  TPRecentgamerecordlist,
-  Yearrecordlist,
-} from "@/app/types/player";
+import { TPRecentgamerecordlist, Yearrecordlist } from "@/lib/types/player";
 
 export const recentTableHeader = (position: string) => {
   if (position === "투수") {

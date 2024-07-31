@@ -1,7 +1,7 @@
-import { useFaq } from "./chatbotForm/FaqProvider";
+import { useFaqStore } from "@/lib/stores/faqStore";
 
 export default function FaqButton({}) {
-  const { faqVisible, setFaqVisible } = useFaq();
+  const { faqVisible, setFaqVisible } = useFaqStore();
   return (
     <div className="flex justify-end items-center py-1">
       <button

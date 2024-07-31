@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import useUserInfo from "@/app/stores/useUserInfo";
-import supabase from "../../lib/utils/supabase/client";
+import supabase from "../utils/supabase/client";
+import useUserInfo from "../stores/userInfoStore";
 
 const useAuth = () => {
   const { setUserInfo } = useUserInfo();

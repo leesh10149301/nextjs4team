@@ -1,8 +1,8 @@
 "use client";
 
-import useUserInfo from "@/app/stores/useUserInfo";
 import { useRouter } from "next/navigation";
 import supabase from "@/lib/utils/supabase/client";
+import useUserInfo from "@/lib/stores/userInfoStore";
 
 export default function Logout() {
   const { deleteUserInfo } = useUserInfo();

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { INIT_FAQ_SENTENCE } from "@/lib/constants/chatbot";
 import supabase from "@/lib/utils/supabase/client";
-import { useFaq } from "./FaqProvider";
+import { useFaqStore } from "@/lib/stores/faqStore";
 
 const FAQ_COLOR = ["bg-red-600", "bg-red-500", "bg-red-400"];
 
@@ -11,7 +11,7 @@ interface IFaqListProps {
 export default function FaqList({ handleFaqClick }: IFaqListProps) {
   const [faqData, setFaqData] =
     useState<{ sentence: string }[]>(INIT_FAQ_SENTENCE);
-  const { faqVisible, setFaqVisible } = useFaq();
+  const { faqVisible, setFaqVisible } = useFaqStore();
   const faqRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
