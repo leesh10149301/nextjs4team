@@ -16,7 +16,7 @@ export default function Header() {
     <nav className="fixed w-full z-[100] bg-black group">
       <div className="h-[84px] flex gap-2 justify-center items-center max-w-[1200px] mx-auto ">
         <div className="flex">
-          <div className="w-[89px] -mt-2">
+          <div className="w-max-[89px] -mt-2">
             <img
               src="/images/header-logo.svg"
               alt="KT Wiz"
@@ -101,8 +101,8 @@ export default function Header() {
                   ))}
                 </ul>
               </div>
-              <div className="ml-9">
-                <ul className="flex h-full  items-center">
+              <div className="ml-9 min-w-[220px]">
+                <ul className="flex h-full  items-center ">
                   {isLoggedIn && userInfo ? (
                     <>
                       <Logout />
