@@ -5,7 +5,7 @@ import useUserInfo from "@/app/stores/useUserInfo";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useAuth from "@/app/hooks/useAuth";
-import { LoginApi } from "@/app/api/auth/route";
+import { LoginApi } from "@/app/api/_auth/route";
 
 export default function LogIn() {
   const [email, setEmail] = useState<string>("");

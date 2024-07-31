@@ -1,6 +1,6 @@
 "use client";
 
-import { getLikesCount } from "@/app/api/board_like/route";
+import { getLikesCount } from "@/app/api/_board_like/route";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

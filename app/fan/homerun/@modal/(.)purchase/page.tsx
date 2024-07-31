@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 
 interface PurchaseModalProps {
-  onClose: () => void;
-  allAreaNames: string;
+  onClose?: () => void;
+  allAreaNames?: string;
 }
 
 export default function PurchaseModal({

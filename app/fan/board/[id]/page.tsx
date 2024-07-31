@@ -9,7 +9,7 @@ import {
   addComment,
   deleteComment,
   getComments,
-} from "@/app/api/board_comment/route";
+} from "@/app/api/_board_comment/route";
 import { BoardLike } from "@/components/board/like";
 
 type Post = {

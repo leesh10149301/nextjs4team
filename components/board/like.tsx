@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { addLike, getLikesCount, removeLike } from "@/app/api/board_like/route";
+import {
+  addLike,
+  getLikesCount,
+  removeLike,
+} from "@/app/api/_board_like/route";
 import supabase from "@/app/utils/supabase/client";
 
 export function BoardLike({ postId, userId }) {

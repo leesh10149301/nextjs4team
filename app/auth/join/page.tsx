@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { signUp, validateEmail, validateNickname } from "@/app/api/auth/route";
+import { signUp, validateEmail, validateNickname } from "@/app/api/_auth/route";
 import useUserInfo from "@/app/stores/useUserInfo";
 import Link from "next/link";
 

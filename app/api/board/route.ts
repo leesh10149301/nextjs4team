@@ -12,7 +12,7 @@ function replacer(key, value) {
 }
 
 // supabase에서 username 가져오기
-export async function getUsernameFromToken(req: NextRequest) {
+async function getUsernameFromToken(req: NextRequest) {
   const token = req.headers.get("Authorization")?.replace("Bearer", "").trim();
   if (!token) throw new Error("Authentication token is missing");
 
@@ -77,7 +77,6 @@ export async function GET() {
     await prisma.$disconnect();
   }
 }
-
 
 // PUT 메서드
 export async function PUT(req: NextRequest, { params }) {
