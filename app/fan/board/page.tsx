@@ -21,7 +21,6 @@ export default function Board() {
         }
         const data = await response.json();
         // console.log("API Response:", data); // 응답 데이터 확인
-
         if (!Array.isArray(data)) {
           throw new Error("Received data is not an array");
         }
