@@ -57,10 +57,10 @@ export default function EditPost() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10 mb-10">
-      {/* <h1 className="text-4xl font-bold mb-6 text-center text-red-500">
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg my-14 border">
+      <h1 className="text-3xl font-bold mb-12 text-black mt-4 text-left">
         게시글 수정
-      </h1> */}
+      </h1>
       <div className="space-y-6">
         <div>
           <label

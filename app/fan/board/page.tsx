@@ -108,7 +108,7 @@ export default function Board() {
             </li>
             {posts.map((post) => (
               <Link href={`/fan/board/${post.id}`} key={post.id}>
-                <li className="flex justify-between py-4 hover:underline">
+                <li className="flex justify-between py-4 hover:bg-gray-100 transition duration-300">
                   <div className="w-1/5">{truncateText(post.title, 10)}</div>
                   <div className="w-2/5">{truncateText(post.content, 23)}</div>
                   <div className="w-1/5">{formatDate(post.createdAt)}</div>
@@ -123,10 +123,10 @@ export default function Board() {
             {posts.map((post) => (
               <div
                 key={post.id}
-                className="bg-white shadow-lg rounded-lg p-4 cursor-pointer hover:shadow-xl transition duration-300"
+                className="bg-white shadow-lg rounded-lg p-4 cursor-pointer hover:shadow-xl transition duration-300 hover:bg-gray-100"
               >
                 <Link href={`/fan/board/${post.id}`} passHref>
-                  <div className="hover:underline">
+                  <div>
                     <div className="text-xl font-semibold text-black">
                       {truncateText(post.title, 10)}
                     </div>
