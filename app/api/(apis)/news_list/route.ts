@@ -4,11 +4,26 @@ import { API_ENDPOINT } from "@/lib/constants/api";
 export async function GET(request: Request) {
   const backendUrl = `${API_ENDPOINT.NEWS_LIST}`;
 
-  const response = await fetch(backendUrl);
+  try {
+    const response = await fetch(backendUrl);
 
-  const {
-    data: { list },
-  } = await response.json();
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: "Failed to fetch data" },
+        { status: 500 }
+      );
+    }
 
-  return NextResponse.json(list);
+    const {
+      data: { list },
+    } = await response.json();
+
+    return NextResponse.json(list);
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch data" },
+      { status: 500 }
+    );
+  }
 }

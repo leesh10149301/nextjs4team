@@ -55,11 +55,12 @@ const answerPlayerQuestion = async (analysisResult: any) => {
   );
   try {
     if (isPlayerPerformance) {
-      const { pcode, position } = await getPlayerSelectedData(searchName);
+      const { p_code, position } = await getPlayerSelectedData(searchName);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/player_info?pcode=${p_code}`
+      ).then((res) => res.json());
 
-      const response = await fetch(`/api/player_info?pcode=${pcode}`).then(
-        (res) => res.json()
-      );
+      console.log("response", response);
       return generateSeasonMessage(response.data.seasonsummary, position);
     } else {
       const { success, data } = await getPlayerData(searchName);
