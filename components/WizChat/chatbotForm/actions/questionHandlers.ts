@@ -56,9 +56,9 @@ const answerPlayerQuestion = async (analysisResult: any) => {
     if (isPlayerPerformance) {
       const { pcode, position } = await getPlayerSelectedData(searchName);
 
-      const response = await fetch(
-        `/api/proxy/player_info?pcode=${pcode}`
-      ).then((res) => res.json());
+      const response = await fetch(`/api/player_info?pcode=${pcode}`).then(
+        (res) => res.json()
+      );
       return generateSeasonMessage(response.data.seasonsummary, position);
     } else {
       const { success, data } = await getPlayerData(searchName);
@@ -74,7 +74,7 @@ const answerPlayerQuestion = async (analysisResult: any) => {
 };
 
 const fetchTodayRank = async () => {
-  const response = await fetch("/api/home/today_rank");
+  const response = await fetch("/api/today_rank");
   const data = await response.json();
   return data.filter((rank: Record<string, string>) => rank.팀 === "KT");
 };

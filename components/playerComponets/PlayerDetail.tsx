@@ -25,11 +25,7 @@ export default function PlayerDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://43.203.217.238:5002/player_data?pcode=${pathname
-            .split("/")
-            .pop()}`
-        );
+        const response = await fetch(`/api/player_info?pcode=${pcode}`);
         const data = await response.json();
         setDetailData(data);
       } catch (error) {

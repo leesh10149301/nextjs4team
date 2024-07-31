@@ -48,7 +48,7 @@ interface IScheduleData {
 }
 
 const fetchScheduleData = async () => {
-  const response = await fetch("/api/home/current_info");
+  const response = await fetch("/api/current_info");
   if (response.ok) {
     const data = await response.json();
     return data as IScheduleData;

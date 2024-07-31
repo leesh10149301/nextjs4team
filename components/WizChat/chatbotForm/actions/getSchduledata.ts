@@ -32,7 +32,7 @@ const TEAM_KEYS = {
 };
 
 async function fetchScheduleData(yearMonth: string) {
-  const response = await fetch(`/api/home/schedule?yearMonth=${yearMonth}`);
+  const response = await fetch(`/api/schedule?yearMonth=${yearMonth}`);
   if (!response.ok) return [];
   const {
     data: { list },

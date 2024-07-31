@@ -12,7 +12,7 @@ interface Score {
 }
 
 const fetchData = async () => {
-  const response = await fetch("/api/home/today_rank");
+  const response = await fetch("/api/today_rank");
   if (response.ok) {
     const data = (await response.json()) as Score;
     return data;

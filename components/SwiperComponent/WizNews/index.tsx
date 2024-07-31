@@ -13,7 +13,7 @@ export default function WizNews() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/api/home/news_list");
+      const response = await fetch("/api/news_list");
       if (!response.ok) return;
       const data = await response.json();
       setNewsList(data);
