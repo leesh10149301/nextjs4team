@@ -1,4 +1,4 @@
-import calculateTeamStats from "@/app/utils/calculateTeamStates";
+import calculateTeamStats from "@/lib/utils/calculateTeamStates";
 import { useEffect, useState } from "react";
 
 type TeamStats = {

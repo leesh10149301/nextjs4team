@@ -1,4 +1,4 @@
-import supabase from "@/app/utils/supabase/client";
+import supabase from "@/lib/utils/supabase/client";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 

@@ -1,4 +1,4 @@
-import supabase from "@/app/utils/supabase/client";
+import supabase from "@/lib/utils/supabase/client";
 
 // 로그인 유지시키는 코드
 export const getId = async () => {

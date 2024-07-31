@@ -29,7 +29,7 @@ const SwiperComponent: FC = () => {
           <div className="flex-grow flex items-center justify-center">
             <iframe
               className="w-full h-full min-h-[520px] border-none"
-              src="https://www.youtube.com/embed/yCqLhzTVgTs?si=2lA05OiqC4p63lfF&mute=1&autoplay=1"
+              src="https://www.youtube.com/embed/UAhq4lzoJ5g?si=UEOpCFSRk8EmUDsO&mute=1&autoplay=1"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"

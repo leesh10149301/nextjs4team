@@ -1,4 +1,4 @@
-import supabase from "@/app/utils/supabase/client";
+import supabase from "@/lib/utils/supabase/client";
 
 type COMMENT = {
   post_id?: string;

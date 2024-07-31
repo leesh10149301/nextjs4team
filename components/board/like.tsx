@@ -5,7 +5,7 @@ import {
   getLikesCount,
   removeLike,
 } from "@/app/api/_board_like/route";
-import supabase from "@/app/utils/supabase/client";
+import supabase from "@/lib/utils/supabase/client";
 
 export function BoardLike({ postId, userId }) {
   const [likesCount, setLikesCount] = useState(0);
