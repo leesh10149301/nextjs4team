@@ -32,12 +32,10 @@ const TEAM_KEYS = {
 };
 
 async function fetchScheduleData(yearMonth: string) {
-  const response = await fetch(`/api/schedule?yearMonth=${yearMonth}`);
-  if (!response.ok) return [];
-  const {
-    data: { list },
-  } = await response.json();
-  return list;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/schedule?yearMonth=${yearMonth}`
+  ).then((res) => res.json());
+  return response;
 }
 
 const emblemMap: { [key: string]: string } = {

@@ -15,6 +15,7 @@ import {
   getThisWeekSchedule,
   getTodaySchedule,
 } from "./getSchduledata";
+import { useRouter } from "next/router";
 
 // 경기 결과 질문 처리 함수
 const answerGameQuestion = async (question: string) => {
@@ -74,9 +75,11 @@ const answerPlayerQuestion = async (analysisResult: any) => {
 };
 
 const fetchTodayRank = async () => {
-  const response = await fetch("/api/today_rank");
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_API_BASE_URL + "/api/today_rank"
+  );
   const data = await response.json();
-  return data.filter((rank: Record<string, string>) => rank.팀 === "KT");
+  return data;
 };
 
 const isGameScheduleQuestion = (question: string) =>

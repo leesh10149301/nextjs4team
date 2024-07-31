@@ -83,7 +83,7 @@ export default function Join() {
     e.preventDefault();
     try {
       const message = await validateEmail(email);
-      console.log(message);
+      // console.log(message);
       setIsCheckedEmail(true);
       setEmailError("");
     } catch (error) {
@@ -100,7 +100,7 @@ export default function Join() {
     e.preventDefault();
     try {
       const message = await validateNickname(nickname);
-      console.log(message);
+      // console.log(message);
       setIsCheckedNickname(true);
       setNicknameError("");
     } catch (error) {
@@ -121,8 +121,8 @@ export default function Join() {
         email: user.user.email,
         nickname: user.user.user_metadata.username,
       });
-      console.log("회원가입 성공:", user.user.user_metadata.username);
-      console.log("userinfo 테이블 업데이트 완료");
+      // console.log("회원가입 성공:", user.user.user_metadata.username);
+      // console.log("userinfo 테이블 업데이트 완료");
     } catch (error: any) {
       console.error("회원가입 오류:", error.message);
       setEmailError(error.message);

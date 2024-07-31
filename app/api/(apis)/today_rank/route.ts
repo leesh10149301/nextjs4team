@@ -7,6 +7,8 @@ interface Score {
   win: number;
   defeat: number;
   draw: number;
+  winRate: number;
+  gamesBehind: number;
 }
 
 export async function GET() {
@@ -20,6 +22,8 @@ export async function GET() {
       win: ktScore.승,
       defeat: ktScore.패,
       draw: ktScore.무,
+      winRate: ktScore.승률,
+      gamesBehind: ktScore.승차,
     };
     return NextResponse.json(record);
   }

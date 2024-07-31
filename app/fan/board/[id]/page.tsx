@@ -54,7 +54,7 @@ export default function PostPage() {
           throw new Error("Failed to fetch post");
         }
         const data = await response.json();
-        console.log("Post data:", data);
+        // console.log("Post data:", data);
         setPost(data);
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -75,7 +75,7 @@ export default function PostPage() {
         }
         const user = data.session?.user;
         if (user) {
-          console.log("User data:", user);
+          // console.log("User data:", user);
           setCurrentUser(user);
         }
       } catch (error) {
@@ -150,9 +150,9 @@ export default function PostPage() {
 
   const deleteCommentHandler = async (commentId: string) => {
     try {
-      console.log("Attempting to delete comment with ID:", commentId);
+      // console.log("Attempting to delete comment with ID:", commentId);
       await deleteComment(commentId);
-      console.log("Comment deleted successfully");
+      // console.log("Comment deleted successfully");
       const data = await getComments(id);
       setComments(data || []);
     } catch (error) {

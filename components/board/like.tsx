@@ -40,7 +40,7 @@ export function BoardLike({ postId, userId }) {
 
   const handleLike = async () => {
     try {
-      console.log(`postId: ${postId}, userId: ${userId}`);
+      // console.log(`postId: ${postId}, userId: ${userId}`);
       if (isLiked) {
         await removeLike(postId, userId);
         setLikesCount((prev) => prev - 1);

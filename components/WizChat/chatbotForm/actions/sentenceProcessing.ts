@@ -18,14 +18,14 @@ const processAndStoreSentence = async (
   sentence: string,
   keywords: string[]
 ) => {
-  console.log(sentence, keywords);
+  // console.log(sentence, keywords);
   try {
     for (const keyword of keywords) {
       const data = await fetchSentenceData(keyword);
       if (!data.length) continue;
 
       for (const { id, sentence: existSentence } of data) {
-        console.log(sentence, existSentence);
+        // console.log(sentence, existSentence);
         // 429 error 방지
         await new Promise((resolve) => setTimeout(resolve, 300));
         const paraphraseResponse: ParaphraseRecognitionResponse =
@@ -34,7 +34,7 @@ const processAndStoreSentence = async (
           return_object: { result },
         } = paraphraseResponse;
 
-        console.log(paraphraseResponse);
+        // console.log(paraphraseResponse);
 
         if (result === "paraphrase") {
           await incrementSentenceCount(id);
