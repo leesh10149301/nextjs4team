@@ -3,7 +3,6 @@
 import { useState, useEffect, useTransition } from "react";
 import { GameArticle } from "./GameArticle";
 import { SkeletonGameArticle } from "@/components/skeleton/SkeletonGameArticle";
-import { API_ENDPOINT } from "@/lib/constants/api";
 import Image from "next/image";
 
 interface GameArticleOptinalProps {
@@ -49,7 +48,7 @@ interface IScheduleData {
 }
 
 const fetchScheduleData = async () => {
-  const response = await fetch(API_ENDPOINT.CURRENT_INFO);
+  const response = await fetch("/api/home/current_info");
   if (response.ok) {
     const data = await response.json();
     return data as IScheduleData;
