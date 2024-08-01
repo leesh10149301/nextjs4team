@@ -23,7 +23,7 @@ export default function LoadingSpinner() {
       </div>
 
       {/* 2번째 */}
-      <div className="flex flex-col items-center mt-2">
+      {/* <div className="flex flex-col items-center mt-2">
         <svg
           aria-hidden="true"
           className="w-10 h-10 text-gray-200 animate-spin dark:text-gray-600 fill-black"
@@ -41,7 +41,7 @@ export default function LoadingSpinner() {
           />
         </svg>
         <span>Loading...</span>
-      </div>
+      </div> */}
     </div>
   );
 }

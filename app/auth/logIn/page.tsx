@@ -6,6 +6,7 @@ import Link from "next/link";
 import useAuth from "@/lib/hooks/useAuth";
 import useUserInfo from "@/lib/stores/userInfoStore";
 import { LoginApi } from "@/app/api/_auth/route";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function LogIn() {
   const [email, setEmail] = useState<string>("");
@@ -74,7 +75,7 @@ export default function LogIn() {
     setIsValid(true);
   }, [email, password]);
 
-  if (loading) return;
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="flex items-center justify-center h-[700px]">

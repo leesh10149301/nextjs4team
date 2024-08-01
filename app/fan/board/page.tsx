@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getLikesCount } from "@/app/api/_board_like/route";
 import useAuth from "@/lib/hooks/useAuth";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Board() {
   const router = useRouter();
@@ -94,7 +95,7 @@ export default function Board() {
   };
 
   if (loading) {
-    return <div>로딩 중...</div>; // 로딩 상태를 표시합니다
+    return <LoadingSpinner />; // 로딩 상태를 표시합니다
   }
 
   return (

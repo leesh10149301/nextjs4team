@@ -11,6 +11,7 @@ import {
   getComments,
 } from "@/app/api/_board_comment/route";
 import { BoardLike } from "@/components/board/like";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 type Post = {
   id: string;
@@ -174,7 +175,7 @@ export default function PostPage() {
     return date.toLocaleDateString("ko-KR", options);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
 
   if (!post) return <div>Post not found</div>;
 

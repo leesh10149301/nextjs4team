@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function EditPost() {
   const { id } = useParams();
@@ -54,7 +55,7 @@ export default function EditPost() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg my-14 border">
