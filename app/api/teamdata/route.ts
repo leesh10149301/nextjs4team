@@ -4,9 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   try {
     const response = await fetch("http://43.203.217.238:5002/daily_teamdata", {
-      headers: {
-        "Cache-Control": "no-cache, no-store, must-revalidate",
-      },
+      cache: "no-store",
     });
 
     if (!response.ok) {

@@ -5,7 +5,9 @@ export async function GET(request: Request) {
   const backendUrl = `${API_ENDPOINT.NEWS_LIST}`;
 
   try {
-    const response = await fetch(backendUrl);
+    const response = await fetch(backendUrl, {
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       return NextResponse.json(

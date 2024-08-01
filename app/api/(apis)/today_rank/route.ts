@@ -12,7 +12,9 @@ interface Score {
 }
 
 export async function GET() {
-  const response = await fetch(API_ENDPOINT.TODAY_RANK);
+  const response = await fetch(API_ENDPOINT.TODAY_RANK, {
+    cache: "no-store",
+  });
   if (response.ok) {
     const data = await response.json();
     const ktScore = data.filter((d: any) => d.팀 === "KT")[0];

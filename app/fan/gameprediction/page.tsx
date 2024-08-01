@@ -36,9 +36,7 @@ export default function GamePrediction() {
     const fetchData = async () => {
       try {
         const response = await fetch("/api/teamdata", {
-          headers: {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-          },
+          cache: "no-store",
         });
         const result = await response.json();
 
