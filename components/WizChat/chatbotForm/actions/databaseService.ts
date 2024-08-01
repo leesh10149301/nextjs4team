@@ -124,6 +124,7 @@ const saveNewSentenceToDB = async (sentence: string) => {
     const { data: existingSentence, error: selectError } = await supabase
       .from("sentence")
       .select("id, count")
+      .filter("sentence", "ilike", sentence.toLowerCase())
       .eq("sentence", sentence)
       .single();
 
