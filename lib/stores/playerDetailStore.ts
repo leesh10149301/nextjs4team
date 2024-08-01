@@ -1,5 +1,5 @@
-import { TChartData, TCoach, TPlayer } from "@/app/types/player";
 import { create } from "zustand";
+import { TChartData, TCoach, TPlayer } from "@/lib/types/player";
 import pitcherData from "../../public/data/pitcher_data.json";
 import catcherData from "../../public/data/catcher_data.json";
 import infielderData from "../../public/data/infielder_data.json";

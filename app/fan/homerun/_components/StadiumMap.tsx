@@ -390,8 +390,8 @@ const StadiumMap = ({
     targetX: number,
     targetY: number,
     playerId: number,
-    areaNames: Set<string>,
-    onAnimationEnd: () => void
+    areaNames?: Set<string>,
+    onAnimationEnd?: () => void
   ) {
     const svg = d3.select("#stadium-svg");
     const ball = svg

@@ -7,30 +7,27 @@ import { Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css/bundle";
 import "./swiper.css";
-import { API_ENDPOINT } from "@/lib/constants/api";
 
 export default function WizNews() {
   const [newsList, setNewsList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(API_ENDPOINT.NEWS_LIST);
+      const response = await fetch("/api/news_list");
       if (!response.ok) return;
-      const {
-        data: { list },
-      } = await response.json();
-      setNewsList(list);
+      const data = await response.json();
+      setNewsList(data);
     };
     fetchData();
   }, []);
 
   if (!newsList)
     return (
-      <div className="w-[500px] h-[280px] bg-gray-300 mx-2 rounded-2xl animate-pulse"></div>
+      <div className="w-full max-w-[500px] h-[280px] bg-gray-300 mx-2 rounded-2xl animate-pulse"></div>
     );
 
   return (
-    <div className="relative w-[500px] h-[280px] mx-2 news">
+    <div className="relative w-full max-w-[500px] h-[280px] mx-2 news">
       <Swiper
         direction="horizontal"
         slidesPerView={1}

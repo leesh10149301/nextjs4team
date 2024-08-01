@@ -43,7 +43,7 @@ export default function Page() {
   };
 
   useEffect(() => {
-    console.log("상위페이지", allAreaNames);
+    // console.log("상위페이지", allAreaNames);
     if (allAreaNames) {
       const timer = setTimeout(() => {
         setIsModalOpen(true);
@@ -54,7 +54,7 @@ export default function Page() {
   }, [allAreaNames]);
 
   const handleStadiumData = (areaNames: string) => {
-    console.log("handleStadiumData called with:", areaNames);
+    // console.log("handleStadiumData called with:", areaNames);
     setAllAreaNames((prev) =>
       prev !== areaNames ? areaNames : areaNames + " "
     );

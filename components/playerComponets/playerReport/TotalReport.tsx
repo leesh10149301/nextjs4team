@@ -1,9 +1,9 @@
-import { Yearrecordlist } from "@/app/types/player";
+import { Yearrecordlist } from "@/lib/types/player";
 import { totalTableHeader } from "../helper";
-import useDetailStore from "../zustand";
+import useDetailStore from "@/lib/stores/playerDetailStore";
 
 export default function TotalReport() {
-  const { detailData, setDetailData } = useDetailStore();
+  const { detailData } = useDetailStore();
   const position = detailData?.data?.gameplayer?.position;
   const totalThs = totalTableHeader(position);
   const totalTDs: Yearrecordlist[] = detailData?.data?.yearrecordlist;

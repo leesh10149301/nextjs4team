@@ -75,7 +75,7 @@ export function GameArticle(props: IGameArticleProps) {
   };
 
   return (
-    <article className="p-5 w-1/3 border rounded-lg shadow-lg">
+    <article className="p-5 max-w-1/3 max-w-[480px] border rounded-lg shadow-lg ">
       <span
         className={`block rounded-full text-white text-center py-1 mb-4 whitespace-nowrap overflow-hidden text-ellipsis ${isToday}`}
       >

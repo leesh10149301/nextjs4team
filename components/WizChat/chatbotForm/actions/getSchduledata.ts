@@ -4,7 +4,6 @@ import weekday from "dayjs/plugin/weekday";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { SCHEDULE_MESSAGES } from "@/lib/constants/chatbot";
-import { API_ENDPOINT } from "@/lib/constants/api";
 
 dayjs.extend(weekday);
 dayjs.extend(isSameOrAfter);
@@ -33,12 +32,10 @@ const TEAM_KEYS = {
 };
 
 async function fetchScheduleData(yearMonth: string) {
-  const response = await fetch(`${API_ENDPOINT.SCHEDULE}${yearMonth}`);
-  if (!response.ok) return [];
-  const {
-    data: { list },
-  } = await response.json();
-  return list;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/schedule?yearMonth=${yearMonth}`
+  ).then((res) => res.json());
+  return response;
 }
 
 const emblemMap: { [key: string]: string } = {

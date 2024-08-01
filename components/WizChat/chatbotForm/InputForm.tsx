@@ -1,6 +1,6 @@
+import { useFaqStore } from "@/lib/stores/faqStore";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { useFaq } from "./FaqProvider";
 
 interface IInputFormProps {
   input: string;
@@ -17,7 +17,7 @@ export default function InputForm({
   handleSubmit,
 }: IInputFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  const { setFaqVisible } = useFaq();
+  const { setFaqVisible } = useFaqStore();
 
   useEffect(() => {
     if (input && formRef.current && faqClick) {

@@ -1,14 +1,14 @@
 "use client";
 
-import { TCoach, TPlayer } from "@/app/types/player";
+import { TCoach, TPlayer } from "@/lib/types/player";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import useDetailStore from "./zustand";
+import useDetailStore from "@/lib/stores/playerDetailStore";
 import RecentReport from "./playerReport/RecentReport";
 import TotalReport from "./playerReport/TotalReport";
 import PredictReport from "./playerReport/PredictReport";
 export default function PlayerDetail() {
-  const { allTeamData, detailData, setDetailData } = useDetailStore();
+  const { allTeamData, setDetailData } = useDetailStore();
   const [checkBtn, setCheckBtn] = useState("recent");
   const pathname = usePathname();
   const pcode: string = pathname.split("/").pop();
@@ -25,11 +25,7 @@ export default function PlayerDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://43.203.217.238:5002/player_data?pcode=${pathname
-            .split("/")
-            .pop()}`
-        );
+        const response = await fetch(`/api/player_info?pcode=${pcode}`);
         const data = await response.json();
         setDetailData(data);
       } catch (error) {

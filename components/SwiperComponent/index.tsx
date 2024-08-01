@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { FC } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Mousewheel, Navigation } from "swiper/modules";
@@ -13,7 +13,6 @@ import TodayScore from "./TodayScore";
 import WeekSchedule from "./WeekSchedule";
 import MonthlyPlayer from "./MonthlyPlayer";
 import WizNews from "./WizNews";
-import Image from "next/image";
 
 const SwiperComponent: FC = () => {
   return (
@@ -21,37 +20,35 @@ const SwiperComponent: FC = () => {
       direction="vertical"
       slidesPerView={1}
       mousewheel
-      // pagination={{ clickable: true }}
       navigation
       modules={[Pagination, Mousewheel, Navigation]}
       className="h-screen"
     >
-      <SwiperSlide className="mt-[80px]">
-        <iframe
-          className="w-full h-2/3 border-none min-h-[500px] mx-auto"
-          src="https://www.youtube.com/embed/yCqLhzTVgTs?si=2lA05OiqC4p63lfF&mute=1&autoplay=1"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allowFullScreen
-        />
-        <TodayScore />
+      <SwiperSlide className="bg-white">
+        <div className="h-screen flex flex-col mt-[80px]">
+          <div className="flex-grow flex items-center justify-center">
+            <iframe
+              className="w-full h-full min-h-[520px] border-none"
+              src="https://www.youtube.com/embed/UAhq4lzoJ5g?si=UEOpCFSRk8EmUDsO&mute=1&autoplay=1"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+          <div className="w-full">
+            <TodayScore />
+          </div>
+        </div>
       </SwiperSlide>
       <SwiperSlide>
-        {/* 다음 섹션 */}
-        <div className="flex flex-col items-center space-y-4">
-          <Image
-            src={"/images/ktwiz_schedule.png"}
-            alt="schedule"
-            width={826}
-            height={300}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="mt-2"
-          />
-          <WeekSchedule />
-          <div className="flex items-center justify-between w-[1060px]">
-            <MonthlyPlayer />
-            <WizNews />
+        <div className="h-full flex items-center justify-center">
+          <div className="container mx-auto p-4 flex flex-col items-center justify-center">
+            <WeekSchedule />
+            <div className="flex items-center justify-center w-full max-w-[1440px]">
+              <MonthlyPlayer />
+              <WizNews />
+            </div>
           </div>
         </div>
       </SwiperSlide>

@@ -19,7 +19,7 @@ export default function EditPost() {
           throw new Error("Failed to fetch post");
         }
         const data = await response.json();
-        console.log("Post data:", data); // 게시물 데이터 로그 출력
+        // console.log("Post data:", data); // 게시물 데이터 로그 출력
         setTitle(data.title);
         setContent(data.content);
         setUsername(data.username); // username 설정

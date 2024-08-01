@@ -1,9 +1,4 @@
-import {
-  Recentgamerecordlistfuture,
-  Seasonsummary,
-  TPRecentgamerecordlist,
-  Yearrecordlist,
-} from "@/app/types/player";
+import { TPRecentgamerecordlist, Yearrecordlist } from "@/lib/types/player";
 
 export const recentTableHeader = (position: string) => {
   if (position === "투수") {
@@ -220,8 +215,8 @@ export const predictPlayerRecordData = ({
       predictData.slg += Number(record.slg);
       predictData.hr += Number(record.hr);
     });
-    console.log(predictData);
-    console.log(predictData.hr);
+    // console.log(predictData);
+    // console.log(predictData.hr);
     return [
       ["BA", (predictData.hra / records.length).toFixed(2)],
       ["OBP", (predictData.bra / records.length).toFixed(2)],

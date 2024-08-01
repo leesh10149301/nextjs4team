@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getLikesCount } from "@/app/api/board_like/route";
 import Link from "next/link";
-import supabase from "@/app/utils/supabase/client";
 import { useRouter } from "next/navigation";
-import useAuth from "@/app/hooks/useAuth";
+import { getLikesCount } from "@/app/api/_board_like/route";
+import useAuth from "@/lib/hooks/useAuth";
 
 export default function Board() {
   const router = useRouter();
@@ -19,7 +18,6 @@ export default function Board() {
 
   useEffect(() => {
     if (!loading && !user) {
-      // 사용자가 로그인하지 않은 경우 로그인 페이지로 리다이렉트
       router.push("/auth/logIn");
     }
   }, [loading, user, router]);
@@ -32,7 +30,6 @@ export default function Board() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log("API Response:", data); // 응답 데이터 확인
 
         if (!Array.isArray(data)) {
           throw new Error("Received data is not an array");
@@ -46,7 +43,7 @@ export default function Board() {
 
         setPosts(data);
 
-        // 각 게시물의 좋아요 수를 가져옵니다.
+        // 각 게시물의 좋아요 수
         const likesData = {};
         for (const post of data) {
           const count = await getLikesCount(post.id);
@@ -60,7 +57,7 @@ export default function Board() {
     }
 
     if (user) {
-      // 사용자가 존재할 때만 게시글을 가져옵니다
+      // 사용자가 존재할 때만 게시글
       fetchPosts();
     }
   }, [user]);
