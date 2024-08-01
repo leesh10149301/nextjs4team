@@ -1,16 +1,26 @@
 "use client";
 
-import { getLikesCount } from "@/app/api/_board_like/route";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { getLikesCount } from "@/app/api/_board_like/route";
+import useAuth from "@/lib/hooks/useAuth";
 
 export default function Board() {
+  const router = useRouter();
+  const { loading, user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [likesCounts, setLikesCounts] = useState({});
   const [error, setError] = useState(null);
   const [viewType, setViewType] = useState("list");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 9;
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/auth/logIn");
+    }
+  }, [loading, user, router]);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -20,7 +30,7 @@ export default function Board() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        // console.log("API Response:", data); // 응답 데이터 확인
+
         if (!Array.isArray(data)) {
           throw new Error("Received data is not an array");
         }
@@ -33,7 +43,7 @@ export default function Board() {
 
         setPosts(data);
 
-        // 각 게시물의 좋아요 수를 가져옵니다.
+        // 각 게시물의 좋아요 수
         const likesData = {};
         for (const post of data) {
           const count = await getLikesCount(post.id);
@@ -46,8 +56,11 @@ export default function Board() {
       }
     }
 
-    fetchPosts();
-  }, []);
+    if (user) {
+      // 사용자가 존재할 때만 게시글
+      fetchPosts();
+    }
+  }, [user]);
 
   const toggleView = (type) => {
     setViewType(type);
@@ -79,6 +92,10 @@ export default function Board() {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  if (loading) {
+    return <div>로딩 중...</div>; // 로딩 상태를 표시합니다
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-4 mt-2">
