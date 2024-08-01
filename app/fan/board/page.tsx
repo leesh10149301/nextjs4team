@@ -94,9 +94,9 @@ export default function Board() {
     setCurrentPage(pageNumber);
   };
 
-  if (loading) {
-    return <LoadingSpinner />; // 로딩 상태를 표시합니다
-  }
+  // if (!currentPosts) {
+  //   return <LoadingSpinner />; // 로딩 상태를 표시합니다
+  // }
 
   return (
     <div className="max-w-4xl mx-auto p-4 mt-2">
@@ -131,29 +131,35 @@ export default function Board() {
       </div>
       <div>
         {viewType === "list" && (
-          <ul className="divide-y divide-gray-300">
+          <ul className="">
             <li className="flex justify-between py-4 font-bold text-gray-500 border-gray-200 border-b-2">
               <div className="w-1/5 text-center">제목</div>
               <div className="w-2/5 text-center">내용</div>
               <div className="w-1/5 text-center">날짜</div>
               <div className="w-1/5 text-center">좋아요</div>
             </li>
-            {currentPosts.map((post) => (
-              <Link href={`/fan/board/${post.id}`} key={post.id}>
-                <li className="flex justify-between py-4 hover:bg-gray-100 transition duration-300">
-                  <div className="w-1/5 pl-2">
-                    {truncateText(post.title, 10)}
-                  </div>
-                  <div className="w-2/5">{truncateText(post.content, 23)}</div>
-                  <div className="w-1/5 text-center">
-                    {formatDate(post.createdAt)}
-                  </div>
-                  <div className="w-1/5 text-center">
-                    {likesCounts[post.id] || 0}
-                  </div>
-                </li>
-              </Link>
-            ))}
+            {currentPosts.length > 0 ? (
+              currentPosts.map((post) => (
+                <Link href={`/fan/board/${post.id}`} key={post.id}>
+                  <li className="flex justify-between py-4 hover:bg-gray-100 transition duration-300">
+                    <div className="w-1/5 pl-2">
+                      {truncateText(post.title, 10)}
+                    </div>
+                    <div className="w-2/5">
+                      {truncateText(post.content, 23)}
+                    </div>
+                    <div className="w-1/5 text-center">
+                      {formatDate(post.createdAt)}
+                    </div>
+                    <div className="w-1/5 text-center">
+                      {likesCounts[post.id] || 0}
+                    </div>
+                  </li>
+                </Link>
+              ))
+            ) : (
+              <LoadingSpinner />
+            )}
           </ul>
         )}
         {viewType === "card" && (
