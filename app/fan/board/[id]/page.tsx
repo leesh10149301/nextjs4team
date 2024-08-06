@@ -5,12 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import supabase from "@/lib/utils/supabase/client";
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
+
+import { BoardLike } from "../_components/like";
 import {
   addComment,
   deleteComment,
   getComments,
-} from "@/app/api/_board_comment/route";
-import { BoardLike } from "@/components/board/like";
+} from "@/lib/utils/supabase/query/boardCommentQuery";
 
 type Post = {
   id: string;

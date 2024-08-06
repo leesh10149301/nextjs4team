@@ -11,7 +11,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import { PostSeasonChance } from "@/components/PostSeasonChance";
+import { PostSeasonChance } from "./_components/PostSesonChance";
 
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 

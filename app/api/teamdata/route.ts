@@ -1,9 +1,10 @@
 // pages/api/teamdata.ts
+import { API_ENDPOINT } from "@/lib/constants/api";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    const response = await fetch("http://43.203.217.238:5002/daily_teamdata", {
+    const response = await fetch(API_ENDPOINT.DAILY_TEAMDATA, {
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate",
       },

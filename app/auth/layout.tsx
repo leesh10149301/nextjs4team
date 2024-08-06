@@ -1,4 +1,4 @@
-import Banner from "@/components/Banner";
+import Banner from "@/components/layout/Banner";
 
 export const metadata = {
   title: "auth",

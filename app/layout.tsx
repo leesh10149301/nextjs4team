@@ -1,7 +1,7 @@
 import "./global.css";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import Chatbot from "../components/WizChat";
+import Footer from "../components/layout/Footer";
+import Header from "../components/layout/Header";
+import Chatbot from "../components/layout/WizChat";
 
 export const metadata = {
   title: "WINNING KT : WE ARE GREAT MAGIC",

@@ -1,4 +1,4 @@
-import PlayerDetail from "@/components/playerComponets/PlayerDetail";
+import PlayerDetail from "@/app/player/_components/playerDetail/PlayerDetailLayout";
 
 export default function DetailPage() {
   return (

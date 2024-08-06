@@ -6,4 +6,5 @@ export const API_ENDPOINT = {
   CURRENT_INFO: `${API_BASE_URL}/get_current_info`,
   PLAYER_INFO: `${API_BASE_URL}/player_data?pcode=`,
   NEWS_LIST: `${API_BASE_URL}/news_list?searchmax=5&page=1`,
+  DAILY_TEAMDATA: `${API_BASE_URL}/daily_teamdata`,
 };

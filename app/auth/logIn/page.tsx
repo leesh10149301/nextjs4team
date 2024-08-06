@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useAuth from "@/lib/hooks/useAuth";
 import useUserInfo from "@/lib/stores/userInfoStore";
-import { LoginApi } from "@/app/api/_auth/route";
+import { LoginApi } from "@/lib/utils/supabase/query/authQuery";
 
 export default function LogIn() {
   const [email, setEmail] = useState<string>("");

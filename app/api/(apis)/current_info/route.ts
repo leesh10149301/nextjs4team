@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { API_ENDPOINT } from "@/lib/constants/api";
-import { IGameArticleProps } from "@/components/SwiperComponent/WeekSchedule";
+import { IGameArticleProps } from "@/app/(home)/_components/WeekSchedule";
 
 interface IScheduleData {
   data: {

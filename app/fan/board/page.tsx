@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { getLikesCount } from "@/app/api/_board_like/route";
 import useAuth from "@/lib/hooks/useAuth";
+import { getLikesCount } from "@/lib/utils/supabase/query/boardLikeQuery";
 
 export default function Board() {
   const router = useRouter();

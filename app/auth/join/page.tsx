@@ -1,9 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { signUp, validateEmail, validateNickname } from "@/app/api/_auth/route";
+
 import { useRouter } from "next/navigation"; // useRouter 임포트 추가
 import useUserInfo from "@/lib/stores/userInfoStore";
+import {
+  signUp,
+  validateEmail,
+  validateNickname,
+} from "@/lib/utils/supabase/query/authQuery";
 
 export default function Join() {
   // State 관리

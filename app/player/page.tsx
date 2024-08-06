@@ -1,4 +1,5 @@
-import PlayerItemList from "@/components/playerComponets/PlayerItemList";
+import PlayerItemList from "./_components/PlayerItemList";
+
 export default function Player() {
   return <PlayerItemList />;
 }
