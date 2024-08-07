@@ -119,15 +119,7 @@ export const calculateTalentData = ({
         talentData.bf += Number(record.bf);
         talentData.hp += Number(record.hp);
       })
-    : // : position === "포수"
-      // ? records?.forEach((record) => {
-      //     talentData.cs += Number(record.cs);
-      //     talentData.hit += Number(record.hit);
-      //     talentData.bb += Number(record.bb);
-      //     talentData.rbi += Number(record.rbi);
-      //     talentData.hr += Number(record.hr);
-      //   })
-      records?.forEach((record) => {
+    : records?.forEach((record) => {
         talentData.run += Number(record.run);
         talentData.hit += Number(record.hit);
         talentData.bb += Number(record.bb);
@@ -137,8 +129,7 @@ export const calculateTalentData = ({
         talentData.bra += Number(record.bra);
         talentData.hra += Number(record.hra);
       });
-  //탈삼진=> 기본값 :20/ 탈삼진값
-  //볼넷 => 기본값 :10/ 볼넷값
+
   return position === "투수"
     ? [
         talentData.er / (talentData.inn / 9) / records.length,
@@ -150,9 +141,7 @@ export const calculateTalentData = ({
           talentData.bf /
           records.length,
       ]
-    : // : position === "포수"
-      // ? []
-      [
+    : [
         talentData.run / talentData.ab / records.length,
         (talentData.slg / records.length).toFixed(3),
         (talentData.bra / records.length).toFixed(3),
@@ -215,13 +204,12 @@ export const predictPlayerRecordData = ({
       predictData.slg += Number(record.slg);
       predictData.hr += Number(record.hr);
     });
-    // console.log(predictData);
-    // console.log(predictData.hr);
+
     return [
       ["BA", (predictData.hra / records.length).toFixed(2)],
       ["OBP", (predictData.bra / records.length).toFixed(2)],
       ["SLG", (predictData.slg / records.length).toFixed(2)],
       ["HR", predictData.hr / records.length],
-    ]; // Return empty array if position is not "투수"
+    ];
   }
 };

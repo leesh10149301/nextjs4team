@@ -21,8 +21,6 @@ export default function PlayerDetail() {
     return <div>No data found</div>;
   }
   const data = filterData[0];
-
-  //여기는 차트 데이터
   useEffect(() => {
     const fetchData = async () => {
       try {
