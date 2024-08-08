@@ -1,10 +1,9 @@
 import PlayerChart from "./PlayerChart";
-import {
-  calculateTalentData,
-  predictPlayerRecordData,
-} from "@/lib/utils/helper";
+
 import useDetailStore from "@/lib/stores/playerDetailStore";
 import PredictPlayerChart from "./PredictPlayerChart";
+import { predictPlayerRecordData } from "@/lib/utils/playerPredict";
+import { calculateTalentData } from "@/lib/utils/playerRadarChartData";
 
 export default function PredictReport() {
   const { detailData } = useDetailStore();

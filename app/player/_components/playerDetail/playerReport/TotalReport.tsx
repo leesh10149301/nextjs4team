@@ -1,6 +1,6 @@
 import { Yearrecordlist } from "@/lib/types/player";
 import useDetailStore from "@/lib/stores/playerDetailStore";
-import { totalTableHeader } from "@/lib/utils/helper";
+import { totalTableHeader } from "@/lib/utils/playerTableHeader";
 
 export default function TotalReport() {
   const { detailData } = useDetailStore();
