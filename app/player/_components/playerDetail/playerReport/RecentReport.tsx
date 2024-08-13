@@ -1,6 +1,7 @@
 import { TPRecentgamerecordlist } from "@/lib/types/player";
 import useDetailStore from "@/lib/stores/playerDetailStore";
-import { recentTableHeader } from "@/lib/utils/helper";
+import { recentTableHeader } from "@/lib/utils/playerTableHeader";
+
 export default function RecentReport() {
   const { detailData } = useDetailStore();
   const position = detailData?.data?.gameplayer?.position;
